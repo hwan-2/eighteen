@@ -3,9 +3,9 @@ import axios from 'axios';
 //api 출처: https://pureani.tistory.com/4997
 
 //제목으로 검색하는 api
-export const searchApiWithName = async (query) => {
+export const searchApiWithTitle = async (title, brand) => {
     try {
-        const response = await axios.get(`https://api.manana.kr/karaoke/song/wonderful.json`);
+        const response = await axios.get(`https://api.manana.kr/karaoke/song/${title}.json?brand=${brand}`);
         return response.data;
     } catch (error) {
         console.error('API 호출 오류:', error);
@@ -14,9 +14,20 @@ export const searchApiWithName = async (query) => {
 };
 
 //가수로 검색하는 api
-export const searchApiWithSinger = async (query) => {
+export const searchApiWithSinger = async (singer, brand) => {
     try {
-        const response = await axios.get(`https://api.manana.kr/karaoke/singer/fripside.json`);
+        const response = await axios.get(`https://api.manana.kr/karaoke/singer/${singer}.json?brand=${brand}`);
+        return response.data;
+    } catch (error) {
+        console.error('API 호출 오류:', error);
+        throw error;
+    }
+};
+
+//번호로 검색하는 api
+export const searchApiWithNumber = async (number, brand) => {
+    try {
+        const response = await axios.get(`https://api.manana.kr/karaoke/no/${number}.json?brand=${brand}`);
         return response.data;
     } catch (error) {
         console.error('API 호출 오류:', error);
