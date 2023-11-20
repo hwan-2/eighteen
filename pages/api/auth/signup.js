@@ -9,7 +9,7 @@ export default async function handler(req, res) {
         const isNullOrWhitespace = (str) => {
             return str === null || str.match(/^\s*$/) !== null;
         };
-        //특수 문자 확인 유저 네임에만 적용?
+        //특수 문자 확인 유저 네임에만 적용과 password 따라 다를지도?
         const hasSpecialCharacters = (str) => {
             return /[~!@#$%^&*(),.?":{}|<>]/.test(str);
         };
