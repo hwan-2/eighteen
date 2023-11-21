@@ -3,6 +3,7 @@ import { useState } from 'react';
 import {searchApiWithTitle, searchApiWithSinger, searchApiWithNumber} from 'pages/api/api.js';
 
 //임시 컴포넌트로 실제 페이지가 만들어지면 사용안할수 있음
+//삭제 예정?
 const SearchComponent = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);

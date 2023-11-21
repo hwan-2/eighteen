@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
         } catch (error) {
             console.error('DB 에러:', error);
-            throw error;
+            res.status(500).json({ error: 'DB 에러' });
         }
     }
 }

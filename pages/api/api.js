@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+//search api를 분리시켰으니 이걸로 작업 안해도됨
+//삭제 예정
 //api 출처: https://pureani.tistory.com/4997
 
 //제목으로 검색하는 api
