@@ -1,0 +1,20 @@
+.register{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    height: 800px;
+}
+
+.input{
+    display: flex;
+    padding: 2vh;
+}
+
+input{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 300px;
+    height: 20px;
+}

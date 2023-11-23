@@ -1,13 +1,16 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css");
+
 body {
   margin : 0;
   background: white;
   color: black;
+  height: 100%;
 }
 
 .title{
   text-align: center;
-  margin-top: 200px;
   font-size: 50px;
+  font-family: Pretendard;
 }
 
 .title-sub{
@@ -18,6 +21,9 @@ body {
 .navbar{
   background: black;
   padding: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .navbar a {
@@ -25,4 +31,61 @@ body {
   font-size: 20px;
   text-decoration: none;
   color: white;
+  font-family: Pretendard;
 }
+
+.footer{
+  background-color: black;
+  padding: 30px;
+  display: flex;
+  height: 30px;
+  justify-content: center;
+}
+
+.footer a {
+  margin-right: 30px;
+  font-size: 20px;
+  text-decoration: none;
+  color: white;
+  font-family: Pretendard;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  height: 750px;
+}
+
+.ad {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  height: 870px;
+}
+
+.search {
+  width: 600px;
+  height: 50px;
+  border-radius: 5px;
+}
+
+.mButton{
+  width: 200px;
+  height: 40px;
+  justify-content: center;
+  text-align: center;
+  border: 0;
+  border-radius: 30px;
+  color: white;
+  background: rgb(150, 74, 74);
+  font-family: Pretendard;
+  font-size: 2vh;
+}
+
+.mButton:hover{
+  cursor: pointer;
+}
+
