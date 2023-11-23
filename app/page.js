@@ -1,8 +1,18 @@
+import Link from "next/link";
+import './globals.css'
+
+//메인 페이지
 export default function Home() {
   return (
-      <div>
-        <h1 className={"title"}>Hello world</h1>
-        <h3 className={"title-sub"}>next.js project</h3>
+      <div className="ad">
+        <div className="banner">
+          <img src="/test.png"></img>
+        </div>
+        <h1 className={"title"}>지금 즉시 가입하세요</h1>
+        <div className={""}>
+          <Link href={"/signup"}><button className={"mButton"} value={"회원가입"}>회원가입</button></Link>
+        </div>
+        
       </div>
   )
 }
