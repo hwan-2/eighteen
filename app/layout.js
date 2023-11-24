@@ -12,7 +12,8 @@ export default function RootLayout({ children }) {
       <body>
         <div className={"navbar"}>
           <Link href={"/"}>Home</Link>
-          <Link href={"/mypage"}>My</Link>
+          {/* 이후 로그인 판별 여부로 수정 */}
+          <Link href={"/login"}>Login</Link>
         </div>
         <div className={"wrap"}>
           {children}
