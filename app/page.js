@@ -12,7 +12,6 @@ export default function Home() {
         <div className={""}>
           <Link href={"/signup"}><button className={"mButton"} value={"회원가입"}>회원가입</button></Link>
         </div>
-        
       </div>
   )
 }
