@@ -14,6 +14,7 @@ export const authOptions = {
             password: { label: "password", type: "password" },
         },
         async authorize(credentials) {
+            console.log(credentials)
             let db = (await connectDB).db('eighteen');
             let user = await db.collection('user').findOne({email : credentials.email})
             if (!user) {

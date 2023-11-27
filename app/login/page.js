@@ -1,5 +1,5 @@
 'use client'
-
+import {useRouter} from "next/navigation";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function Login(){
-
+    const router = useRouter()
     const login = async (e) =>{
         e.preventDefault()
 
@@ -20,12 +20,17 @@ export default function Login(){
                 email,
                 password,
                 redirect: false,
-            }  
-        )
-        console.log(result)
-        // if (result.error) {
-        //     console.error(result.error);
-        // }
+            } 
+        ).then(({ok, error}) => {
+            if(ok){
+                router.replace('/main')
+            } else{
+                console.log(error)
+                alert("잘못된 비밀번호 혹은 아이디 입니다.");
+            }
+        })
+        
+        
         
     }
     return(
