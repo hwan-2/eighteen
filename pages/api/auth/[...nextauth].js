@@ -1,5 +1,5 @@
 import { connectDB } from "@/util/database";
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import { MongoDBAdapter} from "@auth/mongodb-adapter";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from 'bcrypt';
@@ -41,6 +41,7 @@ export const authOptions = {
                 token.user = {};
                 token.user.name = user.name
                 token.user.email = user.email
+                token.user.id = user.id
             }
             return token;
         },
