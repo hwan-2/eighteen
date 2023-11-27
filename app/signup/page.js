@@ -9,16 +9,24 @@ export default function Signup(){
 
     return(
         <div className={"signup"}>
-            <div className={"register"}>
-                <h1>회원가입</h1>
-                <form method="POST" action="/api/auth/signUp">
-                    <TextField label="이름" name="username" required/>
-                    <TextField label="이메일" name="email" required />
-                    <TextField label="비밀번호" name="password" type="password" required/>
-                    <Button type="submit">가입</Button>
-                </form>
+            <Container component="main" maxWidth="xs">
+                <Box
+                    sx={{
+                        marginTop: 10,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}>
+                    <h1>회원가입</h1>
+                    <form method="POST" action="/api/auth/signUp">
+                        <TextField label="이름" name="username" margin="normal" fullWidth required/>
+                        <TextField label="이메일" name="email" margin="normal" fullWidth required />
+                        <TextField label="비밀번호" name="password" type="password" margin="normal" fullWidth required/>
+                        <Button type="submit">가입</Button>
+                    </form>
+                </Box>
                 
-            </div>
+            </Container>
             
         </div>
     )

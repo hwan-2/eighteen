@@ -6,14 +6,3 @@
     text-align: center;
 }
 
-.register{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    width: 400px;
-}
-
-.register > *{
-    margin: 20px;
-}

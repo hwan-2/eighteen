@@ -1,3 +1,4 @@
+import { signIn } from 'next-auth/react';
 import './globals.css'
 import Link from "next/link";
 
