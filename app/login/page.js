@@ -44,15 +44,15 @@ export default function Login(){
                         alignItems: 'center',
                     }}>
                     <h1>로그인</h1>
-                    {/* <form onSubmit={login}>
+                    <form onSubmit={login}>
                         <TextField label="이메일" name="email" id="email" margin="normal" fullWidth required />
                         <TextField label="비밀번호" name="password" id="password" margin="normal" type="password" fullWidth required/>
                         
-                        <FormControlLabel control={<Checkbox value="remember" color="primary"/>} label="자동 로그인"/>
+                        {/* <FormControlLabel control={<Checkbox value="remember" color="primary"/>} label="자동 로그인"/> */}
                         
                         <Button type="submit" variant='contained' sx={{ mt:3, mb: 2}}>로그인</Button>
-                    </form> */}
-                    <form onSubmit={login}>
+                    </form>
+                    {/* <form onSubmit={login}>
                     <div>
                         <label htmlFor="email">사용자 이름</label>
                         <input type="email" id="email" name="email" />
@@ -62,7 +62,7 @@ export default function Login(){
                         <input type="password" id="password" name="password" />
                     </div>
                         <button type="submit">로그인</button>
-                    </form>
+                    </form> */}
                     <Link>비밀번호를 잊으셨습니까?</Link>
                     <Link href="/signup">회원가입</Link>
                 </Box>
