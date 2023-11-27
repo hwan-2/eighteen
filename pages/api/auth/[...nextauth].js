@@ -14,8 +14,8 @@ export const authOptions = {
             password: { label: "password", type: "password" },
         },
         async authorize(credentials) {
-            let db = (await connectDB).db('forum');
-            let user = await db.collection('user_cred').findOne({email : credentials.email})
+            let db = (await connectDB).db('eighteen');
+            let user = await db.collection('user').findOne({email : credentials.email})
             if (!user) {
                 console.log('잘못된 이메일');
                 return null
