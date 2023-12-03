@@ -4,28 +4,23 @@ import './main.css'
 import { useEffect, useState } from 'react'
 import axios from "axios"
 
-
-
-
 export default function Main() {
   
   const [data, setData] = useState([])
   const [input, setInput] = useState("")
-  const [records, setRecords] = useState()
+  const [records, setRecords] = useState(data)
 
-  const fetchTitle = async (value) => {
-    setInput(value)
+  const fetchTitle = async () => {
     const res = await fetch('api/search/searchTitle',
       {
         method: 'POST',
         body : JSON.stringify({title:input})
       })
-    const data = await res.json()
+    const result = await res.json()
     //console.log(data)
-    setData(data)
-    setRecords(data)
+    setData(result)
     console.log(input)
-    console.log(records)
+    console.log(data)
   }
 
 
@@ -54,7 +49,7 @@ export default function Main() {
             placeholder="검색..."
             className="searchBar"
             value = {input}
-            onChange={(e)=>fetchTitle(e.target.value)}
+            onChange={(e)=>handleChange(e.target.value)}
           />
 
           <div>
@@ -72,7 +67,7 @@ export default function Main() {
               </tr>
             </thead>
             <tbody>
-              {records && records.map((item, index)=> 
+              {data.map((item, index)=> 
                 {
                   <tr key={index}>
                     <td>{item.brand}</td>
