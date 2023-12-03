@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     if (req.method == 'POST'){
         try {
             req.body = JSON.parse(req.body)
-            const title = req.body.singer
+            const title = req.body.title
             const response = await axios.get(`https://api.manana.kr/karaoke/song/${title}.json`);
             //response.data를 brand가 tj이거나 kumyoung인 것만 필터링
             const filteredData = response.data.filter(data => data["brand"] === "tj" || data["brand"] === "kumyoung");
