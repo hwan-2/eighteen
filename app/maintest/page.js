@@ -1,46 +1,18 @@
 "use client"
 import { useSession, signIn, signOut } from 'next-auth/react'
-import './main.css'
+import './maintest.css'
 import { useEffect, useState } from 'react'
 import axios from "axios"
 
-export default function Main() {
+export default function MainTest() {
+  const [titleList, setTitleList] = useState([])
+  const [search, setSearch] = useState("")
+
+  useEffect(()=>{
+    axios.get("https://api.manana.kr/karaoke/kumyoung.json?limit=500")
+    .then((response)=>{setTitleList(response.data)})
+  },[])
   
-  const [data, setData] = useState([])
-  const [input, setInput] = useState("")
-  const [records, setRecords] = useState(data)
-
-  const fetchTitle = async () => {
-    const res = await fetch('api/search/searchTitle',
-      {
-        method: 'POST',
-        body : JSON.stringify({title:input})
-      })
-    const result = await res.json()
-    //console.log(data)
-    setData(result)
-    console.log(input)
-    console.log(data)
-  }
-
-
-  const fetchSinger = async () => {
-    const res = await fetch('api/search/searchSinger',
-      {
-        method: 'POST',
-        body : JSON.stringify({singer:""})
-      })
-    const data = await res.json()
-    //console.log(data)
-
-  }
-
-  const handleChange = (value) => {
-    setInput(value)
-    console.log(input)
-  }
-
-
   return (
       <div className="mMain">
         <h1 className={"title"}>노래방 검색</h1>
@@ -50,16 +22,9 @@ export default function Main() {
             type="text"
             placeholder="검색..."
             className="searchBar"
-            value = {input}
-            onChange={(e)=>setInput(e.target.value)}
+            onChange={(e)=>setSearch(e.target.value)}
           />
-
-          <div>
-            <button onClick={fetchTitle}>검색테스트</button>
-          </div>
-          
-          
-
+        
           <table>
             <thead>
               <tr>
@@ -71,11 +36,12 @@ export default function Main() {
               </tr>
             </thead>
             <tbody>
-            {data.filter((item)=>{
-                if(input===""){
+              
+              {titleList.filter((item)=>{
+                if(search===""){
                   
                 }
-                else if(item.title.toLowerCase().includes(input.toLowerCase())){
+                else if(item.title.toLowerCase().includes(search.toLowerCase())){
                   return item
                 }
               })
@@ -87,6 +53,8 @@ export default function Main() {
                   <td>{item.singer}</td>
                   </tr>
               })}
+              
+              
             </tbody>
           </table>
 
