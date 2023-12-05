@@ -3,10 +3,16 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from 'bcrypt';
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions = {
     providers: [
-        //우선 jwt만 사용, 추후 구글 로그인 추가할수도 있음
+        //구글 로그인, 이메일 로그인
+        GoogleProvider({
+            clientId: process.env["GOOGLE_CLIENT_ID"],
+            clientSecret: process.env["GOOGLE_CLIENT_SECRET"]
+        }),
+
         CredentialsProvider({
         name: "credentials",
         credentials: {
