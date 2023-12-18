@@ -133,35 +133,37 @@ export default function Main() {
           {/* select 값에 따라 불러오는 검색 함수가 다름 */}
           
           
-
-          <table className='table'>
-            <thead>
-              <tr>
-                <th>제공</th>
-                <th>번호</th>
-                <th>제목</th>
-                <th>가수</th>
-                <th>북마크</th>
-              </tr>
-            </thead>
-            <tbody>
-
-
-            {data.filter((item)=>{
-                  return item
+          {data.filter((item)=>{
+                return item
               })
               .map((item, index) => {
-                return <tr key={index}>
-                  <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
-                  <td>{item.no}</td>
-                  <td>{item.title}</td>
-                  <td>{item.singer}</td>
-                  <td><button>ㅇ</button></td>
-                  {/* 아이콘으로 바꿀예정 */}
+                return <table className='table'>
+                <thead>
+                  <tr>
+                    <th>제공</th>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>가수</th>
+                    <th>북마크</th>
                   </tr>
+                </thead>
+                <tbody>
+                  <tr key={index}>
+                    <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
+                    <td>{item.no}</td>
+                    <td>{item.title}</td>
+                    <td>{item.singer}</td>
+                    <td><button>ㅇ</button></td>
+                    {/* 아이콘으로 바꿀예정 */}
+                  </tr>
+                </tbody>
+              </table>
               })
-            }
+          }
 
+
+
+            
               {singerData.filter((item)=>{
                   return item
               })
@@ -194,8 +196,6 @@ export default function Main() {
                   {/* 아이콘으로 바꿀예정 */}
                   </tr>
               })}
-            </tbody>
-          </table>
 
 
         </div>
