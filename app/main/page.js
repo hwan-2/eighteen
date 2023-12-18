@@ -71,18 +71,18 @@ export default function Main() {
 
   }
 
-  const fetchNumber = async () => {
-    const res = await fetch('api/search/searchNumber',
-      {
-        method: 'POST',
-        body : JSON.stringify({no:input})
-      })
-    const result = await res.json()
-    //console.log(data)
-    setData(result)
-    console.log(input)
-    console.log(data)
-  }
+  // const fetchNumber = async () => {
+  //   const res = await fetch('api/search/searchNumber',
+  //     {
+  //       method: 'POST',
+  //       body : JSON.stringify({no:input})
+  //     })
+  //   const result = await res.json()
+  //   //console.log(data)
+  //   setData(result)
+  //   console.log(input)
+  //   console.log(data)
+  // }
 
   const handleChange = (value) => {
     setInput(value)
@@ -117,19 +117,20 @@ export default function Main() {
               select === "song"
               ? fetchTitle
               : fetchSinger
-            }><FaMagnifyingGlass /></button>
+              }
+            ><FaMagnifyingGlass /></button>
           </div>
           
           
           <table className='table'>
-                <thead>
-                  <tr>
-                    {columns.map((column) => (
-                      <th key={column}>{column}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
+            <thead>
+              <tr>
+                {columns.map((column) => (
+                  <th key={column}>{column}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
           {data.filter((item)=>{
                 return item
               })

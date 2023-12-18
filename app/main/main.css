@@ -102,7 +102,7 @@ th:nth-child(5) {
 
 .sButton{
     height: 100%;
-    border: 0px;
+    border: none;
     width: 9%;
     float: right;
    
@@ -115,6 +115,12 @@ th:nth-child(5) {
 
 .select{
     width: 9%;
-    appearance: none;
-    text-align-last: center;
+    height: 100%;
+    border: none;
+    outline: none;
+    float: left;
+    background: pink;
+
+    font-family: pretendard;
+    font-weight: bold;
 }
