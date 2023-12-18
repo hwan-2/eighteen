@@ -1,6 +1,8 @@
 import { signIn } from 'next-auth/react';
 import './globals.css'
 import Link from "next/link";
+// import NavBar from '@/component/NavBar';
+
 
 export const metadata = {
   title: 'Eighteen',
