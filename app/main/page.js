@@ -40,7 +40,7 @@ export default function Main() {
   const [singerData, setSingerData] = useState([])
   const [input, setInput] = useState("")
   const [select, setSelect] = useState("song")
- 
+  const [columns, setColumns] = useState([])
 
   const fetchTitle = async () => {
     const res = await fetch('api/search/searchTitle',
@@ -52,7 +52,7 @@ export default function Main() {
   
     //console.log(data)
     setData(result)
-    setSingerData([])
+    setColumns(["제공", "번호", "제목", "가수", "북마크"])
     console.log(input)
     console.log(data)
   }
@@ -65,10 +65,10 @@ export default function Main() {
       })
     const result = await res.json()
     //console.log(data)
-    setSingerData(result)
-    setData([])
+    setData(result)
+    setColumns(["제공", "번호", "제목", "가수", "북마크"])
     console.log(input)
-    console.log(singerData)
+
   }
 
   const fetchNumber = async () => {
@@ -120,35 +120,21 @@ export default function Main() {
             }><FaMagnifyingGlass /></button>
           </div>
           
-
-          {/* <div>
-            <button onClick={fetchTitle}>검색테스트</button>
-          </div>
-          <div>
-            <button onClick={fetchSinger}>가수테스트</button>
-          </div> */}
-          <div>
-            
-          </div>
-          {/* select 값에 따라 불러오는 검색 함수가 다름 */}
           
-          
+          <table className='table'>
+                <thead>
+                  <tr>
+                    {columns.map((column) => (
+                      <th key={column}>{column}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
           {data.filter((item)=>{
                 return item
               })
               .map((item, index) => {
-                return <table className='table'>
-                <thead>
-                  <tr>
-                    <th>제공</th>
-                    <th>번호</th>
-                    <th>제목</th>
-                    <th>가수</th>
-                    <th>북마크</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr key={index}>
+                return <tr key={index}>
                     <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
                     <td>{item.no}</td>
                     <td>{item.title}</td>
@@ -156,47 +142,10 @@ export default function Main() {
                     <td><button>ㅇ</button></td>
                     {/* 아이콘으로 바꿀예정 */}
                   </tr>
-                </tbody>
-              </table>
               })
           }
-
-
-
-            
-              {singerData.filter((item)=>{
-                  return item
-              })
-              .map((item, index) => {
-                return <tr key={index}>
-                  <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
-                  <td>{item.no}</td>
-                  <td>{item.title}</td>
-                  <td>{item.singer}</td>
-                  <td><button>ㅇ</button></td>
-                  {/* 아이콘으로 바꿀예정 */}
-                  </tr>
-              })}
-
-              {data.filter((item)=>{
-                if(input===""){
-                  
-                }
-                else if(item.no.toLowerCase().includes(input.toLowerCase())){
-                  return item
-                }
-              })
-              .map((item, index) => {
-                return <tr key={index}>
-                  <td>{item.brand}</td>
-                  <td>{item.no}</td>
-                  <td>{item.title}</td>
-                  <td>{item.singer}</td>
-                  <td><button>ㅇ</button></td>
-                  {/* 아이콘으로 바꿀예정 */}
-                  </tr>
-              })}
-
+            </tbody>
+          </table>
 
         </div>
       </div>

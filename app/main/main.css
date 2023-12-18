@@ -70,6 +70,31 @@ td, th {
     border: 1px solid #444444;
 }
 
+/* 제공 */
+th:nth-child(1) {
+    width: 10%;
+}
+
+/* 번호 */
+th:nth-child(2) {
+    width: 10%;
+}
+
+/* 제목 */
+th:nth-child(3) {
+    width: 50%;
+}
+
+/* 가수 */
+th:nth-child(4) {
+    width: 20%;
+}
+
+/* 북마크 */
+th:nth-child(5) {
+    width: 10%;
+}
+
 .brand{
     width: 5vh;
     height: 5vh;
