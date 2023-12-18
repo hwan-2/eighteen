@@ -6,13 +6,23 @@
     flex-direction: column;
 }
 
-.searchBar {
-    width: 600px;
+.sSearch {
+    position: relative;
+    flex-direction: row;
+    width: 60vh;
     height: 50px;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    margin: 0 auto;
+    margin: 10px auto;
+    border: 3px solid black;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.searchBar {
+    width: 80%;
+    height: 95%;
+    border: 0px;
+    outline: none;
+    font-size: 16px;
 }
   
 
@@ -35,14 +45,17 @@
     font-size: 20px;
 }
 
-table {
+.table {
     border: 1px #ce9f9f solid;
-    font-size: .9em;
+    font-size: 0.9em;
     box-shadow: 0 2px 5px rgba(0,0,0,.25);
-    width: 100%;
+    width: 80%;
     border-collapse: collapse;
     border-radius: 5px;
     overflow: hidden;
+    margin: 0 auto;
+    margin-bottom: 20vh;
+    margin-top: 12vh;
 }
 
 thead {
@@ -55,4 +68,28 @@ td, th {
     padding: 1em .5em;
     vertical-align: middle;
     border: 1px solid #444444;
+}
+
+.brand{
+    width: 5vh;
+    height: 5vh;
+}
+
+.sButton{
+    height: 100%;
+    border: 0px;
+    width: 9%;
+    float: right;
+   
+    background: #73685d;
+}
+
+.sButton:hover{
+    cursor: pointer;
+}
+
+.select{
+    width: 9%;
+    appearance: none;
+    text-align-last: center;
 }
