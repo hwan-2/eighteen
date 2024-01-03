@@ -30,7 +30,6 @@ export default async function handler(req, res) {
                 res.status(500).json("오류발생")
             }
 
-
         } catch (error) {
             console.error(error)
             res.status(500).json("오류발생")

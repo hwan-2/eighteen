@@ -18,11 +18,10 @@ export default async function NavBar() {
                 {/* 이후 로그인 판별 여부로 수정 */}
                 {
                     session && session.user ? 
-                    <Link href={"/mypage"}>MyPage</Link>     
+                    <Link href={"/mypage"}>Mypage</Link>     
                     : 
                     <Link href={"/login"}>Login</Link>
                 }
-            
             </div>
         </nav>
     )

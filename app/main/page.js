@@ -94,6 +94,19 @@ export default function Main() {
     console.log(select)
   }
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      if(select === "song"){
+        fetchTitle()
+        console.log("노래검색")
+      }
+      else{
+        fetchSinger()
+        console.log("가수검색")
+      }
+    }
+  }
+
   return (
       <div className="mMain">
         <h1 className={"title"}>노래방 검색</h1>
@@ -112,6 +125,7 @@ export default function Main() {
               className="searchBar"
               value = {input}
               onInput={(e)=>handleChange(e.target.value)}
+              onKeyDown = {handleKeyDown}
             />
             <button className='sButton' onClick={
               select === "song"
