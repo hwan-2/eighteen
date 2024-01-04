@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { authOptions } from "@/pages/api/auth/[...nextauth].js"
 import { getServerSession } from "next-auth"
+import { signOut } from "next-auth/react";
+
 
 export default async function NavBar() {
     let session = await getServerSession(authOptions)
@@ -11,6 +13,7 @@ export default async function NavBar() {
         console.log("로그인x")
     }
 
+    // const [open, setOpen] = useState(false)
     return (
         <nav>
             <div className={"navbar"}>
@@ -18,9 +21,22 @@ export default async function NavBar() {
                 {/* 이후 로그인 판별 여부로 수정 */}
                 {
                     session && session.user ? 
-                    <Link href={"/mypage"}>Mypage</Link>     
+                    <div className="dropDown">
+                        <ul className="dropDownList">
+                            <li>
+                                <Link href={"/mypage"}>Mypage</Link>
+                            </li>
+                            <li>
+                                <Link href={"/"}>Logout</Link>
+                            </li>
+                        </ul>
+                        
+                    </div>
+  
                     : 
                     <Link href={"/login"}>Login</Link>
+                    
+                    
                 }
             </div>
         </nav>
