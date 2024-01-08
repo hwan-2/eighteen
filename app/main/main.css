@@ -125,3 +125,7 @@ th:nth-child(5) {
     font-family: pretendard;
     font-weight: bold;
 }
+
+h1{
+    margin-top: 12vh;
+}
