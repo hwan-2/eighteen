@@ -8,6 +8,7 @@ import { Container, FormControlLabel } from '@mui/material';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import { useSession, signIn, signOut } from "next-auth/react"
+import GoogleButton from 'react-google-button'
 
 export default function Login(){
     const router = useRouter()
@@ -66,6 +67,12 @@ export default function Login(){
                     <Link>비밀번호를 잊으셨습니까?</Link>
                     <Link href="/signup">회원가입</Link>
                 </Box>
+
+                <div className="sLogin"> 
+                    <hr/>
+                    <GoogleButton className="gLogin" onClick={()=> signIn('google')}/>
+                    {/* 구글 로그인 */}
+                </div>
             </Container>
         </div>
         

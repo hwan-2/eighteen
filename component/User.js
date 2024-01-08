@@ -19,13 +19,15 @@ export default function User(){
                 open && (
                     <div className="dropDown">
                         <ul className="dropDownList">
-                            <li>
+                            <li onClick={() => setOpen((prev) => !prev)}> 
+                            {/* 클릭 시 닫히게 */}
                                 <Link href={"/mypage"}>Mypage</Link>
                             </li>
-                            <li>
-                                <button className='logout' onClick={()=>signOut({callbackUrl:'/'})}>
-                                    로그아웃
-                                </button>
+                            <li onClick={() => setOpen((prev) => !prev)}>
+                                <Link href={"/"} onClick={()=> signOut({callbackUrl:'/'}) }>
+                                    Logout
+                                </Link>
+                                {/* Link에서 바꿀예정 */}
                             </li>
                         </ul>   
                     </div>
