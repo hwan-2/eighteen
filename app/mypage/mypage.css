@@ -1,0 +1,24 @@
+.mypage{
+    height: 800px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+.logout{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 100px;
+    height: 15px;
+    margin: 0 auto;
+    font-size: 15px;
+    border: none;
+    background: none;
+}
+
+.logout:hover{
+    cursor: pointer;
+}
