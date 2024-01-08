@@ -41,6 +41,7 @@ export default function Main() {
   const [input, setInput] = useState("")
   const [select, setSelect] = useState("song")
   const [columns, setColumns] = useState([])
+  const [visible, setVisible] = useState(false)
 
   const fetchTitle = async () => {
     const res = await fetch('api/search/searchTitle',
@@ -53,6 +54,7 @@ export default function Main() {
     //console.log(data)
     setData(result)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
+    setVisible(true)
     console.log(input)
     console.log(data)
   }
@@ -67,6 +69,7 @@ export default function Main() {
     //console.log(data)
     setData(result)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
+    setVisible(true)
     console.log(input)
 
   }
@@ -94,6 +97,19 @@ export default function Main() {
     console.log(select)
   }
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      if(select === "song"){
+        fetchTitle()
+        console.log("노래검색")
+      }
+      else{
+        fetchSinger()
+        console.log("가수검색")
+      }
+    }
+  }
+
   return (
       <div className="mMain">
         <h1 className={"title"}>노래방 검색</h1>
@@ -112,6 +128,7 @@ export default function Main() {
               className="searchBar"
               value = {input}
               onInput={(e)=>handleChange(e.target.value)}
+              onKeyDown = {handleKeyDown}
             />
             <button className='sButton' onClick={
               select === "song"
@@ -120,33 +137,36 @@ export default function Main() {
               }
             ><FaMagnifyingGlass /></button>
           </div>
-          
-          
-          <table className='table'>
-            <thead>
-              <tr>
-                {columns.map((column) => (
-                  <th key={column}>{column}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-          {data.filter((item)=>{
-                return item
-              })
-              .map((item, index) => {
-                return <tr key={index}>
-                    <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
-                    <td>{item.no}</td>
-                    <td>{item.title}</td>
-                    <td>{item.singer}</td>
-                    <td><button>ㅇ</button></td>
-                    {/* 아이콘으로 바꿀예정 */}
+          {visible
+          ? data.length
+            ? <table className='table'>
+                <thead>
+                  <tr>
+                    {columns.map((column) => (
+                      <th key={column}>{column}</th>
+                    ))}
                   </tr>
-              })
+                </thead>
+                <tbody>
+                    {data.map((item, index) => {
+                    return <tr key={index}>
+                      <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
+                      <td>{item.no}</td>
+                      <td>{item.title}</td>
+                      <td>{item.singer}</td>
+                      <td><button>ㅇ</button></td>
+                      {/* 아이콘으로 바꿀예정 */}
+                    </tr>
+                    })
+                  } 
+                </tbody>
+              </table>
+            : <h1>검색결과가 없습니다.</h1>
+          : <h1>검색하세요</h1>
           }
-            </tbody>
-          </table>
+
+
+          
 
         </div>
       </div>
