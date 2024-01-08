@@ -6,10 +6,10 @@ export default async function handler(req, res) {
         try {
             req.body = JSON.parse(req.body)
             const singer = req.body.singer.replace(/\s/g, '')
-            const response = await axios.get(`https://api.manana.kr/karaoke/singer/${singer}.json`);
+            const response = await axios.get(`https://api.manana.kr/karaoke/singer/${singer}.json?brand=kumyoung,tj`);
             //response.data를 brand가 tj이거나 kumyoung인 것만 필터링
-            const filteredData = response.data.filter(data => data["brand"] === "tj" || data["brand"] === "kumyoung");
-            res.status(200).json(filteredData);
+            //const filteredData = response.data.filter(data => data["brand"] === "tj" || data["brand"] === "kumyoung");
+            res.status(200).json(response.data);
 
         } catch (error) {
             console.error('API 호출 오류:', error);
