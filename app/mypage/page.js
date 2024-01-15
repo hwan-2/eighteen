@@ -1,19 +1,29 @@
-'use client'
 import './mypage.css'
-import { signOut, useSession } from 'next-auth/react'
+import { authOptions } from "@/pages/api/auth/[...nextauth].js"
+import { getServerSession } from "next-auth"
 
 export default async function Mypage(){
+    let session = await getServerSession(authOptions)
+    if (session) {
+        console.log(session.user._id)
+    }
+    else {
+        console.log("로그인x")
+    }
+
+    const res = await fetch(`http://localhost:3000/api/get/${session.user._id}`)
+    const data = await res.json()
+
+    const a = JSON.stringify(data, null, 2);
 
     return(
         <div className='mypage'>
-
-            <div className='bookmark'>
-                북마크
-            </div>
-            <button className='logout' onClick={()=>signOut({callbackUrl:'/'})}>
+            {a}
+            {/* <button className='logout' onClick={()=>signOut({callbackUrl:'/'})}>
                 로그아웃
-            </button>
+            </button> */}
         </div>
         
     )
 }
+
