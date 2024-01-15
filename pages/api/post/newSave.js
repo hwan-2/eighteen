@@ -12,22 +12,17 @@ export default async function handler(req, res) {
             req.body = JSON.parse(req.body)
             let userId = session.user._id
             let saveThing = {
-                brand: req.brand,
+                brand: req.body.brand,
                 no : req.body.no,
-                title : req.title,
-                singer : req.singer
+                title : req.body.title,
+                singer : req.body.singer
             }
 
             let db = (await connectDB).db('eighteen')
             let personalPagePath = `user/${userId}`
             let result = db.collection(personalPagePath).insertOne(saveThing)
             
-            if (result.insertedCount > 0){
-                res.status(200).json("저장완료")
-            } else {
-                console.error(error)
-                res.status(500).json("오류발생")
-            }
+            res.status(200).json("저장완료")
 
         } catch (error) {
             console.error(error)

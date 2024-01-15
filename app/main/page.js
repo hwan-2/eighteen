@@ -77,7 +77,7 @@ export default function Main() {
   }
 
   const fetchBookmark = async (item, e) => {
-    console.log(item)
+    console.log(item.brand)
     const res = await fetch('api/post/newSave',
       {
         method: 'POST',
@@ -85,7 +85,7 @@ export default function Main() {
           brand : item.brand,
           no: item.no,
           title: item.title,
-          singer: item.singer})
+          singer: item.singer })
       })
     const result = await res.json()
     console.log(result)
