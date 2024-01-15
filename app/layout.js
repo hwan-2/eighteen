@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
           {children}
         </div>
         <div className={"footer"}>
-          <Link href={"/"}>안녕</Link>
+          <Link href={"https://github.com/SultanLee/eighteen"}>안녕</Link>
         </div>
 
       </body>

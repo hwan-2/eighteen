@@ -42,6 +42,8 @@ export default function Main() {
   const [select, setSelect] = useState("song")
   const [columns, setColumns] = useState([])
   const [visible, setVisible] = useState(false)
+  const [bookmark, setBookmark] = useState([])
+
 
   const fetchTitle = async () => {
     const res = await fetch('api/search/searchTitle',
@@ -73,6 +75,23 @@ export default function Main() {
     console.log(input)
 
   }
+
+  const fetchBookmark = async (item, e) => {
+    console.log(item)
+    const res = await fetch('api/post/newSave',
+      {
+        method: 'POST',
+        body : JSON.stringify({
+          brand : item.brand,
+          no: item.no,
+          title: item.title,
+          singer: item.singer})
+      })
+    const result = await res.json()
+    console.log(result)
+  }
+
+
 
   // const fetchNumber = async () => {
   //   const res = await fetch('api/search/searchNumber',
@@ -109,6 +128,12 @@ export default function Main() {
       }
     }
   }
+
+  const bookmarktest = (item, e) => {
+    console.log(item)
+    alert("버튼")
+  }
+
 
   return (
       <div className="mMain">
@@ -154,7 +179,7 @@ export default function Main() {
                       <td>{item.no}</td>
                       <td>{item.title}</td>
                       <td>{item.singer}</td>
-                      <td><button>ㅇ</button></td>
+                      <td><button onClick={(e)=>fetchBookmark(item, e)}>ㅇ</button></td>
                       {/* 아이콘으로 바꿀예정 */}
                     </tr>
                     })
@@ -164,10 +189,6 @@ export default function Main() {
             : <h1>검색결과가 없습니다.</h1>
           : <h1>검색하세요</h1>
           }
-
-
-          
-
         </div>
       </div>
   )
