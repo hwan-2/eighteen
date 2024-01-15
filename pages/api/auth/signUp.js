@@ -49,7 +49,7 @@ export default async function handler(req, res) {
         
         //email 중복 체크
         let db = (await connectDB).db('eighteen');
-        const existingUser = await db.collection('user').findOne({ email });
+        const existingUser = await db.collection('users').findOne({ email });
 
         if (existingUser) {
             console.log('이미 사용 중인 이메일입니다.');
@@ -60,7 +60,7 @@ export default async function handler(req, res) {
         const hash = await bcrypt.hash(req.body.password, 10);
         req.body.password = hash;
         
-        await db.collection('user').insertOne(req.body);
+        await db.collection('users').insertOne(req.body);
         res.send("<script>alert('welcome!');location.href='/login';</script>"); 
     }
 }; 

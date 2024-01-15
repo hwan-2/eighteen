@@ -9,29 +9,35 @@ export default async function handler(req, res) {
             //실제 페이지가 만들면 주석처리부분 활성화
             //session에 있는 userId를 가져와서 하위 페이지 만들기
             let session = await getServerSession(req, res, authOptions)
+            
+            //session 체크
+            if (!session) {
+                return res.status(400).json("세션 오류발생")
+            }
+            
             req.body = JSON.parse(req.body)
             let userId = session.user._id
             let saveThing = {
-                brand: req.brand,
+                brand: req.body.brand,
                 no : req.body.no,
-                title : req.title,
-                singer : req.singer
+                title : req.body.title,
+                singer : req.body.singer
             }
-
+            
+            //null 체크
+            if(!saveThing.brand || !saveThing.no || !saveThing.title || !saveThing.singer){
+                return res.status(400).json("null 오류발생")
+            }
+            
             let db = (await connectDB).db('eighteen')
-            let personalPagePath = `user/${userId}`
+            let personalPagePath = `users/${userId}`
             let result = db.collection(personalPagePath).insertOne(saveThing)
             
-            if (result.insertedCount > 0){
-                res.status(200).json("저장완료")
-            } else {
-                console.error(error)
-                res.status(500).json("오류발생")
-            }
+            res.status(200).json("저장완료")
 
         } catch (error) {
             console.error(error)
-            res.status(500).json("오류발생")
+            res.status(500).json("저장오류발생")
         }
     }
 }

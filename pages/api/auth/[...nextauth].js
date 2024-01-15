@@ -22,7 +22,7 @@ export const authOptions = {
         async authorize(credentials) {
             console.log(credentials)
             let db = (await connectDB).db('eighteen');
-            let user = await db.collection('user').findOne({email : credentials.email})
+            let user = await db.collection('users').findOne({email : credentials.email})
             if (!user) {
                 console.log('잘못된 이메일');
                 return null
