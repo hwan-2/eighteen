@@ -5,7 +5,7 @@ export default async function handler(req, res) {
         try {
             const { id } = req.query
             let db = (await connectDB).db('eighteen')
-            let result = await db.collection(`user/${id}`).find().toArray()
+            let result = await db.collection(`users/${id}`).find().toArray()
             res.status(200).json(result)
 
         } catch (error) {
