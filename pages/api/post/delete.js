@@ -19,6 +19,7 @@ export default async function handler(req,res){
         }
         catch (error){
             res.status(500).json("삭제오류발생")
+
         }
     }
 }
