@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
+import { FaUserCircle } from "react-icons/fa";
 
 export default function User(){
 
@@ -11,9 +12,8 @@ export default function User(){
     return (
         <div>
             <div>
-                <button onClick={() => setOpen((prev) => !prev)}>
-                    프로필
-                </button>
+                <FaUserCircle size="30" color="white" onClick={() => setOpen((prev) => !prev)} />
+                {/* 프로필 버튼 */}
             </div>
             {
                 open && (

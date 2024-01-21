@@ -1,7 +1,7 @@
 import { signIn } from 'next-auth/react';
 import './globals.css'
 import Link from "next/link";
-
+import { FaGithub } from "react-icons/fa";
 import NavBar from '@/component/NavBar';
 
 
@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
           {children}
         </div>
         <div className={"footer"}>
-          <Link href={"https://github.com/SultanLee/eighteen"}>안녕</Link>
+          <Link href={"https://github.com/SultanLee/eighteen"}><FaGithub /></Link>
         </div>
 
       </body>
