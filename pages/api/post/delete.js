@@ -13,8 +13,10 @@ export default async function handler(req,res){
                 return res.status(400).json("세션 오류발생")
             }
             let userId = session.user._id
+            req.body = JSON.parse(req.body)
+            let postId = req.body._id
             let db = (await connectDB).db('eighteen')
-            let result = await db.collection(`users/${userId}`).deleteOne({_id : new ObjectId(req.body)})
+            let result = await db.collection(`users/${userId}`).deleteOne({_id : new ObjectId(postId)})
             res.status(200).json("삭제완료")
         }
         catch (error){
