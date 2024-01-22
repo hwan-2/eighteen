@@ -25,6 +25,7 @@ export default function Login(){
         ).then(({ok, error}) => {
             if(ok){
                 router.replace('/main')
+                location.reload();
             } else{
                 console.log(error)
                 alert("잘못된 비밀번호 혹은 아이디 입니다.");

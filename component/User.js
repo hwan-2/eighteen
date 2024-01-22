@@ -21,7 +21,8 @@ export default function User(){
                         <ul className="dropDownList">
                             <li onClick={() => setOpen((prev) => !prev)}> 
                             {/* 클릭 시 닫히게 */}
-                                <Link href={"/mypage"}>Mypage</Link>
+                                <a href={"/mypage"}>Mypage</a>
+                                {/* 새로고침을 위해 a태그 사용 */}
                             </li>
                             <li onClick={() => setOpen((prev) => !prev)}>
                                 <Link href={"/"} onClick={()=> signOut({callbackUrl:'/'}) }>

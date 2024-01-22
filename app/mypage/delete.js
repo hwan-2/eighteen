@@ -13,6 +13,7 @@ export default async function Delete(props) {
                     _id : props.item._id,
                 }),
             })
+            location.reload();
         }
         else{
             alert("취소합니다.")
