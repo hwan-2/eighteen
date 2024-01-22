@@ -13,9 +13,9 @@ export default async function Delete(props) {
                         _id: props.item._id,
                     }),
                 }).then(() => {
-                e.target.parentElement.parentElement.style.opacity = '0'
+                e.target.parentElement.parentElement.parentElement.style.opacity = '0'
                 setTimeout(() => {
-                    e.target.parentElement.parentElement.style.display = 'none'
+                    e.target.parentElement.parentElement.parentElement.style.display = 'none'
                 }, 100)
             })
         }
