@@ -1,8 +1,8 @@
 "use client"
+import { MdDeleteForever } from "react-icons/md";
 
 export default async function Delete(props) {
 
-    
     const deleteBookmark = async () => {
         if (window.confirm("북마크에서 삭제할까요?")) {
             console.log(props.item._id)
@@ -21,6 +21,6 @@ export default async function Delete(props) {
         
       }
     return (
-        <button onClick={deleteBookmark}>ㅇ</button>
+        <MdDeleteForever size="30" onClick={deleteBookmark}/>
     )
 }

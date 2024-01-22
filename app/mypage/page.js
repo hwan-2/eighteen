@@ -15,8 +15,6 @@ export default async function Mypage(){
     const res = await fetch(`http://localhost:3000/api/get/${session.user._id}`)
     const data = await res.json()
 
-   
-
     const a = JSON.stringify(data, null, 2);
 
     return(
