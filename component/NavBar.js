@@ -2,6 +2,8 @@ import Link from "next/link";
 import { authOptions } from "@/pages/api/auth/[...nextauth].js"
 import { getServerSession } from "next-auth"
 import User from '@/component/User';
+import Image from 'next/image'
+import logo from '../public/img/logo.png'
 
 export default async function NavBar() {
     let session = await getServerSession(authOptions)
@@ -16,7 +18,8 @@ export default async function NavBar() {
     return (
         <nav>
             <div className={"navbar"}>
-                <Link href={"/"}>Home</Link>
+                {/*<Link href={"/"}>Home</Link>*/}
+                <Link href={"/"} style={{ display: 'block', marginTop: '-10px' }}><Image src={logo} alt="Home"/></Link>
                 {/* 이후 로그인 판별 여부로 수정 */}
                 {
                     session && session.user ? 
