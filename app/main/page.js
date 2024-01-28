@@ -95,14 +95,17 @@ export default function Main() {
           no: item.no,
           title: item.title,
           singer: item.singer })
-      })
+      }).then(
+        select === "song"
+        ? fetchTitle()
+        : fetchSinger()
+      )
     const result = await res.json()
     console.log(result)
   }
 
 
   const deleteBookmark = async (item, e) => {
-
     const bid = bookmark.filter(v => v.brand === item.brand && v.no === item.no)
     console.log(bid[0]._id)
     const res = await fetch('api/post/delete',
@@ -111,7 +114,11 @@ export default function Main() {
           body: JSON.stringify({
           _id: bid[0]._id,
         }),
-      })
+      }).then(
+        select === "song"
+        ? fetchTitle()
+        : fetchSinger()
+      )
   }
 
   // const fetchNumber = async () => {
@@ -203,11 +210,10 @@ export default function Main() {
                       <td>{bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no)
                       ?<FaHeart size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
                       :<FaRegHeart size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
-                      
                       }
                       </td>
                       
-                      {/* filter로 업체 구분 후, some으로 해당 업체의 번호 검색 */}
+                      {/* filter로 업체 구분 후, some으로 해당 업체의 번호 검색하여 값 존재 시 true 반환 */}
                     </tr>
                     })
                   } 
