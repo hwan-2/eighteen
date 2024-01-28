@@ -20,7 +20,7 @@ export default async function handler(req, res) {
             let db = (await connectDB).db('eighteen')
             let userId = session.user._id
             let resultUser = await db.collection(`users/${userId}`).find().toArray()
-            const filteredData = resultUser.map(({brand, no}) => ({brand, no}))
+            const filteredData = resultUser.map(({brand, no, _id}) => ({brand, no, _id}))
             //user데이터와 검색 데이터를 묶어서 보냄
             const responseData = {
                 music: response.data,

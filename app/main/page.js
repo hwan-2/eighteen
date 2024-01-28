@@ -1,10 +1,11 @@
 "use client"
 import { useSession, signIn, signOut } from 'next-auth/react'
 import './main.css'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import axios from "axios"
 import { Checkbox } from '@mui/material'
-import { FaMagnifyingGlass } from "react-icons/fa6";
+import { FaMagnifyingGlass, FaHeart } from "react-icons/fa6";
+import { FaRegHeart } from "react-icons/fa";
 
 
 
@@ -43,6 +44,8 @@ export default function Main() {
   const [columns, setColumns] = useState([])
   const [visible, setVisible] = useState(false)
   const [bookmark, setBookmark] = useState([])
+  const [, updateState] = useState()
+  const forceUpdate = useCallback(() => updateState({}), [])
 
 
   const fetchTitle = async () => {
@@ -52,13 +55,16 @@ export default function Main() {
         body : JSON.stringify({title:input})
       })
     const result = await res.json()
-  
+    const musicData = result.music
+    const bookmarkData = result.user
+
     //console.log(data)
-    setData(result)
+    setData(musicData)
+    setBookmark(bookmarkData)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
     setVisible(true)
     console.log(input)
-    console.log(data)
+    console.log(bookmark)
   }
 
   const fetchSinger = async () => {
@@ -68,8 +74,11 @@ export default function Main() {
         body : JSON.stringify({singer:input})
       })
     const result = await res.json()
+    const musicData = result.music
+    const bookmarkData = result.user
     //console.log(data)
-    setData(result)
+    setData(musicData)
+    setBookmark(bookmarkData)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
     setVisible(true)
     console.log(input)
@@ -92,6 +101,18 @@ export default function Main() {
   }
 
 
+  const deleteBookmark = async (item, e) => {
+
+    const bid = bookmark.filter(v => v.brand === item.brand && v.no === item.no)
+    console.log(bid[0]._id)
+    const res = await fetch('api/post/delete',
+      {
+        method: 'DELETE',
+          body: JSON.stringify({
+          _id: bid[0]._id,
+        }),
+      })
+  }
 
   // const fetchNumber = async () => {
   //   const res = await fetch('api/search/searchNumber',
@@ -179,8 +200,14 @@ export default function Main() {
                       <td>{item.no}</td>
                       <td>{item.title}</td>
                       <td>{item.singer}</td>
-                      <td><button onClick={(e)=>fetchBookmark(item, e)}>ㅇ</button></td>
-                      {/* 아이콘으로 바꿀예정 */}
+                      <td>{bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no)
+                      ?<FaHeart size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
+                      :<FaRegHeart size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
+                      
+                      }
+                      </td>
+                      
+                      {/* filter로 업체 구분 후, some으로 해당 업체의 번호 검색 */}
                     </tr>
                     })
                   } 
