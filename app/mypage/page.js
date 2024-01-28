@@ -32,7 +32,7 @@ export default async function Mypage(){
                 </thead>
                 <tbody>
                     {data.map((item, index) => {
-                    return <tr key={index}>
+                    return <tr className="tr" key={index}>
                       <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
                       <td>{item.no}</td>
                       <td>{item.title}</td>

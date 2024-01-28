@@ -13,3 +13,6 @@
     margin: 0px auto;
 }
 
+.dark-mode .TextField{
+    background: white;
+}

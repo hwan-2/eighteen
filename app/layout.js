@@ -3,6 +3,7 @@ import './globals.css'
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 import NavBar from '@/component/NavBar';
+import { cookies } from 'next/headers'
 
 
 export const metadata = {
@@ -11,10 +12,15 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+    let cookie = cookies().get('mode')
 
   return (
       <html lang="en">
-      <body>
+      <body className={
+          cookie != undefined && cookie.value == 'dark'
+              ? 'dark-mode'
+              : ''}
+      >
 
         <NavBar/>
         {/* <div className={"navbar"}>

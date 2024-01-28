@@ -79,3 +79,7 @@ th:nth-child(5) {
     width: 5vh;
     height: 5vh;
 }
+
+.dark-mode .tr {
+    background: #333333;
+}
