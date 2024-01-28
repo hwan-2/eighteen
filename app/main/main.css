@@ -129,3 +129,11 @@ th:nth-child(5) {
 h1{
     margin-top: 12vh;
 }
+
+.eH:hover{
+    cursor: pointer;
+}
+
+.fH:hover{
+    cursor: pointer;
+}

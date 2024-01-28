@@ -208,8 +208,8 @@ export default function Main() {
                       <td>{item.title}</td>
                       <td>{item.singer}</td>
                       <td>{bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no)
-                      ?<FaHeart size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
-                      :<FaRegHeart size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
+                      ?<FaHeart className='fH' size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
+                      :<FaRegHeart className='eH' size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
                       }
                       </td>
                       
