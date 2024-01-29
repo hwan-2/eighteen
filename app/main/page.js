@@ -45,10 +45,7 @@ export default function Main() {
   const [columns, setColumns] = useState([])
   const [visible, setVisible] = useState(false)
   const [bookmark, setBookmark] = useState([])
-  const [, updateState] = useState()
-  const forceUpdate = useCallback(() => updateState({}), [])
-
-
+  const [test, setTest] = useState();
 
   const fetchTitle = async () => {
     const res = await fetch('api/search/searchTitle',
@@ -59,14 +56,10 @@ export default function Main() {
     const result = await res.json()
     const musicData = result.music
     const bookmarkData = result.user
-
-    //console.log(data)
     setData(musicData)
     setBookmark(bookmarkData)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
     setVisible(true)
-    console.log(input)
-    console.log(bookmark)
   }
 
   const fetchSinger = async () => {
@@ -78,17 +71,13 @@ export default function Main() {
     const result = await res.json()
     const musicData = result.music
     const bookmarkData = result.user
-    //console.log(data)
     setData(musicData)
     setBookmark(bookmarkData)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
     setVisible(true)
-    console.log(input)
-
   }
 
   const fetchBookmark = async (item, e) => {
-    console.log(item.brand)
     const res = await fetch('api/post/newSave',
       {
         method: 'POST',
@@ -97,31 +86,33 @@ export default function Main() {
           no: item.no,
           title: item.title,
           singer: item.singer })
-      }).then(
-        select === "song"
-        ? fetchTitle()
-        : fetchSinger()
-      )
+      }).then(searchBookmark())
     const result = await res.json()
-    console.log(result)
   }
 
 
   const deleteBookmark = async (item, e) => {
     const bid = bookmark.filter(v => v.brand === item.brand && v.no === item.no)
-    console.log(bid[0]._id)
     const res = await fetch('api/post/delete',
       {
         method: 'DELETE',
           body: JSON.stringify({
           _id: bid[0]._id,
         }),
-      }).then(
-        select === "song"
-        ? fetchTitle()
-        : fetchSinger()
-      )
+      }).then(searchBookmark())
   }
+
+  const searchBookmark = async () => {
+    const res = await fetch('api/search/searchBookmark',
+      {
+        method: 'POST',
+        body : JSON.stringify({title:input})
+      })
+    const result = await res.json()
+    const bookmarkData = result.user
+    setBookmark(bookmarkData)
+  }
+
 
   // const fetchNumber = async () => {
   //   const res = await fetch('api/search/searchNumber',
@@ -138,32 +129,32 @@ export default function Main() {
 
   const handleChange = (value) => {
     setInput(value)
-    console.log(input)
   }
 
   const selectChange = (e) => {
     setSelect(e.target.value)
-    console.log(select)
   }
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       if(select === "song"){
         fetchTitle()
-        console.log("노래검색")
       }
       else{
         fetchSinger()
-        console.log("가수검색")
       }
     }
   }
 
-  const bookmarktest = (item, e) => {
-    console.log(item)
-    alert("버튼")
+  const bookmarkButton = (item) => {
+    if(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
+    {
+    return <FaHeart className='fH' size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
+    }
+    else{
+      return <FaRegHeart className='eH' size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
+    }
   }
-
 
   return (
       <div className="mMain">
@@ -209,12 +200,13 @@ export default function Main() {
                       <td>{item.no}</td>
                       <td>{item.title}</td>
                       <td>{item.singer}</td>
-                      <td>{bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no)
+                      <td>{bookmarkButton(item)}
+                        
+                      {/* {(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
                       ?<FaHeart className='fH' size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
                       :<FaRegHeart className='eH' size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
-                      }
+                      } */}
                       </td>
-                      
                       {/* filter로 업체 구분 후, some으로 해당 업체의 번호 검색하여 값 존재 시 true 반환 */}
                     </tr>
                     })
