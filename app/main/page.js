@@ -86,7 +86,8 @@ export default function Main() {
           no: item.no,
           title: item.title,
           singer: item.singer })
-      }).then(searchBookmark())
+      })
+      searchBookmark()
     const result = await res.json()
   }
 
@@ -99,7 +100,8 @@ export default function Main() {
           body: JSON.stringify({
           _id: bid[0]._id,
         }),
-      }).then(searchBookmark())
+      })
+      searchBookmark()
   }
 
   const searchBookmark = async () => {
@@ -112,20 +114,6 @@ export default function Main() {
     const bookmarkData = result.user
     setBookmark(bookmarkData)
   }
-
-
-  // const fetchNumber = async () => {
-  //   const res = await fetch('api/search/searchNumber',
-  //     {
-  //       method: 'POST',
-  //       body : JSON.stringify({no:input})
-  //     })
-  //   const result = await res.json()
-  //   //console.log(data)
-  //   setData(result)
-  //   console.log(input)
-  //   console.log(data)
-  // }
 
   const handleChange = (value) => {
     setInput(value)
@@ -143,16 +131,6 @@ export default function Main() {
       else{
         fetchSinger()
       }
-    }
-  }
-
-  const bookmarkButton = (item) => {
-    if(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
-    {
-    return <FaHeart className='fH' size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
-    }
-    else{
-      return <FaRegHeart className='eH' size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
     }
   }
 
@@ -200,12 +178,11 @@ export default function Main() {
                       <td>{item.no}</td>
                       <td>{item.title}</td>
                       <td>{item.singer}</td>
-                      <td>{bookmarkButton(item)}
-                        
-                      {/* {(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
+                      <td>
+                      {(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
                       ?<FaHeart className='fH' size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
                       :<FaRegHeart className='eH' size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
-                      } */}
+                      }
                       </td>
                       {/* filter로 업체 구분 후, some으로 해당 업체의 번호 검색하여 값 존재 시 true 반환 */}
                     </tr>
