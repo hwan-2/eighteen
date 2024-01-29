@@ -137,3 +137,7 @@ h1{
 .fH:hover{
     cursor: pointer;
 }
+
+.dark-mode .tr {
+    background: #333333;
+}

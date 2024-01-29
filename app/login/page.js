@@ -47,8 +47,8 @@ export default function Login(){
                     }}>
                     <h1>로그인</h1>
                     <form onSubmit={login}>
-                        <TextField label="이메일" name="email" id="email" margin="normal" fullWidth required />
-                        <TextField label="비밀번호" name="password" id="password" margin="normal" type="password" fullWidth required/>
+                        <TextField className="TextField" label="이메일" name="email" id="email" margin="normal" fullWidth required />
+                        <TextField className="TextField" label="비밀번호" name="password" id="password" margin="normal" type="password" fullWidth required/>
                         
                         {/* <FormControlLabel control={<Checkbox value="remember" color="primary"/>} label="자동 로그인"/> */}
                         
@@ -65,8 +65,7 @@ export default function Login(){
                     </div>
                         <button type="submit">로그인</button>
                     </form> */}
-                    <Link>비밀번호를 잊으셨습니까?</Link>
-                    <Link href="/signup">회원가입</Link>
+                    혹시 회원이 아니신가요? <Link href="/signup">회원가입</Link>
                 </Box>
 
                 <div className="sLogin"> 
