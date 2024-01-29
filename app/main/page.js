@@ -9,6 +9,7 @@ import { FaRegHeart } from "react-icons/fa";
 
 
 
+
 // const OPTIONS = [
 // 	{ value: "songTitle", name: "노래" },
 // 	{ value: "artist", name: "가수" },
@@ -46,6 +47,7 @@ export default function Main() {
   const [bookmark, setBookmark] = useState([])
   const [, updateState] = useState()
   const forceUpdate = useCallback(() => updateState({}), [])
+
 
 
   const fetchTitle = async () => {

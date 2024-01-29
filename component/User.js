@@ -12,7 +12,7 @@ export default function User(){
     return (
         <div>
             <div>
-                <FaUserCircle size="30" color="white" onClick={() => setOpen((prev) => !prev)} />
+                <FaUserCircle className="pButton" size="30" color="white" onClick={() => setOpen((prev) => !prev)} />
                 {/* 프로필 버튼 */}
             </div>
             {
