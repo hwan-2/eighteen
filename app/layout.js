@@ -21,16 +21,7 @@ export default function RootLayout({ children }) {
               ? 'dark-mode'
               : ''}
       >
-
         <NavBar/>
-        {/* <div className={"navbar"}>
-          <Link href={"/"}>Home</Link>
-          {
-            session ?
-            <Link href={"/mypage"}>MyPage</Link> 
-            :<Link href={"/login"}>Login</Link>
-          }
-        </div> */}
         <div className={"wrap"}>
           {children}
         </div>

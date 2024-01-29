@@ -15,7 +15,6 @@ export default async function NavBar() {
         console.log("로그인x")
     }
 
-    // const [open, setOpen] = useState(false)
     return (
         <nav>
             <div className={"navbar"}>

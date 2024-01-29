@@ -15,8 +15,6 @@ export default async function Mypage(){
     const res = await fetch(`http://localhost:3000/api/get/${session.user._id}`)
     const data = await res.json()
 
-    const a = JSON.stringify(data, null, 2);
-
     return(
         <div className='mypage'>
             <h1>안녕하세요 {session.user.name}님!</h1>
@@ -43,9 +41,6 @@ export default async function Mypage(){
                   } 
                 </tbody>
             </table>
-            {/* <button className='logout' onClick={()=>signOut({callbackUrl:'/'})}>
-                로그아웃
-            </button> */}
         </div>
         
     )

@@ -2,7 +2,6 @@
 import {useRouter} from "next/navigation";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Checkbox from '@mui/material/Checkbox';
 import './login.css'
 import { Container, FormControlLabel } from '@mui/material';
 import Link from '@mui/material/Link';
@@ -31,9 +30,6 @@ export default function Login(){
                 alert("잘못된 비밀번호 혹은 아이디 입니다.");
             }
         })
-        
-        
-        
     }
     return(
         <div className='login'>
@@ -49,25 +45,10 @@ export default function Login(){
                     <form onSubmit={login}>
                         <TextField className="TextField" label="이메일" name="email" id="email" margin="normal" fullWidth required />
                         <TextField className="TextField" label="비밀번호" name="password" id="password" margin="normal" type="password" fullWidth required/>
-                        
-                        {/* <FormControlLabel control={<Checkbox value="remember" color="primary"/>} label="자동 로그인"/> */}
-                        
                         <Button type="submit" variant='contained' sx={{ mt:3, mb: 2}}>로그인</Button>
                     </form>
-                    {/* <form onSubmit={login}>
-                    <div>
-                        <label htmlFor="email">사용자 이름</label>
-                        <input type="email" id="email" name="email" />
-                    </div>
-                    <div>
-                        <label htmlFor="password">비밀번호</label>
-                        <input type="password" id="password" name="password" />
-                    </div>
-                        <button type="submit">로그인</button>
-                    </form> */}
                     혹시 회원이 아니신가요? <Link href="/signup">회원가입</Link>
                 </Box>
-
                 <div className="sLogin"> 
                     <hr/>
                     <GoogleButton className="gLogin" onClick={()=> signIn('google')}/>
