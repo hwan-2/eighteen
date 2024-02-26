@@ -12,7 +12,7 @@ export default async function Mypage(){
         console.log("로그인x")
     }
 
-    const res = await fetch(`http://localhost:3000/api/get/${session.user._id}`)
+    const res = await fetch(`'https://eighteen-three.vercel.app/api/get/${session.user._id}`)
     const data = await res.json()
 
     return(
