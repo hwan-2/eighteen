@@ -6,7 +6,7 @@ export default function Home() {
   return (
       <div className="ad">
         <div className="banner">
-          <img src="/test6.png"></img>
+          <img className="bImage" src="/test6.png"></img>
         </div>
         <h1 className={"title"}>지금 즉시 가입하세요!</h1>
         <div className={"mtitle"}>

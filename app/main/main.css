@@ -19,7 +19,7 @@
 }
 
 .searchBar {
-    width: 80%;
+    width: 75%;
     height: 95%;
     border: 0px;
     outline: none;
@@ -115,15 +115,15 @@ th:nth-child(5) {
 }
 
 .select{
-    width: 9%;
+    width: 8vh;
     height: 100%;
     border: none;
     outline: none;
     float: left;
     background: pink;
-
     font-family: pretendard;
     font-weight: bold;
+    text-align: center;
 }
 
 h1{
