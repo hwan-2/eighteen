@@ -21,3 +21,6 @@
 ## 컨트리뷰터
 - [SultanLee (이승환)](https://github.com/SultanLee)
 - [KimIHwan (김이환)](https://github.com/KimIHwan)
+
+## 라이센스
+이 프로젝트는 [MIT LICENSE](https://github.com/hwan-2/eighteen/blob/main/LICENSE)를 따릅니다.
