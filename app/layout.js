@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
           {children}
         </div>
         <div className={"footer"}>
-          <Link href={"https://github.com/SultanLee/eighteen"}><FaGithub /></Link>
+          <Link href={"https://eighteen-three.vercel.app/"}><FaGithub /></Link>
         </div>
 
       </body>
