@@ -25,7 +25,7 @@ export default function User(){
                                 {/* 새로고침을 위해 a태그 사용 */}
                             </li>
                             <li onClick={() => setOpen((prev) => !prev)}>
-                                <Link href={"/"} onClick={()=> signOut({callbackUrl:'/'}) }>
+                                <Link href={"/main"} onClick={()=> signOut({callbackUrl:'/'}) }>
                                     Logout
                                 </Link>
                                 {/* Link에서 바꿀예정 */}

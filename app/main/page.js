@@ -8,8 +8,6 @@ import { FaMagnifyingGlass, FaHeart } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
 
 
-
-
 // const OPTIONS = [
 // 	{ value: "songTitle", name: "노래" },
 // 	{ value: "artist", name: "가수" },
@@ -46,6 +44,7 @@ export default function Main() {
   const [visible, setVisible] = useState(false)
   const [bookmark, setBookmark] = useState([])
   const [test, setTest] = useState();
+  const [testLogin, setTestLogin] = useState(false);
 
   const fetchTitle = async () => {
     const res = await fetch('api/search/searchTitle',
@@ -55,9 +54,16 @@ export default function Main() {
       })
     const result = await res.json()
     const musicData = result.music
-    const bookmarkData = result.user
+    if(result.user){
+      const bookmarkData = result.user
+      setBookmark(bookmarkData)
+      setTestLogin(true)
+    }else{
+      setBookmark([])
+      setTestLogin(false)
+    }
+    console.log(bookmark)
     setData(musicData)
-    setBookmark(bookmarkData)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
     setVisible(true)
   }
@@ -70,9 +76,16 @@ export default function Main() {
       })
     const result = await res.json()
     const musicData = result.music
-    const bookmarkData = result.user
+    if(result.user){
+      const bookmarkData = result.user
+      setBookmark(bookmarkData)
+      setTestLogin(true)
+    }else{
+      setBookmark([])
+      setTestLogin(false)
+    }
+    console.log(bookmark)
     setData(musicData)
-    setBookmark(bookmarkData)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
     setVisible(true)
   }
@@ -179,9 +192,14 @@ export default function Main() {
                       <td>{item.title}</td>
                       <td>{item.singer}</td>
                       <td>
-                      {(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
-                      ?<FaHeart className='fH' size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
-                      :<FaRegHeart className='eH' size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
+                      {
+                      testLogin
+                      ?(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
+                        ?<FaHeart className='fH' size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
+                        :<FaRegHeart className='eH' size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
+                      :<FaRegHeart className='eH' size={30} color='red' onClick={()=>alert("로그인 후 이용 가능 합니다")}/>
+
+                      
                       }
                       </td>
                       {/* filter로 업체 구분 후, some으로 해당 업체의 번호 검색하여 값 존재 시 true 반환 */}

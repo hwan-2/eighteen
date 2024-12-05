@@ -18,7 +18,7 @@ export default async function NavBar() {
     return (
         <nav>
             <div className={"navbar"}>
-                <a href={"/"} style={{ display: 'block', marginTop: '-10px' }}><Image src={logo} alt="Home"/></a>
+                <a href={"/main"} style={{ display: 'block', marginTop: '-10px' }}><Image src={logo} alt="Home"/></a>
                 <div style={{ display: 'flex',  marginLeft: 'auto', gap: '10px', alignItems: 'center' }}>
                     <DarkMode></DarkMode>
                     {
