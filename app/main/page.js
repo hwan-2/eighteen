@@ -47,12 +47,8 @@ export default function Main() {
   const [testLogin, setTestLogin] = useState(false);
 
   const fetchTitle = async () => {
-    const res = await fetch('api/search/searchTitle',
-      {
-        method: 'POST',
-        body : JSON.stringify({title:input})
-      })
-    const result = await res.json()
+    const res = await axios.post('api/search/searchTitle', {title:input})
+    const result = res.data
     const musicData = result.music
     if(result.user){
       const bookmarkData = result.user
@@ -69,12 +65,8 @@ export default function Main() {
   }
 
   const fetchSinger = async () => {
-    const res = await fetch('api/search/searchSinger',
-      {
-        method: 'POST',
-        body : JSON.stringify({singer:input})
-      })
-    const result = await res.json()
+    const res = await axios.post('api/search/searchSinger', {title:input})
+    const result = res.data
     const musicData = result.music
     if(result.user){
       const bookmarkData = result.user

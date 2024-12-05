@@ -7,7 +7,6 @@ import {authOptions} from "@/pages/api/auth/[...nextauth]";
 export default async function handler(req, res) {
     if (req.method == 'POST'){
         try {
-            req.body = JSON.parse(req.body)
             const title = req.body.title.replace(/\s/g, '')
             const response = await axios.get(`https://api.manana.kr/karaoke/song/${title}.json?brand=kumyoung,tj`);
             
