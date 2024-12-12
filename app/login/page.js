@@ -43,8 +43,8 @@ export default function Login(){
                     }}>
                     <h1>로그인</h1>
                     <form onSubmit={login}>
-                        <TextField className="TextField" label="이메일" name="email" id="email" margin="normal" fullWidth required />
-                        <TextField className="TextField" label="비밀번호" name="password" id="password" margin="normal" type="password" fullWidth required/>
+                        <TextField className="TextField" label="이메일" variant="filled" name="email" id="email" margin="normal" fullWidth required />
+                        <TextField className="TextField" label="비밀번호" variant="filled" name="password" id="password" margin="normal" type="password" fullWidth required/>
                         <Button type="submit" variant='contained' sx={{ mt:3, mb: 2}}>로그인</Button>
                     </form>
                     혹시 회원이 아니신가요? <Link href="/signup">회원가입</Link>

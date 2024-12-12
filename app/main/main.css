@@ -25,6 +25,7 @@
     outline: none;
     font-size: 16px;
     box-sizing: border-box;
+    background-color: rgba(0,0,0,0);
 }
   
 
@@ -141,4 +142,8 @@ h1{
 
 .dark-mode .tr {
     background: #333333;
+}
+
+.dark-mode .searchBar::placeholder{
+    color: #a3a3a3;
 }
