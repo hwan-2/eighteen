@@ -45,8 +45,10 @@ export default function Main() {
   const [bookmark, setBookmark] = useState([])
   const [test, setTest] = useState();
   const [testLogin, setTestLogin] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const fetchTitle = async () => {
+    setLoading(true)
     const res = await axios.post('api/search/searchTitle', {title:input})
     const result = res.data
     const musicData = result.music
@@ -70,9 +72,11 @@ export default function Main() {
     setData(filteredMusicData)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
     setVisible(true)
+    setLoading(false)
   }
 
   const fetchSinger = async () => {
+    setLoading(true)
     const res = await axios.post('api/search/searchSinger', {singer:input})
     const result = res.data
     const musicData = result.music
@@ -88,6 +92,7 @@ export default function Main() {
     setData(musicData)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
     setVisible(true)
+    setLoading(false)
   }
 
   const fetchBookmark = async (item, e) => {
@@ -171,9 +176,15 @@ export default function Main() {
               select === "song"
               ? fetchTitle
               : fetchSinger
-              }
+              } disabled={loading}
             ><FaMagnifyingGlass /></button>
           </div>
+          {loading && (
+              <div className="loading-spinner-container">
+                <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+              </div>
+          )}
+
           {visible
           ? data.length
             ? <table className='table'>
