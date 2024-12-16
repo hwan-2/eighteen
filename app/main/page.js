@@ -50,6 +50,14 @@ export default function Main() {
     const res = await axios.post('api/search/searchTitle', {title:input})
     const result = res.data
     const musicData = result.music
+
+    //feat. 관련 필터링
+    const filterKeywords = ['f', 'e', 'a', 't', 'fe', 'ea', 'at', 'fea']
+    const shouldFilter = filterKeywords.includes(input.toLowerCase())
+    const filteredMusicData = shouldFilter
+        ? musicData.filter(item => !item.title.toLowerCase().includes('feat.'))
+        : musicData
+
     if(result.user){
       const bookmarkData = result.user
       setBookmark(bookmarkData)
@@ -59,7 +67,7 @@ export default function Main() {
       setTestLogin(false)
     }
     console.log(bookmark)
-    setData(musicData)
+    setData(filteredMusicData)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
     setVisible(true)
   }

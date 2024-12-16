@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     if (req.method == 'POST'){
         try {
             const title = req.body.title.replace(/\s/g, '')
-            const response = await axios.get(`https://api.manana.kr/karaoke/song/${title}.json?brand=kumyoung,tj`);
+            const response = await axios.get(`https://api.manana.kr/karaoke/song/${title}.json?brand=kumyoung,tj`)
             
             //session을 이용한 user가 가지고 있는 마이페이지 데이터를 가져오기 위한 방법
             let session = await getServerSession(req, res, authOptions)
