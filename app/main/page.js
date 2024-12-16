@@ -65,7 +65,7 @@ export default function Main() {
   }
 
   const fetchSinger = async () => {
-    const res = await axios.post('api/search/searchSinger', {title:input})
+    const res = await axios.post('api/search/searchSinger', {singer:input})
     const result = res.data
     const musicData = result.music
     if(result.user){
