@@ -7,27 +7,46 @@
 }
 
 .sSearch {
-    position: relative;
+    display: flex;
     flex-direction: row;
-    min-width: 280px;
-    width: 60vh;
+    align-items: center;
+    justify-content: center;
+    max-width: 580px;
+    width: 80%;
     height: 50px;
-    margin: 10px auto;
+    margin: 0 auto;
     border: 3px solid black;
     border-radius: 20px;
     overflow: hidden;
 }
 
+.select{
+    border:none;
+    outline: none;
+    width: 70px;
+    height: 100%;
+    background: pink;
+    font-family: pretendard;
+    font-weight: bold;
+    text-align: center;
+}
+
 .searchBar {
-    width: 75%;
-    height: 95%;
-    border: 0px;
+    border: 0;
+    height: 100%;
+    flex-grow: 1;
     outline: none;
     font-size: 16px;
-    box-sizing: border-box;
     background-color: rgba(0,0,0,0);
 }
   
+
+.sButton{
+    border:none;
+    width: 50px;
+    height: 100%;
+    background: #73685d;
+}
 
 .mMain {
     display: flex;
@@ -103,30 +122,10 @@ th:nth-child(5) {
     height: 5vh;
 }
 
-.sButton{
-    height: 100%;
-    border: none;
-    width: 9%;
-    float: right;
-   
-    background: #73685d;
-}
-
 .sButton:hover{
     cursor: pointer;
 }
 
-.select{
-    width: 8vh;
-    height: 100%;
-    border: none;
-    outline: none;
-    float: left;
-    background: pink;
-    font-family: pretendard;
-    font-weight: bold;
-    text-align: center;
-}
 
 h1{
     margin-top: 12vh;
