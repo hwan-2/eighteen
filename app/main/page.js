@@ -48,6 +48,9 @@ export default function Main() {
   const [loading, setLoading] = useState(false)
 
   const fetchTitle = async () => {
+    if (!input.trim()) {
+      return
+    }
     setLoading(true)
     const res = await axios.post('api/search/searchTitle', {title:input})
     const result = res.data
@@ -76,6 +79,9 @@ export default function Main() {
   }
 
   const fetchSinger = async () => {
+    if (!input.trim()) {
+      return
+    }
     setLoading(true)
     const res = await axios.post('api/search/searchSinger', {singer:input})
     const result = res.data
