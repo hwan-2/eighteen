@@ -34,10 +34,10 @@ export default async function handler(req, res) {
                 const filteredData = resultUser.map(({brand, no, _id}) => ({brand, no, _id}))
                 //user데이터와 검색 데이터를 묶어서 보냄
                 const responseData = {
-                    music: response.data,
+                    music: response.map(res => res.data).flat(),
                     user: filteredData
                 }
-    
+                responseData.music.sort((a, b) => a.title.localeCompare(b.title));
                 res.status(200).json(responseData);
             }
             

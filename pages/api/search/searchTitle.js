@@ -24,7 +24,7 @@ export default async function handler(req, res) {
             let db = (await connectDB).db('eighteen')
             if (!session) {
                 const responseData = {
-                    music: response.map(res => res.data).flat()
+                    music: response.map(res => res.data).flat(),
                 }
                 responseData.music.sort((a, b) => a.title.localeCompare(b.title));
                 res.status(200).json(responseData)
@@ -35,9 +35,10 @@ export default async function handler(req, res) {
                 const filteredData = resultUser.map(({brand, no, _id}) => ({brand, no, _id}))
                 //user데이터와 검색 데이터를 묶어서 보냄 + _id도 보냄
                 const responseData = {
-                    music: response.data,
+                    music: response.map(res => res.data).flat(),
                     user: filteredData,
                 }
+                responseData.music.sort((a, b) => a.title.localeCompare(b.title));
                 res.status(200).json(responseData);
             }
             
