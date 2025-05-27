@@ -49,11 +49,11 @@ export default function Login(){
                     </form>
                     혹시 회원이 아니신가요? <Link href="/signup">회원가입</Link>
                 </Box>
-                <div className="sLogin"> 
-                    <hr/>
-                    <GoogleButton className="gLogin" onClick={()=> signIn('google')}/>
-                    {/* 구글 로그인 */}
-                </div>
+                {/*<div className="sLogin"> */}
+                {/*    <hr/>*/}
+                {/*    <GoogleButton className="gLogin" onClick={()=> signIn('google')}/>*/}
+                {/*    /!* 구글 로그인 *!/*/}
+                {/*</div>*/}
             </Container>
         </div>
         
