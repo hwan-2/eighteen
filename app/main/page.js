@@ -46,6 +46,7 @@ export default function Main() {
   const [test, setTest] = useState();
   const [testLogin, setTestLogin] = useState(false);
   const [loading, setLoading] = useState(false)
+  const [brandSelect, setBrandSelect] = useState("all")
 
   const fetchTitle = async () => {
     if (!input.trim()) {
@@ -158,6 +159,10 @@ export default function Main() {
     }
   }
 
+  const brandSelectChange = (e) => {
+    setBrandSelect(e.target.value)
+  }
+
   return (
       <div className="mMain">
         <h1 className={"title"}>노래방 검색</h1>
@@ -196,13 +201,63 @@ export default function Main() {
             ? <table className='table'>
                 <thead>
                   <tr>
+                    
                     {columns.map((column) => (
-                      <th key={column}>{column}</th>
+                      <th key={column}>
+                        {column === '제공'?
+                        <select onChange={brandSelectChange} value={brandSelect} className='brandSelect'>
+                          <option key="all" value="all">제공</option>
+                          <option key="tj" value="tj">TJ</option>
+                          <option key="ky" value="ky">금영</option>
+                        </select> 
+                        :column}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                    {data.map((item, index) => {
+                    {brandSelect === "all" && data.map((item, index) => {
+                    return <tr className="tr" key={index}>
+                      <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
+                      <td>{item.no}</td>
+                      <td>{item.title}</td>
+                      <td>{item.singer}</td>
+                      <td>
+                      {
+                      testLogin
+                      ?(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
+                        ?<FaHeart className='fH' size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
+                        :<FaRegHeart className='eH' size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
+                      :<FaRegHeart className='eH' size={30} color='red' onClick={()=>alert("로그인 후 이용 가능 합니다")}/>
+
+                      
+                      }
+                      </td>
+                      {/* filter로 업체 구분 후, some으로 해당 업체의 번호 검색하여 값 존재 시 true 반환 */}
+                    </tr>
+                    })
+                  } 
+                  {brandSelect === "tj" && data.filter(e => e.brand === "tj").map((item, index) => {
+                    return <tr className="tr" key={index}>
+                      <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
+                      <td>{item.no}</td>
+                      <td>{item.title}</td>
+                      <td>{item.singer}</td>
+                      <td>
+                      {
+                      testLogin
+                      ?(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
+                        ?<FaHeart className='fH' size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
+                        :<FaRegHeart className='eH' size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
+                      :<FaRegHeart className='eH' size={30} color='red' onClick={()=>alert("로그인 후 이용 가능 합니다")}/>
+
+                      
+                      }
+                      </td>
+                      {/* filter로 업체 구분 후, some으로 해당 업체의 번호 검색하여 값 존재 시 true 반환 */}
+                    </tr>
+                    })
+                  }
+                  {brandSelect === "ky" && data.filter(e => e.brand === "kumyoung").map((item, index) => {
                     return <tr className="tr" key={index}>
                       <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
                       <td>{item.no}</td>
