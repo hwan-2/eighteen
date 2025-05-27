@@ -2,13 +2,20 @@ import axios from 'axios';
 import {connectDB} from "@/util/database";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {console} from "next/dist/compiled/@edge-runtime/primitives";
 
 //제목으로 검색하는 api
 export default async function handler(req, res) {
     if (req.method == 'POST'){
         try {
             const title = req.body.title.replace(/\s/g, '')
-            const response = await axios.get(`https://api.manana.kr/karaoke/song/${title}.json?brand=kumyoung,tj`)
+            const brands = ['kumyoung', 'tj'];
+
+            const response = await Promise.all(
+                brands.map(brand =>
+                    axios.get(`https://api.manana.kr/karaoke/song/${title}.json?brand=${brand}`)
+                )
+            )
             
             //session을 이용한 user가 가지고 있는 마이페이지 데이터를 가져오기 위한 방법
             let session = await getServerSession(req, res, authOptions)
@@ -17,9 +24,10 @@ export default async function handler(req, res) {
             let db = (await connectDB).db('eighteen')
             if (!session) {
                 const responseData = {
-                    music: response.data,
+                    music: response.map(res => res.data).flat()
                 }
-                res.status(200).json(responseData);
+                responseData.music.sort((a, b) => a.title.localeCompare(b.title));
+                res.status(200).json(responseData)
                 // return res.status(400).json("세션 오류발생")
             } else {
                 let userId = session.user._id

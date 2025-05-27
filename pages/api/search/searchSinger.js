@@ -8,7 +8,13 @@ export default async function handler(req, res) {
     if (req.method == 'POST'){
         try {
             const singer = req.body.singer.replace(/\s/g, '')
-            const response = await axios.get(`https://api.manana.kr/karaoke/singer/${singer}.json?brand=kumyoung,tj`);
+            const brands = ['kumyoung', 'tj'];
+
+            const response = await Promise.all(
+                brands.map(brand =>
+                    axios.get(`https://api.manana.kr/karaoke/song/${title}.json?brand=${brand}`)
+                )
+            )
 
             //session을 이용한 user가 가지고 있는 마이페이지 데이터를 가져오기 위한 방법
             let session = await getServerSession(req, res, authOptions)
@@ -17,9 +23,9 @@ export default async function handler(req, res) {
             let db = (await connectDB).db('eighteen')
             if (!session) {
                 const responseData = {
-                    music: response.data,
+                    music: response.map(res => res.data).flat(),
                 }
-    
+                responseData.music.sort((a, b) => a.title.localeCompare(b.title));
                 res.status(200).json(responseData);
                 // return res.status(400).json("세션 오류발생")
             } else {
