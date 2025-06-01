@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
             const response = await Promise.all(
                 brands.map(brand =>
-                    axios.get(`https://api.manana.kr/karaoke/song/${singer}.json?brand=${brand}`)
+                    axios.get(`https://api.manana.kr/karaoke/singer/${singer}.json?brand=${brand}`)
                 )
             )
 
