@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+//현재 사용하지 않음
 //번호로 검색하는 api
 export default async function handler(req, res) {
     if (req.method == 'POST'){

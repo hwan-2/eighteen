@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { authOptions } from "@/pages/api/auth/[...nextauth].js"
+import { authOptions } from "@/pages/api/auth/[...nextauth].ts"
 import { getServerSession } from "next-auth"
 import User from '@/component/User';
 import Image from 'next/image'

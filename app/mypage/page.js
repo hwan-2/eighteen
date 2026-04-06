@@ -1,5 +1,5 @@
 import './mypage.css'
-import { authOptions } from "@/pages/api/auth/[...nextauth].js"
+import { authOptions } from "@/pages/api/auth/[...nextauth].ts"
 import { getServerSession } from "next-auth"
 import Delete from "./delete"
 

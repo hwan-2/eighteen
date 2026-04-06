@@ -3,6 +3,7 @@ import {connectDB} from "@/util/database";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
+//현재 사용하지 않음
 //제목으로 검색하는 api
 export default async function handler(req, res) {
     if (req.method == 'POST'){

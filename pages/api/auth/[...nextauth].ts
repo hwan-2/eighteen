@@ -1,35 +1,31 @@
 import { connectDB } from "@/util/database";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from 'bcrypt';
-import GoogleProvider from "next-auth/providers/google";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
     providers: [
-        //구글 로그인, 이메일 로그인
-        GoogleProvider({
-            clientId: process.env["GOOGLE_CLIENT_ID"],
-            clientSecret: process.env["GOOGLE_CLIENT_SECRET"]
-        }),
-
         CredentialsProvider({
         name: "credentials",
         credentials: {
             email: { label: "email", type: "text" },
             password: { label: "password", type: "password" },
         },
-        async authorize(credentials) {
-            console.log(credentials)
-            let db = (await connectDB).db('eighteen');
-            let user = await db.collection('users').findOne({email : credentials.email})
+        async authorize(credentials) :Promise<any> {
+            if (!credentials?.email || !credentials?.password) {
+                console.log('이메일 또는 비밀번호가 입력되지 않았습니다.')
+                return null
+            }
+            const db = (await connectDB).db('eighteen');
+            const user = await db.collection('users').findOne({email : credentials.email})
             if (!user) {
-                console.log('잘못된 이메일');
+                console.log('오류발생: 잘못된 이메일');
                 return null
             }
             const pwcheck = await bcrypt.compare(credentials.password, user.password);
             if (!pwcheck) {
-                console.log('잘못된 비밀번호');
+                console.log('오류발생: 잘못된 비밀번호');
                 return null
             }
             return user
@@ -45,15 +41,16 @@ export const authOptions = {
     callbacks: {
         jwt: async ({ token, user }) => {
             if (user) {
-                token.user = {};
-                token.user.name = user.username
-                token.user.email = user.email
-                token.user._id = user._id
+                token.user = {
+                    name: user.name,
+                    email: user.email,
+                    _id: user.id
+                };
             }
             return token;
         },
         session: async ({ session, token }) => {
-            session.user = token.user;
+            session.user = token.user as any;
             return session;
         },
     },

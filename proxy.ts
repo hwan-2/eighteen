@@ -1,8 +1,9 @@
 import {NextResponse} from "next/server";
 import {getToken} from "next-auth/jwt";
+import type { NextRequest } from "next/server";
 const secret = process.env.NEXTAUTH_SECRET;
 
-export async function middleware(req){
+export async function proxy(req:NextRequest){
     const session = await getToken({req: req, secret: secret})
 
     //main이나 mypage 들어갈때 로그인 유무 체크
