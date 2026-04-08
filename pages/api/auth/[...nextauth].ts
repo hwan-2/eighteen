@@ -28,7 +28,11 @@ export const authOptions: NextAuthOptions = {
                 console.log('오류발생: 잘못된 비밀번호');
                 return null
             }
-            return user
+            return {
+                id: user._id.toString(),
+                name: user.username,
+                email: user.email,
+            }
         }
     })
     ],
