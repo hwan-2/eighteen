@@ -33,20 +33,30 @@ import { FaRegHeart } from "react-icons/fa";
 // 	);
 // };
 
+interface SearchData {
+  brand: string;
+  no: string;
+  title: string;
+  singer: string;
+}
+
+interface BookmarkData {
+  brand: string;
+  no: string;
+  _id: string;
+}
 
 export default function Main() {
   
-  const [data, setData] = useState([])
-  const [singerData, setSingerData] = useState([])
-  const [input, setInput] = useState("")
-  const [select, setSelect] = useState("song")
-  const [columns, setColumns] = useState([])
-  const [visible, setVisible] = useState(false)
-  const [bookmark, setBookmark] = useState([])
-  const [test, setTest] = useState();
-  const [testLogin, setTestLogin] = useState(false);
-  const [loading, setLoading] = useState(false)
-  const [brandSelect, setBrandSelect] = useState("all")
+  const [data, setData] = useState<SearchData[]>([])
+  const [input, setInput] = useState<string>("")
+  const [select, setSelect] = useState<string>("song")
+  const [columns, setColumns] = useState<string[]>([])
+  const [visible, setVisible] = useState<boolean>(false)
+  const [bookmark, setBookmark] = useState<BookmarkData[]>([])
+  const [testLogin, setTestLogin] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false)
+  const [brandSelect, setBrandSelect] = useState<string>("all")
 
   const fetchTitle = async () => {
     if (!input.trim()) {
@@ -73,6 +83,8 @@ export default function Main() {
       setTestLogin(false)
     }
     console.log(bookmark)
+    console.log(result)
+    console.log("이승")
     setData(filteredMusicData)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
     setVisible(true)
@@ -95,14 +107,14 @@ export default function Main() {
       setBookmark([])
       setTestLogin(false)
     }
-    console.log(bookmark)
+    //console.log(bookmark)
     setData(musicData)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
     setVisible(true)
     setLoading(false)
   }
 
-  const fetchBookmark = async (item, e) => {
+  const fetchBookmark = async (item : SearchData) => {
     const res = await fetch('api/post/newSave',
       {
         method: 'POST',
@@ -117,7 +129,7 @@ export default function Main() {
   }
 
 
-  const deleteBookmark = async (item, e) => {
+  const deleteBookmark = async (item : SearchData) => {
     const bid = bookmark.filter(v => v.brand === item.brand && v.no === item.no)
     const res = await fetch('api/post/delete',
       {
@@ -140,15 +152,15 @@ export default function Main() {
     setBookmark(bookmarkData)
   }
 
-  const handleChange = (value) => {
+  const handleChange = (value : string) => {
     setInput(value)
   }
 
-  const selectChange = (e) => {
+  const selectChange = (e : any) => {
     setSelect(e.target.value)
   }
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e : any) => {
     if (e.key === "Enter") {
       if(select === "song"){
         fetchTitle()
@@ -159,7 +171,7 @@ export default function Main() {
     }
   }
 
-  const brandSelectChange = (e) => {
+  const brandSelectChange = (e : any) => {
     setBrandSelect(e.target.value)
   }
 
@@ -180,7 +192,7 @@ export default function Main() {
               placeholder="검색..."
               className="searchBar"
               value = {input}
-              onInput={(e)=>handleChange(e.target.value)}
+              onChange={(e)=>handleChange(e.target.value)}
               onKeyDown = {handleKeyDown}
             />
             <button className='sButton' onClick={
@@ -225,8 +237,8 @@ export default function Main() {
                       {
                       testLogin
                       ?(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
-                        ?<FaHeart className='fH' size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
-                        :<FaRegHeart className='eH' size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
+                        ?<FaHeart className='fH' size={30} color='red' onClick={()=>deleteBookmark(item)}/>
+                        :<FaRegHeart className='eH' size={30} color='red' onClick={()=>fetchBookmark(item)}/>
                       :<FaRegHeart className='eH' size={30} color='red' onClick={()=>alert("로그인 후 이용 가능 합니다")}/>
 
                       
@@ -246,8 +258,8 @@ export default function Main() {
                       {
                       testLogin
                       ?(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
-                        ?<FaHeart className='fH' size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
-                        :<FaRegHeart className='eH' size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
+                        ?<FaHeart className='fH' size={30} color='red' onClick={()=>deleteBookmark(item)}/>
+                        :<FaRegHeart className='eH' size={30} color='red' onClick={()=>fetchBookmark(item)}/>
                       :<FaRegHeart className='eH' size={30} color='red' onClick={()=>alert("로그인 후 이용 가능 합니다")}/>
 
                       
@@ -267,8 +279,8 @@ export default function Main() {
                       {
                       testLogin
                       ?(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
-                        ?<FaHeart className='fH' size={30} color='red' onClick={(e)=>deleteBookmark(item, e)}/>
-                        :<FaRegHeart className='eH' size={30} color='red' onClick={(e)=>fetchBookmark(item, e)}/>
+                        ?<FaHeart className='fH' size={30} color='red' onClick={()=>deleteBookmark(item)}/>
+                        :<FaRegHeart className='eH' size={30} color='red' onClick={()=>fetchBookmark(item)}/>
                       :<FaRegHeart className='eH' size={30} color='red' onClick={()=>alert("로그인 후 이용 가능 합니다")}/>
 
                       

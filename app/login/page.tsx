@@ -11,26 +11,29 @@ import GoogleButton from 'react-google-button'
 
 export default function Login(){
     const router = useRouter()
-    const login = async (e) =>{
+    const login = async (e : any) =>{
         e.preventDefault()
 
         const email = e.target.email.value;
         const password = e.target.password.value;
         const result = await signIn("credentials", {
-                email,
-                password,
-                redirect: false,
-            } 
-        ).then(({ok, error}) => {
-            if(ok){
-                router.replace('/main')
-                location.reload();
-            } else{
-                console.log(error)
-                alert("잘못된 비밀번호 혹은 아이디 입니다.");
-            }
-        })
+            email,
+            password,
+            redirect: false,
+        });
+        if (!result) {
+            alert("로그인 응답이 없습니다.");
+            return;
+        }
+        if (result.ok) {
+            router.replace("/main");
+            location.reload();
+        } else {
+            console.log(result.error);
+            alert("잘못된 비밀번호 혹은 아이디 입니다.");
+        }
     }
+
     return(
         <div className='login'>
             <Container component="main" maxWidth="xs">

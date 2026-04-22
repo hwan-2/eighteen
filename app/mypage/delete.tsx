@@ -1,11 +1,11 @@
 "use client"
 import { MdDeleteForever } from "react-icons/md";
 
-export default async function Delete(props) {
+export default function Delete(props) {
 
     const deleteBookmark = async (e) => {
         if (window.confirm("북마크에서 삭제할까요?")) {
-            const res = await fetch('api/post/delete',
+            const res = await fetch('/api/post/delete',
                 {
                     method: 'DELETE',
                     body: JSON.stringify({
