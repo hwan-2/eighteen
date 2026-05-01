@@ -175,6 +175,27 @@ export default function Main() {
     setBrandSelect(e.target.value)
   }
 
+  console.time("new-version");
+
+  const bookmarkSet = new Set(bookmark.map(v => `${v.brand}-${v.no}`))
+
+  const filteredData = data.filter(item => {
+    if (brandSelect === "all") return true
+    const brandName = brandSelect === "tj" ? "tj" : "kumyoung"
+    return item.brand === brandName
+  })
+
+  console.timeEnd("new-version");
+
+  console.time("old-version");
+
+  const renderData = data.map((item) => {
+    const isBookmarked = bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no);
+    return { ...item, isBookmarked };
+  });
+
+  console.timeEnd("old-version");
+
   return (
       <div className="mMain">
         <h1 className={"title"}>노래방 검색</h1>
@@ -226,71 +247,95 @@ export default function Main() {
                     ))}
                   </tr>
                 </thead>
-                <tbody>
-                    {brandSelect === "all" && data.map((item, index) => {
-                    return <tr className="tr" key={index}>
-                      <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
-                      <td>{item.no}</td>
-                      <td>{item.title}</td>
-                      <td>{item.singer}</td>
-                      <td>
-                      {
-                      testLogin
-                      ?(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
-                        ?<FaHeart className='fH' size={30} color='red' onClick={()=>deleteBookmark(item)}/>
-                        :<FaRegHeart className='eH' size={30} color='red' onClick={()=>fetchBookmark(item)}/>
-                      :<FaRegHeart className='eH' size={30} color='red' onClick={()=>alert("로그인 후 이용 가능 합니다")}/>
+                    <tbody>
+                    {filteredData.map((item) => (
+                        <tr className="tr" key={`${item.brand}-${item.no}`}>
+                          <td>
+                            {item.brand === 'tj' && <img src="/img/tj.png" className='brand' alt="TJ" />}
+                            {item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand' alt="금영" />}
+                          </td>
+                          <td>{item.no}</td>
+                          <td>{item.title}</td>
+                          <td>{item.singer}</td>
+                          <td>
+                            {testLogin ? (
+                                bookmarkSet.has(`${item.brand}-${item.no}`) ? (
+                                    <FaHeart className='fH' size={30} color='red' onClick={() => deleteBookmark(item)}/>
+                                ) : (
+                                    <FaRegHeart className='eH' size={30} color='red' onClick={() => fetchBookmark(item)}/>
+                                )
+                            ) : (
+                                <FaRegHeart className='eH' size={30} color='red' onClick={() => alert("로그인 후 이용 가능 합니다")}/>
+                            )}
+                          </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                {/*<tbody>*/}
+                {/*    {brandSelect === "all" && data.map((item, index) => {*/}
+                {/*    return <tr className="tr" key={index}>*/}
+                {/*      <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>*/}
+                {/*      <td>{item.no}</td>*/}
+                {/*      <td>{item.title}</td>*/}
+                {/*      <td>{item.singer}</td>*/}
+                {/*      <td>*/}
+                {/*      {*/}
+                {/*      testLogin*/}
+                {/*      ?(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))*/}
+                {/*        ?<FaHeart className='fH' size={30} color='red' onClick={()=>deleteBookmark(item)}/>*/}
+                {/*        :<FaRegHeart className='eH' size={30} color='red' onClick={()=>fetchBookmark(item)}/>*/}
+                {/*      :<FaRegHeart className='eH' size={30} color='red' onClick={()=>alert("로그인 후 이용 가능 합니다")}/>*/}
 
-                      
-                      }
-                      </td>
-                      {/* filter로 업체 구분 후, some으로 해당 업체의 번호 검색하여 값 존재 시 true 반환 */}
-                    </tr>
-                    })
-                  } 
-                  {brandSelect === "tj" && data.filter(e => e.brand === "tj").map((item, index) => {
-                    return <tr className="tr" key={index}>
-                      <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
-                      <td>{item.no}</td>
-                      <td>{item.title}</td>
-                      <td>{item.singer}</td>
-                      <td>
-                      {
-                      testLogin
-                      ?(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
-                        ?<FaHeart className='fH' size={30} color='red' onClick={()=>deleteBookmark(item)}/>
-                        :<FaRegHeart className='eH' size={30} color='red' onClick={()=>fetchBookmark(item)}/>
-                      :<FaRegHeart className='eH' size={30} color='red' onClick={()=>alert("로그인 후 이용 가능 합니다")}/>
+                {/*      */}
+                {/*      }*/}
+                {/*      </td>*/}
+                {/*      /!* filter로 업체 구분 후, some으로 해당 업체의 번호 검색하여 값 존재 시 true 반환 *!/*/}
+                {/*    </tr>*/}
+                {/*    })*/}
+                {/*  } */}
+                {/*  {brandSelect === "tj" && data.filter(e => e.brand === "tj").map((item, index) => {*/}
+                {/*    return <tr className="tr" key={index}>*/}
+                {/*      <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>*/}
+                {/*      <td>{item.no}</td>*/}
+                {/*      <td>{item.title}</td>*/}
+                {/*      <td>{item.singer}</td>*/}
+                {/*      <td>*/}
+                {/*      {*/}
+                {/*      testLogin*/}
+                {/*      ?(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))*/}
+                {/*        ?<FaHeart className='fH' size={30} color='red' onClick={()=>deleteBookmark(item)}/>*/}
+                {/*        :<FaRegHeart className='eH' size={30} color='red' onClick={()=>fetchBookmark(item)}/>*/}
+                {/*      :<FaRegHeart className='eH' size={30} color='red' onClick={()=>alert("로그인 후 이용 가능 합니다")}/>*/}
 
-                      
-                      }
-                      </td>
-                      {/* filter로 업체 구분 후, some으로 해당 업체의 번호 검색하여 값 존재 시 true 반환 */}
-                    </tr>
-                    })
-                  }
-                  {brandSelect === "ky" && data.filter(e => e.brand === "kumyoung").map((item, index) => {
-                    return <tr className="tr" key={index}>
-                      <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
-                      <td>{item.no}</td>
-                      <td>{item.title}</td>
-                      <td>{item.singer}</td>
-                      <td>
-                      {
-                      testLogin
-                      ?(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))
-                        ?<FaHeart className='fH' size={30} color='red' onClick={()=>deleteBookmark(item)}/>
-                        :<FaRegHeart className='eH' size={30} color='red' onClick={()=>fetchBookmark(item)}/>
-                      :<FaRegHeart className='eH' size={30} color='red' onClick={()=>alert("로그인 후 이용 가능 합니다")}/>
+                {/*      */}
+                {/*      }*/}
+                {/*      </td>*/}
+                {/*      /!* filter로 업체 구분 후, some으로 해당 업체의 번호 검색하여 값 존재 시 true 반환 *!/*/}
+                {/*    </tr>*/}
+                {/*    })*/}
+                {/*  }*/}
+                {/*  {brandSelect === "ky" && data.filter(e => e.brand === "kumyoung").map((item, index) => {*/}
+                {/*    return <tr className="tr" key={index}>*/}
+                {/*      <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>*/}
+                {/*      <td>{item.no}</td>*/}
+                {/*      <td>{item.title}</td>*/}
+                {/*      <td>{item.singer}</td>*/}
+                {/*      <td>*/}
+                {/*      {*/}
+                {/*      testLogin*/}
+                {/*      ?(bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no))*/}
+                {/*        ?<FaHeart className='fH' size={30} color='red' onClick={()=>deleteBookmark(item)}/>*/}
+                {/*        :<FaRegHeart className='eH' size={30} color='red' onClick={()=>fetchBookmark(item)}/>*/}
+                {/*      :<FaRegHeart className='eH' size={30} color='red' onClick={()=>alert("로그인 후 이용 가능 합니다")}/>*/}
 
-                      
-                      }
-                      </td>
-                      {/* filter로 업체 구분 후, some으로 해당 업체의 번호 검색하여 값 존재 시 true 반환 */}
-                    </tr>
-                    })
-                  } 
-                </tbody>
+                {/*      */}
+                {/*      }*/}
+                {/*      </td>*/}
+                {/*      /!* filter로 업체 구분 후, some으로 해당 업체의 번호 검색하여 값 존재 시 true 반환 *!/*/}
+                {/*    </tr>*/}
+                {/*    })*/}
+                {/*  } */}
+                {/*</tbody>*/}
               </table>
             : <h1>검색결과가 없습니다.</h1>
           : <h1>검색하세요</h1>
