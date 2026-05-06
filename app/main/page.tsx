@@ -175,8 +175,6 @@ export default function Main() {
     setBrandSelect(e.target.value)
   }
 
-  console.time("new-version");
-
   const bookmarkSet = new Set(bookmark.map(v => `${v.brand}-${v.no}`))
 
   const filteredData = data.filter(item => {
@@ -184,17 +182,6 @@ export default function Main() {
     const brandName = brandSelect === "tj" ? "tj" : "kumyoung"
     return item.brand === brandName
   })
-
-  console.timeEnd("new-version");
-
-  console.time("old-version");
-
-  const renderData = data.map((item) => {
-    const isBookmarked = bookmark.filter(v => v.brand === item.brand).some(v=> v.no === item.no);
-    return { ...item, isBookmarked };
-  });
-
-  console.timeEnd("old-version");
 
   return (
       <div className="mMain">
