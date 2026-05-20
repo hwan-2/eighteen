@@ -6,32 +6,8 @@ import axios from "axios"
 import { Checkbox } from '@mui/material'
 import { FaMagnifyingGlass, FaHeart } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
-
-
-// const OPTIONS = [
-// 	{ value: "songTitle", name: "노래" },
-// 	{ value: "artist", name: "가수" },
-// ];
-
-// const SelectBox = (props) => {
-// 	const handleChange = (e) => {
-// 		console.log(e.target.value)
-// 	}
-
-// 	return (
-// 		<select onChange={handleChange}>
-// 			{props.options.map((option) => (
-// 				<option
-// 					key={option.value}
-// 					value={option.value}
-// 					defaultValue={props.defaultValue === option.value}
-// 				>
-// 					{option.name}
-// 				</option>
-// 			))}
-// 		</select>
-// 	);
-// };
+import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
 
 interface SearchData {
   brand: string;
@@ -84,7 +60,6 @@ export default function Main() {
     }
     console.log(bookmark)
     console.log(result)
-    console.log("이승")
     setData(filteredMusicData)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
     setVisible(true)
@@ -183,6 +158,28 @@ export default function Main() {
     return item.brand === brandName
   })
 
+  const handleBookmark = (e, item) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (rect.left + rect.width / 2) / window.innerWidth;
+    const y = (rect.top + rect.height / 2) / window.innerHeight;
+    const heart = confetti.shapeFromText({ text: '♥' });
+  
+    confetti({
+      particleCount: 10,
+      spread: 360,
+      origin: { x, y },
+      colors: ['#ff0000', '#ff4d4d', '#ff8080'],
+      startVelocity: 5,
+      shapes: [heart],
+      ticks: 20,
+      gravity: -0.1,
+      scalar: 0.7,
+      drift: 0,
+    });
+  
+    fetchBookmark(item);
+  };
+
   return (
       <div className="mMain">
         <h1 className={"title"}>노래방 검색</h1>
@@ -221,7 +218,6 @@ export default function Main() {
             ? <table className='table'>
                 <thead>
                   <tr>
-                    
                     {columns.map((column) => (
                       <th key={column}>
                         {column === '제공'?
@@ -245,15 +241,38 @@ export default function Main() {
                           <td>{item.title}</td>
                           <td>{item.singer}</td>
                           <td>
-                            {testLogin ? (
-                                bookmarkSet.has(`${item.brand}-${item.no}`) ? (
-                                    <FaHeart className='fH' size={30} color='red' onClick={() => deleteBookmark(item)}/>
-                                ) : (
-                                    <FaRegHeart className='eH' size={30} color='red' onClick={() => fetchBookmark(item)}/>
-                                )
-                            ) : (
-                                <FaRegHeart className='eH' size={30} color='red' onClick={() => alert("로그인 후 이용 가능 합니다")}/>
-                            )}
+                             <AnimatePresence mode="wait">
+                              <motion.div
+                                key={bookmarkSet.has(`${item.brand}-${item.no}`) ? "liked" : "unliked"}
+                                  initial={{ scale: 0.8, opacity: 0.5 }}
+                                  animate={{ scale: 1, opacity: 1 }}
+                                  exit={{ scale: 0.8, opacity: 1 }}
+                                  whileTap={{ scale: 0.9 }}
+                                  transition={{ type: "tween", duration: 0.05,}}
+                                >
+                                {testLogin ? 
+                                  (
+                                    bookmarkSet.has(`${item.brand}-${item.no}`) ? (
+                                      <FaHeart 
+                                        className='fH' 
+                                        size={30} 
+                                        color='red' 
+                                        onClick={() => deleteBookmark(item)}
+                                      />
+                                    ) : (
+                                      <FaRegHeart 
+                                        className='eH' 
+                                        size={30} 
+                                        color='red' 
+                                        onClick={(e) => handleBookmark(e, item)}
+                                      />
+                                    )
+                                  )
+                                : (
+                                    <FaRegHeart className='eH' size={30} color='red' onClick={() => alert("로그인 후 이용 가능 합니다")}/>
+                                )}
+                              </motion.div>
+                            </AnimatePresence>
                           </td>
                         </tr>
                     ))}

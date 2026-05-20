@@ -83,3 +83,11 @@ th:nth-child(5) {
 .dark-mode .tr {
     background: #333333;
 }
+
+.deleteBookmark {
+    color : black;
+}
+
+.deleteBookmark:hover {
+    color : grey;
+}

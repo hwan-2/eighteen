@@ -1,5 +1,6 @@
 "use client"
 import { MdDeleteForever } from "react-icons/md";
+import './mypage.css'
 
 export default function Delete(props) {
 
@@ -25,6 +26,6 @@ export default function Delete(props) {
         
       }
     return (
-        <MdDeleteForever size="30" onClick={deleteBookmark}/>
+        <MdDeleteForever size="30" className="deleteBookmark" onClick={deleteBookmark}/>
     )
 }
