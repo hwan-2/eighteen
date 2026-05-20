@@ -18,6 +18,7 @@ export default function Delete(props) {
                 setTimeout(() => {
                     e.target.closest("tr").style.display = 'none'
                 }, 100)
+                window.location.reload()
             })
         }
         else{
