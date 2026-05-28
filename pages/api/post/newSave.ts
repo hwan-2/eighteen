@@ -25,6 +25,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
 
             const saveThing = {
+                listName: body.listName,
                 brand: body.brand,
                 no : body.no,
                 title : body.title,
@@ -32,7 +33,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             }
             
             //null 체크
-            if(!saveThing.brand || !saveThing.no || !saveThing.title || !saveThing.singer){
+            if(!saveThing.listName || !saveThing.brand || !saveThing.no || !saveThing.title || !saveThing.singer){
                 return res.status(400).json("오류발생: 입력값 누락")
             }
             
