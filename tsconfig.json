@@ -35,7 +35,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/dev/types/**/*.ts"
-, "app/mypage/page.tsx"  ],
+, "app/mypage/page.tsx", "component/TopButton.js"  ],
   "exclude": [
     "node_modules"
   ]

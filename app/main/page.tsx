@@ -8,6 +8,7 @@ import { FaMagnifyingGlass, FaHeart } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import {addBookmarkToLocal, removeBookmarkFromLocal, getLocalBookmarks} from  '@/util/addBookmarkToLocal'
 
 interface SearchData {
   brand: string;
@@ -33,6 +34,24 @@ export default function Main() {
   const [testLogin, setTestLogin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false)
   const [brandSelect, setBrandSelect] = useState<string>("all")
+  const [bookmarkLocal, setBookmarkLocal] = useState<SearchData[]>([])
+
+  useEffect(() => {
+    //console.log(getLocalBookmarks());
+    setBookmarkLocal(getLocalBookmarks())
+    //console.log(bookmarkLocal)
+  }, []);
+
+  const addTest = (e, item : SearchData) => {
+    handleBookmark(e)
+    addBookmarkToLocal(item)
+    setBookmarkLocal(getLocalBookmarks())
+  }
+
+  const deleteTest = (brand : string, no : string) => {
+    removeBookmarkFromLocal(brand, no)
+    setBookmarkLocal(getLocalBookmarks())
+  }
 
   const fetchTitle = async () => {
     if (!input.trim()) {
@@ -94,6 +113,7 @@ export default function Main() {
       {
         method: 'POST',
         body : JSON.stringify({
+          listName : "e",
           brand : item.brand,
           no: item.no,
           title: item.title,
@@ -151,6 +171,7 @@ export default function Main() {
   }
 
   const bookmarkSet = new Set(bookmark.map(v => `${v.brand}-${v.no}`))
+  const bookmarkLocalSet =  new Set(bookmarkLocal.map(v => `${v.brand}-${v.no}`))
 
   const filteredData = data.filter(item => {
     if (brandSelect === "all") return true
@@ -158,7 +179,7 @@ export default function Main() {
     return item.brand === brandName
   })
 
-  const handleBookmark = (e, item) => {
+  const handleBookmark = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (rect.left + rect.width / 2) / window.innerWidth;
     const y = (rect.top + rect.height / 2) / window.innerHeight;
@@ -176,9 +197,13 @@ export default function Main() {
       scalar: 0.7,
       drift: 0,
     });
-  
-    fetchBookmark(item);
+
   };
+
+  const addBookmark = (e, item) => {
+    handleBookmark(e)
+    fetchBookmark(item);
+  }
 
   return (
       <div className="mMain">
@@ -243,7 +268,8 @@ export default function Main() {
                           <td>
                              <AnimatePresence mode="wait">
                               <motion.div
-                                key={bookmarkSet.has(`${item.brand}-${item.no}`) ? "liked" : "unliked"}
+                                key={testLogin ? bookmarkSet.has(`${item.brand}-${item.no}`) ? "liked" : "unliked" :
+                               bookmarkLocalSet.has(`${item.brand}-${item.no}`) ? "liked" : "unliked"}
                                   initial={{ scale: 0.8, opacity: 0.5 }}
                                   animate={{ scale: 1, opacity: 1 }}
                                   exit={{ scale: 0.8, opacity: 1 }}
@@ -264,13 +290,28 @@ export default function Main() {
                                         className='eH' 
                                         size={30} 
                                         color='red' 
-                                        onClick={(e) => handleBookmark(e, item)}
+                                        onClick={(e) => addBookmark(e, item)}
                                       />
                                     )
                                   )
                                 : (
-                                    <FaRegHeart className='eH' size={30} color='red' onClick={() => alert("로그인 후 이용 가능 합니다")}/>
-                                )}
+                                    bookmarkLocalSet.has(`${item.brand}-${item.no}`) ? (
+                                      <FaHeart 
+                                        className='fH' 
+                                        size={30} 
+                                        color='red' 
+                                        onClick={() => deleteTest(item.brand, item.no)}
+                                      />
+
+                                  ) : (
+                                    <FaRegHeart 
+                                      className='eH'
+                                      size={30}
+                                      color='red'
+                                      onClick={(e) => addTest(e, item)}/>
+                                  )
+                                )
+                                }
                               </motion.div>
                             </AnimatePresence>
                           </td>

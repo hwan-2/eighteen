@@ -1,31 +1,42 @@
 "use client"
 import { useMemo, useEffect, useState } from 'react'
-import Delete from "./delete"
+import { MdDeleteForever } from "react-icons/md";
 import './mypage.css'
+import {getLocalBookmarks, removeBookmarkFromLocal} from "@/util/addBookmarkToLocal"
 
-export default function Rtpage({tableData}){
+interface SongData {
+    brand: string;
+    no: string;
+    title: string;
+    singer: string;
+}
+
+export default function Localpage(){
 
     const [brandSelect, setBrandSelect] = useState<string>("all")
-    const [bookmarkData, setBookmarkData] = useState([])
+    const [bookmarkLocal, setBookmarkLocal] = useState<SongData[]>([])
 
     useEffect(() => {
-        const saved = localStorage.getItem("brandSelect");
-
-        if (saved) {
-            setBrandSelect(saved);
-        }
+        setBookmarkLocal(getLocalBookmarks())
     }, []);
-
-    useEffect(() => {
-        localStorage.setItem("brandSelect", brandSelect);
-    }, [brandSelect]);
 
     const brandSelectChange = (e) => {
         setBrandSelect(e.target.value);
     };
 
+    const deleteTest = (brand : string, no : string) => {
 
-    const filteredData = tableData.filter(item => {
+        if (window.confirm("북마크에서 삭제할까요?")) {
+            removeBookmarkFromLocal(brand, no)
+            setBookmarkLocal(getLocalBookmarks())
+        }
+        else{
+            alert("취소합니다.")
+        }
+    }
+
+
+    const filteredData = bookmarkLocal.filter(item => {
         if (brandSelect === "all") return true
         const brandName = brandSelect === "tj" ? "tj" : "kumyoung"
         return item.brand === brandName
@@ -33,7 +44,7 @@ export default function Rtpage({tableData}){
 
 
     return (
-        (!tableData || tableData.length === 0)?
+        (!bookmarkLocal || bookmarkLocal.length === 0)?
             <p>노래를 추가해봐요</p>
         :
         <table className='table'>
@@ -59,7 +70,7 @@ export default function Rtpage({tableData}){
                       <td>{item.no}</td>
                       <td>{item.title}</td>
                       <td>{item.singer}</td>
-                      <td><Delete item={item}/></td>
+                      <td><MdDeleteForever size="30" className="deleteBookmark" onClick={() => deleteTest(item.brand, item.no)}/></td>
                     </tr>
                     })
                   } 

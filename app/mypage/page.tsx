@@ -2,6 +2,7 @@ import './mypage.css'
 import { authOptions } from "@/pages/api/auth/[...nextauth]"
 import { getServerSession } from "next-auth"
 import Rtpage from "./rtpage"
+import Localpage from './localpage'
 import Delete from "./delete"
 
 interface SessionTest {
@@ -13,21 +14,31 @@ interface SessionTest {
 }
 
 export default async function Mypage(){
+    
     let session : SessionTest | null = await getServerSession(authOptions)
+    let data = null
     if (session) {
         console.log(session.user._id)
+        const res = await fetch(`https://eighteen-three.vercel.app/api/get/${session?.user._id}`)
+        data = await res.json()
     }
     else {
         console.log("로그인x")
     }
 
-    const res = await fetch(`https://eighteen-three.vercel.app/api/get/${session?.user._id}`)
-    const data = await res.json()
+    // const res = await fetch(`https://eighteen-three.vercel.app/api/get/${session?.user._id}`)
+    // const data = await res.json()
 
     return(
         <div className='mypage'>
+            {session?
             <h1>안녕하세요 {session?.user.name}님!</h1>
-            <Rtpage tableData = {data}/>
+                : <h1>로그인하면 더 좋아요</h1>}
+            {session? 
+                <Rtpage tableData = {data}/>
+                : <Localpage/>
+            }
+            
             {/* <table className='table'>
                 <thead>
                     <tr>

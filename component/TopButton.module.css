@@ -1,0 +1,27 @@
+.topButton {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 12px 12px;
+    border-radius: 100px;
+    background-color: #b8b8b8;
+    color: black;
+
+    border: none;
+    cursor: pointer;
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.topButtonHidden {
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    }
+
+.topButtonVisible {
+    opacity: 1;
+    transform: translateY(0);
+}

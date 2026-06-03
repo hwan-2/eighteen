@@ -26,7 +26,12 @@ export default async function NavBar() {
                             <User/>
                             // SignOut이 서버에서 사용 불가능하므로 클라이언트 컴포넌트 따로 만듦
                             :
-                            <Link href={"/login"}>Login</Link>
+                            <>
+                                <Link href={"/mypage"}>My</Link>
+                                <Link href={"/login"}>Login</Link>
+                            </>
+                            
+                            
                     }
                 </div>
             </div>

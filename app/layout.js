@@ -3,6 +3,7 @@ import './globals.css'
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 import NavBar from '@/component/NavBar';
+import TopButton from "@/component/TopButton";
 import { cookies } from 'next/headers'
 
 
@@ -25,6 +26,7 @@ export default async function RootLayout({ children }) {
         <NavBar/>
         <div className={"wrap"}>
           {children}
+          <TopButton/>
         </div>
         <div className={"footer"}>
           <Link href={"https://github.com/hwan-2/eighteen"}><FaGithub /></Link>

@@ -88,6 +88,10 @@ th:nth-child(5) {
     color : black;
 }
 
+.dark-mode .deleteBookmark {
+    color : white;
+}
+
 .deleteBookmark:hover {
     color : grey;
 }
