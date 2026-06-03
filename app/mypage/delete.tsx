@@ -2,25 +2,27 @@
 import { MdDeleteForever } from "react-icons/md";
 import './mypage.css'
 
-export default function Delete(props) {
+export default function Delete({item, onDeleteSuccess}) {
 
-    const deleteBookmark = async (e) => {
+    const deleteBookmark = async () => {
         if (window.confirm("북마크에서 삭제할까요?")) {
             const res = await fetch('/api/post/delete',
                 {
                     method: 'DELETE',
                     body: JSON.stringify({
-                        _id: props.item._id,
+                        _id: item._id,
                     }),
-                }).then(() => {
-                    console.log(e.target.closest("tr"))
-                    e.target.closest("tr").style.opacity = '0'
-                setTimeout(() => {
-                    e.target.closest("tr").style.display = 'none'
-                }, 100)
-                window.location.reload()
-            })
-        }
+                });
+
+                if (res.ok) {
+                    if (onDeleteSuccess) {
+                        onDeleteSuccess(item)
+                    }
+                } else {
+                    alert("삭제에 실패했습니다.")
+                }
+            }
+
         else{
             alert("취소합니다.")
         }

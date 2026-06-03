@@ -6,7 +6,13 @@ import './mypage.css'
 export default function Rtpage({tableData}){
 
     const [brandSelect, setBrandSelect] = useState<string>("all")
-    const [bookmarkData, setBookmarkData] = useState([])
+    const [bookmarkData, setBookmarkData] = useState(tableData || [])
+
+    useEffect(() => {
+        if(tableData) {
+            setBookmarkData(tableData)
+        }
+    }, [tableData])
 
     useEffect(() => {
         const saved = localStorage.getItem("brandSelect");
@@ -24,8 +30,13 @@ export default function Rtpage({tableData}){
         setBrandSelect(e.target.value);
     };
 
+    const handleDeleteSuccess = (deletedItem) => {
+        setBookmarkData(data =>
+            data.filter(item => !(item.brand === deletedItem.brand && item.no === deletedItem.no))
+        )
+    }
 
-    const filteredData = tableData.filter(item => {
+    const filteredData = bookmarkData.filter(item => {
         if (brandSelect === "all") return true
         const brandName = brandSelect === "tj" ? "tj" : "kumyoung"
         return item.brand === brandName
@@ -33,7 +44,7 @@ export default function Rtpage({tableData}){
 
 
     return (
-        (!tableData || tableData.length === 0)?
+        (!bookmarkData || bookmarkData .length === 0)?
             <p>노래를 추가해봐요</p>
         :
         <table className='table'>
@@ -59,7 +70,7 @@ export default function Rtpage({tableData}){
                       <td>{item.no}</td>
                       <td>{item.title}</td>
                       <td>{item.singer}</td>
-                      <td><Delete item={item}/></td>
+                      <td><Delete item={item} onDeleteSuccess={handleDeleteSuccess}/></td>
                     </tr>
                     })
                   } 
