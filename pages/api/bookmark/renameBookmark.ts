@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const session = await getServerSession(req, res, authOptions)
 
             if (!session || !session.user) {
-                return res.status(401).json("오류발생: 세션오류")
+                return res.status(400).json("오류발생: 세션오류")
             }
 
             const userId = (session.user as { _id?: string })._id
@@ -41,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             // 매칭된 데이터가 없는 경우 예외 처리
             if (result.matchedCount === 0) {
-                return res.status(444).json("수정할 리스트를 찾을 수 없습니다.")
+                return res.status(400).json("수정할 리스트를 찾을 수 없습니다.")
             }
 
             return res.status(200).json({
@@ -53,6 +53,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(500).json("오류발생: 이름 수정 실패")
         }
     } else {
-        return res.status(403).json("오류발생: PUT")
+        return res.status(405).json("오류발생: PUT")
     }
 }

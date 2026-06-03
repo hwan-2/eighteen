@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             const userId = (session.user as { _id?: string })._id
             if (!userId) {
-                return res.status(401).json("오류발생: 사용자 id 불명")
+                return res.status(400).json("오류발생: 사용자 id 불명")
             }
 
             // 리스트 네임 받기
@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             })
 
             if (result.deletedCount === 0) {
-                return res.status(444).json("삭제할 데이터가 없습니다.")
+                return res.status(400).json("삭제할 데이터가 없습니다.")
             }
 
             return res.status(200).json({

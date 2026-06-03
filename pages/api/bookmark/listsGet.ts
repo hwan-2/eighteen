@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const session = await getServerSession(req, res, authOptions)
 
             if (!session || !session.user) {
-                return res.status(401).json("오류발생: 세션 오류")
+                return res.status(400).json("오류발생: 세션 오류")
             }
 
             const userId = (session.user as { _id?: string })._id
