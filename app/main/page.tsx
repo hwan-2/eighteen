@@ -3,12 +3,12 @@ import { useSession, signIn, signOut } from 'next-auth/react'
 import './main.css'
 import { useCallback, useEffect, useState } from 'react'
 import axios from "axios"
-import { Checkbox } from '@mui/material'
 import { FaMagnifyingGlass, FaHeart } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import {addBookmarkToLocal, removeBookmarkFromLocal, getLocalBookmarks} from  '@/util/addBookmarkToLocal'
+import BookmarkModal from '@/component/BookmarkModal'
 
 interface SearchData {
   brand: string;
@@ -35,6 +35,10 @@ export default function Main() {
   const [loading, setLoading] = useState<boolean>(false)
   const [brandSelect, setBrandSelect] = useState<string>("all")
   const [bookmarkLocal, setBookmarkLocal] = useState<SearchData[]>([])
+
+  const [bookmarkGrouplist, setBookmarkGroupList] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [tmpTitle, setTmpTitle] = useState<SearchData>({brand:"", no:"",title:"", singer:""}); 
 
   useEffect(() => {
     //console.log(getLocalBookmarks());
@@ -205,11 +209,46 @@ export default function Main() {
     fetchBookmark(item);
   }
 
+
+  const openModal = async (item : SearchData) => {
+    fetchList();
+
+    setTmpTitle(item);
+    setIsOpen(true);
+    console.log(bookmarkGrouplist)
+  };
+
+  const fetchList = async () => {
+    const res = await fetch("/api/bookmark/listsGet");
+    const data = await res.json();
+    console.log(data)
+
+    setBookmarkGroupList(data);
+  }
+
+  // const addList = async () => {
+  //   const res = await fetch('api/bookmark/createList',
+  //     {
+  //       method: 'POST',
+  //       body : JSON.stringify({
+  //         newListName : "5",
+  //         })
+  //     })
+  // }
+
   return (
       <div className="mMain">
         <h1 className={"title"}>노래방 검색</h1>
         {/* <h3 className={"title-sub"}>※안전하지 않음</h3> */}
         <div className="search">
+
+        <BookmarkModal 
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          bookmarkGroupList={bookmarkGrouplist}
+          tmpTitle={tmpTitle}
+          onSuccess={fetchList}
+        />
 
           <div className="sSearch">
             <select onChange={selectChange} value={select} className='select'>
@@ -278,21 +317,8 @@ export default function Main() {
                                 >
                                 {testLogin ? 
                                   (
-                                    bookmarkSet.has(`${item.brand}-${item.no}`) ? (
-                                      <FaHeart 
-                                        className='fH' 
-                                        size={30} 
-                                        color='red' 
-                                        onClick={() => deleteBookmark(item)}
-                                      />
-                                    ) : (
-                                      <FaRegHeart 
-                                        className='eH' 
-                                        size={30} 
-                                        color='red' 
-                                        onClick={(e) => addBookmark(e, item)}
-                                      />
-                                    )
+                                    <button onClick={() => openModal(item)}>이</button>
+                                    
                                   )
                                 : (
                                     bookmarkLocalSet.has(`${item.brand}-${item.no}`) ? (

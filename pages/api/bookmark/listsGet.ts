@@ -17,7 +17,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             const db = (await connectDB).db('eighteen')
 
-            const uniqueLists = await db.collection(`users/${userId}`).distinct("listName")
+            // const uniqueLists = await db.collection(`users/${userId}`).distinct("listName")
+            const lists = await db.collection(`users/${userId}`).aggregate([
+                { $sort: { createdAt: 1 } }, 
+                
+                { $group: { 
+                    _id: "$listName", 
+                    createdAt: { $first: "$createdAt" } 
+                }},
+                
+                { $sort: { createdAt: 1 } }
+                ]).toArray()
+
+            const uniqueLists = lists.map(list => list._id).filter(Boolean)
 
             return res.status(200).json(uniqueLists)
 
