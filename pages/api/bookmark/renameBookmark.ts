@@ -2,6 +2,7 @@ import { connectDB } from "@/util/database";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import type { NextApiRequest, NextApiResponse } from "next";
+import {ObjectId} from "mongodb";
 
 // 리스트 이름을 바꾸는 함수
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -19,10 +20,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
 
             const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
-            const { oldListName, newListName } = body
+            const { listId, newListName } = body
 
             // 유무 체크
-            if (!oldListName || !newListName) {
+            if (!listId || !newListName) {
                 return res.status(400).json("오류발생: 기존 이름 또는 새 이름 누락")
             }
 
@@ -34,8 +35,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const db = (await connectDB).db('eighteen')
             const personalPagePath = `users/${userId}`
 
-            const result = await db.collection(personalPagePath).updateMany(
-                {listName: oldListName},
+            const existing = await db.collection(personalPagePath).findOne({
+                type: 'list',
+                listName: newListName
+            })
+            if (existing) {
+                return res.status(400).json("이미 존재하는 보관함 이름입니다.")
+            }
+
+            const result = await db.collection(personalPagePath).updateOne(
+                { _id: new ObjectId(listId), type: 'list' },
                 {$set: {listName: newListName}}
             )
 

@@ -25,7 +25,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
 
             const saveThing = {
-                listName: body.listName,
+                type: 'song',
+                listId: body.listId,
                 brand: body.brand,
                 no : body.no,
                 title : body.title,
@@ -33,12 +34,24 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             }
             
             //null 체크
-            if(!saveThing.listName || !saveThing.brand || !saveThing.no || !saveThing.title || !saveThing.singer){
+            if(!saveThing.listId || !saveThing.brand || !saveThing.no || !saveThing.title || !saveThing.singer){
                 return res.status(400).json("오류발생: 입력값 누락")
             }
             
             const db = (await connectDB).db('eighteen')
             const personalPagePath = `users/${userId}`
+
+            const existingItem = await db.collection(personalPagePath).findOne({
+                type: 'song',
+                listId: saveThing.listId,
+                brand: saveThing.brand,
+                no: saveThing.no
+            })
+
+            if (existingItem) {
+                return res.status(400).json("이미 해당 보관함에 저장된 곡입니다.")
+            }
+
             const result = await db.collection(personalPagePath).insertOne(saveThing)
             
             res.status(200).json(result)

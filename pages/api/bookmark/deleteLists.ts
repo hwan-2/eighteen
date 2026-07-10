@@ -2,6 +2,7 @@ import { connectDB } from "@/util/database";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import type { NextApiRequest, NextApiResponse } from "next";
+import {ObjectId} from "mongodb";
 
 // 특정 리스트를 삭제하는 함수
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -19,17 +20,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
 
             // 리스트 네임 받기
-            const listName = req.query.listName as string
+            const listId = req.query.listId as string
 
-            if (!listName) {
-                return res.status(400).json("오류발생: 삭제할 리스트 이름이 없습니다.")
+            if (!listId) {
+                return res.status(400).json("오류발생: 삭제할 리스트 ID가 없습니다.")
             }
 
             const db = (await connectDB).db('eighteen')
             const personalPagePath = `users/${userId}`
 
             const result = await db.collection(personalPagePath).deleteMany({
-                listName: listName
+                $or: [
+                    { _id: new ObjectId(listId) },
+                    { listId: listId }
+                ]
             })
 
             if (result.deletedCount === 0) {

@@ -22,15 +22,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const personalPagePath = `users/${userId}`
 
             // 이미 같은 이름의 리스트가 있는지 중복 검사
-            const existing = await db.collection(personalPagePath).findOne({listName: newListName})
+            const existing = await db.collection(personalPagePath).findOne({type: 'list', listName: newListName})
             if (existing) {
                 return res.status(400).json("오류발생: 이미 존재하는 보관함 이름입니다.")
             }
+
+            //
+            const lastList = await db.collection(personalPagePath)
+                .find({ type: 'list' })
+                .sort({ listIndex: -1 })
+                .limit(1)
+                .toArray()
+
+            const nextIndex = (lastList.length > 0 && lastList[0].listIndex !== undefined)
+                ? lastList[0].listIndex + 1
+                : 0
             
             // 빈 데이터 생성
             const emptyFolderData = {
+                type: 'list',
                 listName: newListName,
-                isPlaceholder: true,
+                listIndex: nextIndex,
                 createdAt: new Date()
             }
 
