@@ -3,12 +3,19 @@ import { useMemo, useEffect, useState } from 'react'
 import Delete from "./delete"
 import './mypage.css'
 
+interface BookmarkGroupList {
+    listId : string;
+    listName : string;
+    listIndex : number;
+}
+
 export default function Rtpage({tableData}){
 
     const [brandSelect, setBrandSelect] = useState<string>("all")
     const [bookmarkData, setBookmarkData] = useState(tableData || [])
-    const [bookmarkGroupList, setBookmarkGroupList] = useState<string[]>([])
+    const [bookmarkGroupList, setBookmarkGroupList] = useState<BookmarkGroupList[]>([])
     const [groupSelect, setGroupSelect] = useState<string>("")
+    const [selectedGroup, setSelectedGroup] = useState<boolean>(false)
 
     useEffect(() => {
         if(tableData) {
@@ -40,20 +47,27 @@ export default function Rtpage({tableData}){
         setBrandSelect(e.target.value);
     };
 
-    const groupSelectChange = (e) => {
-        setGroupSelect(e.target.value);
+    const groupSelectChange = (value) => {
+        setGroupSelect(value);
+        setSelectedGroup(true);
+        console.log(groupSelect)
     };
+
+    const backChange = () => {
+        setGroupSelect("")
+        setSelectedGroup(false)
+    }
 
     const handleDeleteSuccess = (deletedItem) => {
         setBookmarkData(data =>
-            data.filter(item => !(item.brand === deletedItem.brand && item.no === deletedItem.no))
+            data.filter(item => !(item._id === deletedItem._id))
         )
     }
 
     const filteredData = bookmarkData.filter(item => {
-        if (brandSelect === "all") return item.listName === groupSelect && item.title
+        if (brandSelect === "all") return item.listId === groupSelect && item.title
         const brandName = brandSelect === "tj" ? "tj" : "kumyoung"
-        return item.brand === brandName && item.listName === groupSelect && item.title
+        return item.brand === brandName && item.listId === groupSelect && item.title
     })
 
 
@@ -64,13 +78,19 @@ export default function Rtpage({tableData}){
         <div>
             <>그룹 선택</>
 
-            <select onChange={groupSelectChange} value={groupSelect} className='brandSelect'>
+            {!selectedGroup?
+            <div>
                 {bookmarkGroupList.map((item)=> {
-                return <option key={item} value={item} style={{display:"flex", justifyContent:"center", flexDirection:"row"}}>
-                            {item}
-                        </option>
+                return <button key={item.listIndex} onClick={() => groupSelectChange(item.listId)} >
+                            {item.listName}
+                    </button>
                 })}
-            </select>
+            </div> :
+            
+            <button onClick={backChange}>뒤로가기</button>
+            
+            }
+            
             {/* {bookmarkGroupList.map((item)=> {
                 return <div key={item} style={{display:"flex", justifyContent:"center", flexDirection:"row"}}>
                         <div>{item}</div>

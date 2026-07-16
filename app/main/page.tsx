@@ -23,6 +23,12 @@ interface BookmarkData {
   _id: string;
 }
 
+interface BookmarkGroupList {
+    listId : string;
+    listName : string;
+    listIndex : number;
+}
+
 export default function Main() {
   
   const [data, setData] = useState<SearchData[]>([])
@@ -36,7 +42,7 @@ export default function Main() {
   const [brandSelect, setBrandSelect] = useState<string>("all")
   const [bookmarkLocal, setBookmarkLocal] = useState<SearchData[]>([])
 
-  const [bookmarkGrouplist, setBookmarkGroupList] = useState([]);
+  const [bookmarkGrouplist, setBookmarkGroupList] = useState<BookmarkGroupList[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [tmpTitle, setTmpTitle] = useState<SearchData>({brand:"", no:"",title:"", singer:""}); 
 

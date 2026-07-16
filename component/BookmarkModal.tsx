@@ -11,11 +11,17 @@ interface SearchData {
   singer: string;
 }
 
+interface BookmarkGroupList {
+    listId : string;
+    listName : string;
+    listIndex : number;
+}
+
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  bookmarkGroupList : string[];
+  bookmarkGroupList : BookmarkGroupList[];
   tmpTitle : SearchData;
   onSuccess : () => void;
 }
@@ -72,7 +78,7 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
     }
 
     const deleteList = async (item) => {
-        const res = await fetch(`api/bookmark/deleteLists?listName=${encodeURIComponent(item)}`,
+        const res = await fetch(`api/bookmark/deleteLists?listId=${encodeURIComponent(item)}`,
         {
             method: 'DELETE',
         })
@@ -85,45 +91,28 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
         onSuccess()
     }
 
-    const fetchBookmark = async () => {
-        // const res = await fetch('api/post/newSave',
-        // {
-        //     method: 'POST',
-        //     body : JSON.stringify({
-        //     listName : "오타쿠",
-        //     brand : tmpTitle.brand,
-        //     no: tmpTitle.no,
-        //     title: tmpTitle.title,
-        //     singer: tmpTitle.singer })
-        // })
-        // const result = await res.json()
-
+    const fetchBookmark = async (item) => {
         try {
-            await Promise.all(
-            checkedLists.map(async (item) => {
-                const res = await fetch('api/post/newSave',
-                    {
-                        method: 'POST',
-                        body : JSON.stringify({
-                        listName : item,
-                        brand : tmpTitle.brand,
-                        no: tmpTitle.no,
-                        title: tmpTitle.title,
-                        singer: tmpTitle.singer })
-                    })
-                    const result = await res.json()
+            const res = await fetch('api/post/newSave',
+                {
+                    method: 'POST',
+                    body : JSON.stringify({
+                    listId : item,
+                    brand : tmpTitle.brand,
+                    no: tmpTitle.no,
+                    title: tmpTitle.title,
+                    singer: tmpTitle.singer })
+                })
+            const result = await res.json()
 
-                if (!res.ok) {
-                    throw new Error(`저장 실패: ${item}`);
-                }
-                
-            })
-            );
+            if (!res.ok) {
+                // throw new Error(`저장 실패: ${item}`);
+                alert(result)
+            }
             console.log('저장 완료');
         } catch (error) {
             console.error(error);
         }
-        onClose()
     }
 
     if (!isOpen) return null;
@@ -180,12 +169,13 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
             <div>
                 
                 {bookmarkGroupList.map((item) => (
-                <div key={item}>
-                    {item}
-                    <Checkbox checked={checkedLists.includes(item)}
-                    onChange={() => handleCheckboxChange(item)} 
-                    />
-                    <button onClick={() =>deleteList(item)}> x</button>
+                <div key={item.listIndex}>
+                    {item.listName}
+                    {/* <Checkbox checked={checkedLists.includes(item.listId)}
+                    onChange={() => handleCheckboxChange(item.listId)} 
+                    /> */}
+                    <button onClick={() => fetchBookmark(item.listId)}>s</button>
+                    <button onClick={() =>deleteList(item.listId)}> x</button>
                 </div>
                     
                 ))}
