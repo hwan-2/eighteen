@@ -34,7 +34,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             } else {
                 const userId = session.user._id
                 const resultUser = await db.collection(`users/${userId}`).find().toArray()
-                const filteredData = resultUser.map(({brand, no, _id}) => ({brand, no, _id}))
+                const filteredData = resultUser.map(({brand, no, _id, listId}) => ({brand, no, _id, listId}))
                 //user데이터와 검색 데이터를 묶어서 보냄 + _id도 보냄
                 const responseData = {
                     music: response.map(res => res.data).flat(),

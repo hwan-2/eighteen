@@ -2,6 +2,10 @@
 
 import { Checkbox } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react'
+import { FaMagnifyingGlass, FaHeart } from "react-icons/fa6";
+import { FaRegHeart } from "react-icons/fa";
+import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
 
 
 interface SearchData {
@@ -17,6 +21,13 @@ interface BookmarkGroupList {
     listIndex : number;
 }
 
+interface BookmarkData {
+    brand: string;
+    no: string;
+    _id: string;
+    listId : string;
+}
+
 
 interface ModalProps {
   isOpen: boolean;
@@ -24,23 +35,16 @@ interface ModalProps {
   bookmarkGroupList : BookmarkGroupList[];
   tmpTitle : SearchData;
   onSuccess : () => void;
+  bookmark : BookmarkData[];
+  onBookmarkSuccess : () => void;
 }
 
 
-export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTitle, onSuccess} : ModalProps) {
+export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTitle, onSuccess, bookmark, onBookmarkSuccess} : ModalProps) {
 
     const [input, setInput] = useState<string>("")
     const [saveOpen, setSaveOpen] = useState(false);
-    const [checkedLists, setCheckedLists] = useState<string[]>([]);
-
-    const handleCheckboxChange = (item: string) => {
-        setCheckedLists((prev) =>
-            prev.includes(item)
-            ? prev.filter((value) => value !== item)
-            : [...prev, item]
-        );
-        console.log(checkedLists)
-    }
+    const bookmarkSet = new Set(bookmark.map(v => `${v.brand}-${v.no}-${v.listId}`))
 
     const handleChange = (value : string) => {
         setInput(value)
@@ -110,9 +114,49 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
                 alert(result)
             }
             console.log('저장 완료');
+            onBookmarkSuccess()
         } catch (error) {
             console.error(error);
         }
+        
+    }
+
+    const handleBookmark = (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = (rect.left + rect.width / 2) / window.innerWidth;
+        const y = (rect.top + rect.height / 2) / window.innerHeight;
+        const heart = confetti.shapeFromText({ text: '♥' });
+      
+        confetti({
+          particleCount: 10,
+          spread: 360,
+          origin: { x, y },
+          colors: ['#ff0000', '#ff4d4d', '#ff8080'],
+          startVelocity: 5,
+          shapes: [heart],
+          ticks: 20,
+          gravity: -0.1,
+          scalar: 0.7,
+          drift: 0,
+        });
+    
+    };
+
+    const addBookmark = (e, item) => {
+        handleBookmark(e)
+        fetchBookmark(item);
+    }
+
+    const deleteBookmark = async (item) => {
+        const bid = bookmark.filter(v => v.brand === tmpTitle.brand && v.no === tmpTitle.no && v.listId === item)
+        const res = await fetch('api/post/delete',
+        {
+            method: 'DELETE',
+            body: JSON.stringify({
+            _id: bid[0]._id,
+            }),
+        })
+        onBookmarkSuccess()
     }
 
     if (!isOpen) return null;
@@ -171,10 +215,25 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
                 {bookmarkGroupList.map((item) => (
                 <div key={item.listIndex}>
                     {item.listName}
-                    {/* <Checkbox checked={checkedLists.includes(item.listId)}
-                    onChange={() => handleCheckboxChange(item.listId)} 
-                    /> */}
                     <button onClick={() => fetchBookmark(item.listId)}>s</button>
+                    {
+                        bookmarkSet.has(`${tmpTitle.brand}-${tmpTitle.no}-${item.listId}`) ? (
+                            <FaHeart 
+                                className='fH' 
+                                size={30} 
+                                color='red' 
+                                onClick={() => deleteBookmark(item.listId)}
+                            />
+                        ) : (
+                            <FaRegHeart 
+                                className='eH' 
+                                size={30} 
+                                color='red' 
+                                onClick={(e) => addBookmark(e, item.listId)}
+                            />
+                        )
+                    }
+
                     <button onClick={() =>deleteList(item.listId)}> x</button>
                 </div>
                     

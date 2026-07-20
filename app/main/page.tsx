@@ -21,12 +21,13 @@ interface BookmarkData {
   brand: string;
   no: string;
   _id: string;
+  listId : string;
 }
 
 interface BookmarkGroupList {
-    listId : string;
-    listName : string;
-    listIndex : number;
+  listId : string;
+  listName : string;
+  listIndex : number;
 }
 
 export default function Main() {
@@ -150,8 +151,7 @@ export default function Main() {
     const res = await fetch('api/search/searchBookmark',
       {
         method: 'POST',
-        body : JSON.stringify({title:input})
-      })
+    })
     const result = await res.json()
     const bookmarkData = result.user
     setBookmark(bookmarkData)
@@ -221,13 +221,14 @@ export default function Main() {
 
     setTmpTitle(item);
     setIsOpen(true);
-    console.log(bookmarkGrouplist)
+    //console.log(bookmarkGrouplist)
+    console.log(bookmark)
   };
 
   const fetchList = async () => {
     const res = await fetch("/api/bookmark/listsGet");
     const data = await res.json();
-    console.log(data)
+    //console.log(data)
 
     setBookmarkGroupList(data);
   }
@@ -254,6 +255,8 @@ export default function Main() {
           bookmarkGroupList={bookmarkGrouplist}
           tmpTitle={tmpTitle}
           onSuccess={fetchList}
+          bookmark={bookmark}
+          onBookmarkSuccess={searchBookmark}
         />
 
           <div className="sSearch">
