@@ -9,7 +9,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const session = await getServerSession(req, res, authOptions)
             if (!session || !session.user) return res.status(401).json("오류발생: 세션 오류")
 
-            const userId = (session.user as { _id?: string })._id
+            const userId = session.user._id
+            if (!userId) {
+                return res.status(400).json("오류발생: 사용자 ID 누락")
+            }
 
             const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
             const newListName = body.newListName

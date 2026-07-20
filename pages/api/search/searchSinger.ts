@@ -32,7 +32,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                 responseData.music.sort((a, b) => a.title.localeCompare(b.title));
                 res.status(200).json(responseData);
             } else {
-                const userId = (session.user as { _id?: string })._id
+                const userId = session.user._id
                 const resultUser = await db.collection(`users/${userId}`).find().toArray()
                 const filteredData = resultUser.map(({brand, no, _id}) => ({brand, no, _id}))
                 //user데이터와 검색 데이터를 묶어서 보냄
