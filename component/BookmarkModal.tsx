@@ -6,6 +6,7 @@ import { FaMagnifyingGlass, FaHeart } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import AddBookmarkListModal from '@/component/AddBookmarkListModal'
 
 
 interface SearchData {
@@ -42,44 +43,8 @@ interface ModalProps {
 
 export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTitle, onSuccess, bookmark, onBookmarkSuccess} : ModalProps) {
 
-    const [input, setInput] = useState<string>("")
-    const [saveOpen, setSaveOpen] = useState(false);
+    const [addListOpen, setAddListOpen] = useState(false);
     const bookmarkSet = new Set(bookmark.map(v => `${v.brand}-${v.no}-${v.listId}`))
-
-    const handleChange = (value : string) => {
-        setInput(value)
-        console.log(input)
-    }
-    const handleKeyDown = (e : any) => {
-        if (e.key === "Enter") {
-            addList()
-        }
-    }
-   
-    const addList = async () => {
-        const res = await fetch('api/bookmark/createList',
-        {
-            method: 'POST',
-            body : JSON.stringify({
-                newListName : input,
-            })
-        })
-
-        const result = await res.json()
-
-        if (!res.ok) {
-            // if (res.status === 400) {
-            //     alert("이미 존재하는 보관함 이름입니다.")
-            // }
-            alert(result)
-        }
-        else {
-            onSuccess()
-            setInput("")
-            setSaveOpen(false)
-        }
-        
-    }
 
     const deleteList = async (item) => {
         const res = await fetch(`api/bookmark/deleteLists?listId=${encodeURIComponent(item)}`,
@@ -240,19 +205,24 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
                 ))}
             </div>  
 
-            {saveOpen && (
+            <AddBookmarkListModal
+                isOpen={addListOpen}
+                onClose={() => setAddListOpen(false)}
+                onSuccess={onSuccess}
+            />
+            {/* {saveOpen && (
                 <div
                     onClick={()=> setSaveOpen(false)}
                     style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100vw",
-                    height: "100vh",
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100vw",
+                        height: "100vh",
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
                     }}
                 >
                     <div
@@ -303,8 +273,9 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
                         </div>
                     </div>
                 </div>
-            )}
-                <button onClick={() => setSaveOpen(true)}>새 그룹 추가</button>
+            )} */}
+
+                <button onClick={() => setAddListOpen(true)}>새 그룹 추가</button>
                 <button onClick={fetchBookmark}>저장</button>
 
                 <h4>현재 선택 곡 : {tmpTitle.title}</h4>

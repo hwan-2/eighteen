@@ -2,6 +2,7 @@
 import { useMemo, useEffect, useState } from 'react'
 import Delete from "./delete"
 import './mypage.css'
+import AddBookmarkListModal from '@/component/AddBookmarkListModal'
 
 interface BookmarkGroupList {
     listId : string;
@@ -16,6 +17,7 @@ export default function Rtpage({tableData}){
     const [bookmarkGroupList, setBookmarkGroupList] = useState<BookmarkGroupList[]>([])
     const [groupSelect, setGroupSelect] = useState<string>("")
     const [selectedGroup, setSelectedGroup] = useState<boolean>(false)
+    const [addListOpen, setAddListOpen] = useState(false);
 
     useEffect(() => {
         if(tableData) {
@@ -25,23 +27,24 @@ export default function Rtpage({tableData}){
     }, [tableData])
 
     useEffect(() => {
-        const fetchGroups = async () => {
-            try {
-                const res = await fetch("/api/bookmark/listsGet");
-                const data = await res.json();
-
-                setBookmarkGroupList(data);
-
-                if (data.length > 0) {
-                    setGroupSelect(data[0]);
-                }
-            } catch (error) {
-                console.error("그룹 목록 조회 실패:", error);
-            }
-            };
-
         fetchGroups();
     }, []);
+
+
+    const fetchGroups = async () => {
+        try {
+            const res = await fetch("/api/bookmark/listsGet");
+            const data = await res.json();
+
+            setBookmarkGroupList(data);
+
+            if (data.length > 0) {
+                setGroupSelect(data[0]);
+            }
+        } catch (error) {
+            console.error("그룹 목록 조회 실패:", error);
+        }
+    };
 
     const brandSelectChange = (e) => {
         setBrandSelect(e.target.value);
@@ -50,7 +53,6 @@ export default function Rtpage({tableData}){
     const groupSelectChange = (value) => {
         setGroupSelect(value);
         setSelectedGroup(true);
-        console.log(groupSelect)
     };
 
     const backChange = () => {
@@ -72,64 +74,62 @@ export default function Rtpage({tableData}){
 
 
     return (
-        (!bookmarkData || bookmarkData.length === 0)?
-            <p>그룹을 만들고 노래를 추가해봐요</p>
-        :
         <div>
             <>그룹 선택</>
 
             {!selectedGroup?
-            <div>
-                {bookmarkGroupList.map((item)=> {
-                return <button key={item.listIndex} onClick={() => groupSelectChange(item.listId)} >
+                <div>
+                    {bookmarkGroupList.map((item)=> {
+                        return <button key={item.listIndex} onClick={() => groupSelectChange(item.listId)} >
                             {item.listName}
-                    </button>
-                })}
-            </div> :
-            
-            <button onClick={backChange}>뒤로가기</button>
-            
+                        </button>
+                    })}
+                    <button onClick={() => setAddListOpen(true)}>+</button>
+                </div> :
+                <div>
+                    <button onClick={backChange}>뒤로가기</button>
+                    {bookmarkData.some(item => item.listId === groupSelect && item.type === "song")? // 선택한 그룹에 저장된 노래가 있는지 없는지 판단
+                        <table className='table'>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <select onChange={brandSelectChange} value={brandSelect} className='brandSelect'>
+                                            <option key="all" value="all">제공</option>
+                                            <option key="tj" value="tj">TJ</option>
+                                            <option key="ky" value="ky">금영</option>
+                                        </select>
+                                    </th>
+                                    <th>번호</th>
+                                    <th>제목</th>
+                                    <th>가수</th>
+                                    <th>삭제</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredData.map((item, index) => {
+                                    return <tr className="tr" key={index}>
+                                    <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
+                                    <td>{item.no}</td>
+                                    <td>{item.title}</td>
+                                    <td>{item.singer}</td>
+                                    <td><Delete item={item} onDeleteSuccess={handleDeleteSuccess}/></td>
+                                    </tr>
+                                    })
+                                } 
+                            </tbody>
+                        </table>
+                        :
+                        <div>이 그룹에는 아직 노래가 없어요</div>
+                    }
+                    
+                </div>
             }
             
-            {/* {bookmarkGroupList.map((item)=> {
-                return <div key={item} style={{display:"flex", justifyContent:"center", flexDirection:"row"}}>
-                        <div>{item}</div>
-                        <button onChange={() => setGroupSelect(item)}>o</button>
-                    </div>
-            })} */}
-
-            {filteredData.length===0?
-            <div>이 그룹에 노래를 추가해보세요</div>:
-            <table className='table'>
-                <thead>
-                    <tr>
-                        <th>
-                            <select onChange={brandSelectChange} value={brandSelect} className='brandSelect'>
-                                <option key="all" value="all">제공</option>
-                                <option key="tj" value="tj">TJ</option>
-                                <option key="ky" value="ky">금영</option>
-                            </select>
-                        </th>
-                        <th>번호</th>
-                        <th>제목</th>
-                        <th>가수</th>
-                        <th>삭제</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredData.map((item, index) => {
-                        return <tr className="tr" key={index}>
-                        <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
-                        <td>{item.no}</td>
-                        <td>{item.title}</td>
-                        <td>{item.singer}</td>
-                        <td><Delete item={item} onDeleteSuccess={handleDeleteSuccess}/></td>
-                        </tr>
-                        })
-                    } 
-                </tbody>
-            </table>
-            }
+            <AddBookmarkListModal
+                isOpen={addListOpen}
+                onClose={() => setAddListOpen(false)}
+                onSuccess={fetchGroups}
+            />
         </div>
     )
 }
