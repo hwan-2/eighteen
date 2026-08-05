@@ -3,6 +3,7 @@ import { useMemo, useEffect, useState } from 'react'
 import Delete from "./delete"
 import './mypage.css'
 import AddBookmarkListModal from '@/component/AddBookmarkListModal'
+import RenameBookmarkListModal from '@/component/RenameBookmarkListModal'
 
 interface BookmarkGroupList {
     listId : string;
@@ -18,6 +19,9 @@ export default function Rtpage({tableData}){
     const [groupSelect, setGroupSelect] = useState<string>("")
     const [selectedGroup, setSelectedGroup] = useState<boolean>(false)
     const [addListOpen, setAddListOpen] = useState(false);
+    const [groupEditOpen, setGroupEditOpen] = useState<string|null>(null);
+    const [renameGroupOpen, setRenameGroupOpen] = useState(false);
+    const [selectedRenameGroup, setSelectedRenameGroup] = useState<BookmarkGroupList>({listId:"", listName:"", listIndex:0})
 
     useEffect(() => {
         if(tableData) {
@@ -66,6 +70,27 @@ export default function Rtpage({tableData}){
         )
     }
 
+    const deleteList = async (item) => {
+
+        if (window.confirm(item.listName + " 그룹을 삭제할까요?")) {
+            const res = await fetch(`api/bookmark/deleteLists?listId=${encodeURIComponent(item.listId)}`,
+            {
+                method: 'DELETE',
+            })
+
+            if (res.ok) {
+                    setGroupEditOpen(null);
+                    fetchGroups();
+                } else {
+                    alert("삭제에 실패했습니다.")
+            }
+        }
+        else{
+            alert("취소합니다.")
+        }
+        
+    }
+
     const filteredData = bookmarkData.filter(item => {
         if (brandSelect === "all") return item.listId === groupSelect && item.title
         const brandName = brandSelect === "tj" ? "tj" : "kumyoung"
@@ -80,11 +105,40 @@ export default function Rtpage({tableData}){
             {!selectedGroup?
                 <div>
                     {bookmarkGroupList.map((item)=> {
-                        return <button key={item.listIndex} onClick={() => groupSelectChange(item.listId)} >
-                            {item.listName}
-                        </button>
+                        return <div key={item.listIndex} style={{position: "relative", display: "inline-block", margin: "5px", verticalAlign: "top",}}>
+                            <RenameBookmarkListModal
+                                isOpen={renameGroupOpen}
+                                onClose={() => setRenameGroupOpen(false)}
+                                onSuccess={fetchGroups}
+                                listItem={selectedRenameGroup}
+                            />
+
+                            <button style={{width:'20vh', height: '20vh', borderRadius: 10,}}  onClick={() => {groupSelectChange(item.listId); setGroupEditOpen(null)}} >
+                                {item.listName}
+                            </button>
+                            <button onClick={(e) => {e.stopPropagation(); setGroupEditOpen(groupEditOpen === item.listId ? null : item.listId); }} style={{ position: "absolute", top: 6, right: 6,}}>
+                                ⋮
+                            </button>
+                            {groupEditOpen === item.listId && (
+                                <div
+                                    style={{
+                                        position: "absolute",
+                                        top: 36,
+                                        right: 6,
+                                        background: "#fff",
+                                        borderRadius: 6,
+                                        width: '6vh',
+                                        height: '6vh',
+                                    }}
+                                >
+                                    <div onClick={() => {setRenameGroupOpen(true), setSelectedRenameGroup(item), console.log(item)}}>수정</div>
+                                    <div onClick={() => deleteList(item)}>삭제</div>
+                                </div>
+                            )}
+                            
+                        </div>
                     })}
-                    <button onClick={() => setAddListOpen(true)}>+</button>
+                    <button style={{width:'20vh', height: '20vh', borderRadius: 10, margin: "5px", verticalAlign: "top",}} onClick={() => setAddListOpen(true)}>+</button>
                 </div> :
                 <div>
                     <button onClick={backChange}>뒤로가기</button>

@@ -46,19 +46,19 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
     const [addListOpen, setAddListOpen] = useState(false);
     const bookmarkSet = new Set(bookmark.map(v => `${v.brand}-${v.no}-${v.listId}`))
 
-    const deleteList = async (item) => {
-        const res = await fetch(`api/bookmark/deleteLists?listId=${encodeURIComponent(item)}`,
-        {
-            method: 'DELETE',
-        })
+    // const deleteList = async (item) => {
+    //     const res = await fetch(`api/bookmark/deleteLists?listId=${encodeURIComponent(item)}`,
+    //     {
+    //         method: 'DELETE',
+    //     })
 
-        const result = await res.json()
-        if (!res.ok) {
-            console.log(result)
-            console.log(item)
-        }
-        onSuccess()
-    }
+    //     const result = await res.json()
+    //     if (!res.ok) {
+    //         console.log(result)
+    //         console.log(item)
+    //     }
+    //     onSuccess()
+    // }
 
     const fetchBookmark = async (item) => {
         try {
@@ -180,7 +180,7 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
                 {bookmarkGroupList.map((item) => (
                 <div key={item.listIndex}>
                     {item.listName}
-                    <button onClick={() => fetchBookmark(item.listId)}>s</button>
+                    {/* <button onClick={() => fetchBookmark(item.listId)}>s</button> */}
                     {
                         bookmarkSet.has(`${tmpTitle.brand}-${tmpTitle.no}-${item.listId}`) ? (
                             <FaHeart 
@@ -199,7 +199,7 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
                         )
                     }
 
-                    <button onClick={() =>deleteList(item.listId)}> x</button>
+                    {/* <button onClick={() =>deleteList(item.listId)}> x</button> */}
                 </div>
                     
                 ))}
