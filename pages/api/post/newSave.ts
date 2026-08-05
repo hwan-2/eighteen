@@ -30,7 +30,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                 brand: body.brand,
                 no : body.no,
                 title : body.title,
-                singer : body.singer
+                singer : body.singer,
+                songIndex: 0
             }
             
             //null 체크
@@ -50,6 +51,33 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
             if (existingItem) {
                 return res.status(400).json("이미 해당 보관함에 저장된 곡입니다.")
+            }
+
+            // songIndex 계산
+            const requestedIndex = typeof body.songIndex === 'number' ? body.songIndex : null
+
+            if (requestedIndex !== null && requestedIndex >= 0) {
+                // 지정된 위치 이후의 기존 곡들 인덱스를 1만큼 밀어냄
+                await db.collection(personalPagePath).updateMany(
+                    {
+                        type: 'song',
+                        listId: saveThing.listId,
+                        songIndex: { $gte: requestedIndex }
+                    },
+                    { $inc: { songIndex: 1 } }
+                )
+                saveThing.songIndex = requestedIndex
+            } else {
+                // 현재 리스트의 최대 songIndex + 1
+                const lastSong = await db.collection(personalPagePath)
+                    .find({ type: 'song', listId: saveThing.listId })
+                    .sort({ songIndex: -1 })
+                    .limit(1)
+                    .toArray()
+                
+                saveThing.songIndex = lastSong.length > 0 && typeof lastSong[0].songIndex === 'number'
+                    ? lastSong[0].songIndex + 1
+                    : 0
             }
 
             const result = await db.collection(personalPagePath).insertOne(saveThing)

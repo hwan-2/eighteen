@@ -29,7 +29,9 @@ export default async function RootLayout({ children }) {
           <TopButton/>
         </div>
         <div className={"footer"}>
-          <Link href={"https://github.com/hwan-2/eighteen"}><FaGithub /></Link>
+          <Link href={"https://github.com/hwan-2/eighteen"} target="_blank" rel="noopener noreferrer" title="GitHub">
+            <FaGithub />
+          </Link>
         </div>
 
       </body>
