@@ -1,9 +1,14 @@
 "use client"
-import { useMemo, useEffect, useState } from 'react'
+import { useMemo, useEffect, useState, useRef } from 'react'
 import Delete from "./delete"
 import './mypage.css'
 import AddBookmarkListModal from '@/component/AddBookmarkListModal'
 import RenameBookmarkListModal from '@/component/RenameBookmarkListModal'
+import { closestCenter, DndContext, DragEndEvent, } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, arrayMove, } from "@dnd-kit/sortable";
+
+import SortableBookmarkList from "@/component/SortableBookmarkList";
+
 
 interface BookmarkGroupList {
     listId : string;
@@ -22,6 +27,7 @@ export default function Rtpage({tableData}){
     const [groupEditOpen, setGroupEditOpen] = useState<string|null>(null);
     const [renameGroupOpen, setRenameGroupOpen] = useState(false);
     const [selectedRenameGroup, setSelectedRenameGroup] = useState<BookmarkGroupList>({listId:"", listName:"", listIndex:0})
+    const [isSortable, setIsSortable] = useState(false);
 
     useEffect(() => {
         if(tableData) {
@@ -30,9 +36,54 @@ export default function Rtpage({tableData}){
         }
     }, [tableData])
 
+    const sortedItems = useMemo(
+        () => [...bookmarkGroupList].sort((a, b) => a.listIndex - b.listIndex),
+        [bookmarkGroupList]
+    );
+
+    const handleDragEnd = async ({ active, over }: DragEndEvent) => {
+        if (!over || active.id === over.id) return;
+
+        const oldIndex = sortedItems.findIndex(
+        (item) => item.listId === active.id
+        );
+
+        const newIndex = sortedItems.findIndex(
+        (item) => item.listId === over.id
+        );
+
+        const reordered = arrayMove(sortedItems, oldIndex, newIndex);
+
+        const updated = reordered.map((item, index) => ({
+        ...item,
+        listIndex : index,
+        }));
+
+
+        setBookmarkGroupList(updated);
+        await updateGroupOrder(updated);
+
+    };
+
     useEffect(() => {
         fetchGroups();
     }, []);
+
+    const updateGroupOrder = async (items) => {
+        // const payload = {
+        //     orderedListIds: items.map((item) => item.listId),
+        // };
+
+        await fetch("/api/bookmark/reorderBookmark", {
+            method: "PUT",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                orderedListIds: items.map((item) => item.listId),
+            }),
+        });
+    };
 
 
     const fetchGroups = async () => {
@@ -101,10 +152,17 @@ export default function Rtpage({tableData}){
     return (
         <div>
             <>그룹 선택</>
+            {!selectedGroup?
+                <button onClick={() => {setIsSortable((prev) => !prev), setGroupEditOpen(null)}}>
+                    {isSortable ? "편집 완료" : "순서 변경"}
+                </button>
+                :<></>
+            }
+            
 
             {!selectedGroup?
                 <div>
-                    {bookmarkGroupList.map((item)=> {
+                    {/* {bookmarkGroupList.map((item)=> {
                         return <div key={item.listIndex} style={{position: "relative", display: "inline-block", margin: "5px", verticalAlign: "top",}}>
                             <RenameBookmarkListModal
                                 isOpen={renameGroupOpen}
@@ -137,8 +195,61 @@ export default function Rtpage({tableData}){
                             )}
                             
                         </div>
-                    })}
-                    <button style={{width:'20vh', height: '20vh', borderRadius: 10, margin: "5px", verticalAlign: "top",}} onClick={() => setAddListOpen(true)}>+</button>
+                    })} */}
+                    <div
+                        style={{
+                            maxWidth: "90vh",
+                            margin: "40px auto",
+                        }}
+                        >
+                        <DndContext
+                            collisionDetection={closestCenter}
+                            onDragEnd={handleDragEnd}
+                        >
+                            <SortableContext
+                                items={sortedItems.map((item) => item.listId)}
+                                strategy={rectSortingStrategy}
+                            >
+                                <div
+                                    style={{
+                                        display: "grid",
+                                        gridTemplateColumns: "repeat(auto-fit, 20vh)",
+                                        justifyContent: "center",
+                                        gap: "10px",
+                                    }}
+                                >
+                                    {sortedItems.map((item) => (
+                                        <SortableBookmarkList
+                                            key={item.listId}
+                                            item={item}
+                                            isSortable={isSortable}
+                                            groupSelectChange={groupSelectChange}
+                                            setGroupEditOpen={setGroupEditOpen}
+                                            groupEditOpen={groupEditOpen}
+                                            setRenameGroupOpen={setRenameGroupOpen}
+                                            setSelectedRenameGroup={setSelectedRenameGroup}
+                                            deleteList={deleteList}
+                                        />
+                                        
+                                    ))}
+
+                                    <button style={{width: "20vh", height: "20vh", borderRadius: 10, verticalAlign: "top",}} onClick={() => setAddListOpen(true)}>
+                                        <h1>+</h1>
+                                    </button>
+                                </div>
+                            </SortableContext>
+                        </DndContext>
+                        
+                        {/* <pre>{JSON.stringify(sortedItems, null, 2)}</pre> */}
+                    </div>
+                    <RenameBookmarkListModal
+                        isOpen={renameGroupOpen}
+                        onClose={() => setRenameGroupOpen(false)}
+                        onSuccess={fetchGroups}
+                        listItem={selectedRenameGroup}
+                    />
+
+                    {/* <button style={{width: "20vh", height: "20vh", borderRadius: 10, margin: "5px", verticalAlign: "top",}} onClick={() => setAddListOpen(true)}>+</button> */}
                 </div> :
                 <div>
                     <button onClick={backChange}>뒤로가기</button>
