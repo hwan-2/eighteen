@@ -7,6 +7,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import AddBookmarkListModal from '@/component/AddBookmarkListModal'
+import styles from './BookmarkModal.module.css';
 
 
 interface SearchData {
@@ -65,12 +66,13 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
             const res = await fetch('api/post/newSave',
                 {
                     method: 'POST',
-                    body : JSON.stringify({
-                    listId : item,
-                    brand : tmpTitle.brand,
-                    no: tmpTitle.no,
-                    title: tmpTitle.title,
-                    singer: tmpTitle.singer })
+                    body: JSON.stringify({
+                        listId: item,
+                        brand: tmpTitle.brand,
+                        no: tmpTitle.no,
+                        title: tmpTitle.title,
+                        singer: tmpTitle.singer
+                    })
                 })
             const result = await res.json()
 
@@ -83,28 +85,28 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
         } catch (error) {
             console.error(error);
         }
-        
+
     }
 
     const handleBookmark = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = (rect.left + rect.width / 2) / window.innerWidth;
         const y = (rect.top + rect.height / 2) / window.innerHeight;
-        const heart = confetti.shapeFromText({ text: '♥' });
-      
+        const heart = confetti.shapeFromText({text: '♥'});
+
         confetti({
-          particleCount: 10,
-          spread: 360,
-          origin: { x, y },
-          colors: ['#ff0000', '#ff4d4d', '#ff8080'],
-          startVelocity: 5,
-          shapes: [heart],
-          ticks: 20,
-          gravity: -0.1,
-          scalar: 0.7,
-          drift: 0,
+            particleCount: 10,
+            spread: 360,
+            origin: {x, y},
+            colors: ['#ff0000', '#ff4d4d', '#ff8080'],
+            startVelocity: 5,
+            shapes: [heart],
+            ticks: 20,
+            gravity: -0.1,
+            scalar: 0.7,
+            drift: 0,
         });
-    
+
     };
 
     const addBookmark = (e, item) => {
@@ -115,173 +117,118 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
     const deleteBookmark = async (item) => {
         const bid = bookmark.filter(v => v.brand === tmpTitle.brand && v.no === tmpTitle.no && v.listId === item)
         const res = await fetch('api/post/delete',
-        {
-            method: 'DELETE',
-            body: JSON.stringify({
-            _id: bid[0]._id,
-            }),
-        })
+            {
+                method: 'DELETE',
+                body: JSON.stringify({
+                    _id: bid[0]._id,
+                }),
+            })
         onBookmarkSuccess()
     }
 
-    if (!isOpen) return null;
-
     return (
-        <div
-            onClick={onClose}
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              backgroundColor: "rgba(0,0,0,0.5)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-        >
-            <div 
-                onClick={(e) => e.stopPropagation()}
-                style={{
-                    background: "white",
-                    padding: "20px",
-                    borderRadius: "10px",
-                    minWidth: "300px",
-                }}
-            >
-
-            <div
-                style={{
-                    position: "relative",
-                    marginBottom: "20px",
-                }}
-            >
-                <h2 
-                    style={{
-                        margin: 0,
-                        textAlign: "center",
-                    }}>북마크
-                </h2>
-
-                <button 
-                    style={{
-                        position: "absolute",
-                        right: 0,
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                    }}
-                    onClick={onClose}>
-                    X
-                </button>
-            </div>
-            <div>
-                
-                {bookmarkGroupList.map((item) => (
-                <div key={item.listIndex}>
-                    {item.listName}
-                    {/* <button onClick={() => fetchBookmark(item.listId)}>s</button> */}
-                    {
-                        bookmarkSet.has(`${tmpTitle.brand}-${tmpTitle.no}-${item.listId}`) ? (
-                            <FaHeart 
-                                className='fH' 
-                                size={30} 
-                                color='red' 
-                                onClick={() => deleteBookmark(item.listId)}
-                            />
-                        ) : (
-                            <FaRegHeart 
-                                className='eH' 
-                                size={30} 
-                                color='red' 
-                                onClick={(e) => addBookmark(e, item.listId)}
-                            />
-                        )
-                    }
-
-                    {/* <button onClick={() =>deleteList(item.listId)}> x</button> */}
-                </div>
-                    
-                ))}
-            </div>  
-
-            <AddBookmarkListModal
-                isOpen={addListOpen}
-                onClose={() => setAddListOpen(false)}
-                onSuccess={onSuccess}
-            />
-            {/* {saveOpen && (
-                <div
-                    onClick={()=> setSaveOpen(false)}
-                    style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        width: "100vw",
-                        height: "100vh",
-                        backgroundColor: "rgba(0,0,0,0.5)",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
+        <AnimatePresence>
+            {isOpen && (
+                <motion.div
+                    initial={{opacity: 0}}
+                    animate={{opacity: 1}}
+                    exit={{opacity: 0}}
+                    onClick={onClose}
+                    className={styles.modalOverlay}
                 >
-                    <div
+                    <motion.div
+                        initial={{scale: 0.9, opacity: 0, y: 20}}
+                        animate={{scale: 1, opacity: 1, y: 0}}
+                        exit={{scale: 0.9, opacity: 0, y: 20}}
+                        transition={{type: "spring", damping: 25, stiffness: 300}}
                         onClick={(e) => e.stopPropagation()}
-                        style={{
-                            background: "white",
-                            padding: "20px",
-                            borderRadius: "10px",
-                            minWidth: "200px",
-                        }}>
-
-                        <div
-                            style={{
-                                position: "relative",
-                                display: "flex",
-                                flexDirection: "column",
-                            }}
-                        >
-                            새 그룹 추가
-
-                            <input
-                                type="text"
-                                placeholder="..."
-                                className=""
-                                value = {input}
-                                onChange={(e)=>handleChange(e.target.value)}
-                                onKeyDown = {handleKeyDown}
-                                style={{
-                                    margin: "10px",
-                                }}
-                            />
-                            <div
-                                style={{
-                                    position: "relative",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    justifyContent: "right"
-                            }}>
-                                <button onClick = {addList}>
-                                    저장
-                                </button>
-
-                                <button 
-                                    onClick={()=> setSaveOpen(false)}>
-                                        닫기
-                                </button>
+                        className={styles.modalContent}
+                    >
+                        <div className={styles.modalHeader}>
+                            <div className={styles.headerText}>
+                                <h2 className={styles.headerTitle}>
+                                    북마크에 저장
+                                </h2>
+                                <p className={styles.headerSubtitle}>
+                                    {tmpTitle?.title} {tmpTitle?.singer ? `- ${tmpTitle.singer}` : ''}
+                                </p>
                             </div>
+
+                            <button
+                                className={styles.closeButton}
+                                onClick={onClose}
+                            >
+                                ✕
+                            </button>
                         </div>
-                    </div>
-                </div>
-            )} */}
 
-                <button onClick={() => setAddListOpen(true)}>새 그룹 추가</button>
-                
+                        <div className={styles.listContainer}>
+                            {bookmarkGroupList.map((item) => {
+                                const isBookmarked = bookmarkSet.has(`${tmpTitle.brand}-${tmpTitle.no}-${item.listId}`);
+                                return (
+                                    <div
+                                        key={item.listIndex}
+                                        className={`${styles.listItem} ${isBookmarked ? styles.listItemSelected : ''}`}
+                                        onClick={(e) => {
+                                            if (isBookmarked) {
+                                                deleteBookmark(item.listId);
+                                            } else {
+                                                addBookmark(e, item.listId);
+                                            }
+                                        }}
+                                    >
+                                        <span
+                                            className={`${styles.listItemText} ${isBookmarked ? styles.listItemTextSelected : ''}`}>
+                                            {item.listName}
+                                        </span>
 
-                <h4>현재 선택 곡 : {tmpTitle.title}</h4>
+                                        <motion.div whileTap={{scale: 0.8}}>
+                                            {isBookmarked ? (
+                                                <FaHeart
+                                                    size={24}
+                                                    color='#e11d48'
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        deleteBookmark(item.listId);
+                                                    }}
+                                                />
+                                            ) : (
+                                                <FaRegHeart
+                                                    size={24}
+                                                    className={styles.emptyHeart}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        addBookmark(e, item.listId);
+                                                    }}
+                                                />
+                                            )}
+                                        </motion.div>
+                                    </div>
+                                );
+                            })}
 
-            </div>
-        </div>
-            
+                            {bookmarkGroupList.length === 0 && (
+                                <div className={styles.emptyText}>
+                                    등록된 북마크 그룹이 없습니다.
+                                </div>
+                            )}
+                        </div>
+
+                        <button
+                            className={styles.addButton}
+                            onClick={() => setAddListOpen(true)}
+                        >
+                            + 새 그룹 추가
+                        </button>
+
+                        <AddBookmarkListModal
+                            isOpen={addListOpen}
+                            onClose={() => setAddListOpen(false)}
+                            onSuccess={onSuccess}
+                        />
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     )
 }

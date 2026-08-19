@@ -1,0 +1,158 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.modalContent {
+    background: linear-gradient(145deg, #ffffff, #f3f4f6);
+    padding: 32px;
+    border-radius: 20px;
+    min-width: 320px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modalHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.headerTitle {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.3px;
+}
+
+.headerSubtitle {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.inputField {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 2px solid #e5e7eb;
+    background: #ffffff;
+    font-size: 15px;
+    color: #111827;
+    transition: all 0.2s ease;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.inputField:focus {
+    border-color: #be123c;
+    box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.1);
+}
+
+.inputField::placeholder {
+    color: #9ca3af;
+}
+
+.buttonGroup {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+
+.cancelButton {
+    background: transparent;
+    color: #6b7280;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancelButton:hover {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.saveButton {
+    background: #be123c;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.saveButton:hover {
+    background: #9f1239;
+    transform: translateY(-1px);
+}
+
+.saveButton:active {
+    transform: translateY(1px);
+}
+
+/* Dark Mode */
+:global(.dark-mode) .modalContent {
+    background: linear-gradient(145deg, #262626, #1a1a1a);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+:global(.dark-mode) .headerTitle {
+    color: #f9fafb;
+}
+
+:global(.dark-mode) .headerSubtitle {
+    color: #9ca3af;
+}
+
+:global(.dark-mode) .inputField {
+    background: #333333;
+    border-color: #404040;
+    color: #f9fafb;
+}
+
+:global(.dark-mode) .inputField:focus {
+    border-color: #fb7185;
+    background: #3a3a3a;
+}
+
+:global(.dark-mode) .cancelButton {
+    color: #9ca3af;
+}
+
+:global(.dark-mode) .cancelButton:hover {
+    background: #3f3f46;
+    color: #e5e7eb;
+}
+
+:global(.dark-mode) .saveButton {
+    background: #e11d48;
+}
+
+:global(.dark-mode) .saveButton:hover {
+    background: #be123c;
+}

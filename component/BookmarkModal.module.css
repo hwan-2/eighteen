@@ -1,0 +1,201 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modalContent {
+    background: linear-gradient(145deg, #ffffff, #f3f4f6);
+    padding: 32px;
+    border-radius: 24px;
+    min-width: 340px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.headerText {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    text-align: center;
+}
+
+.headerTitle {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #111827;
+    letter-spacing: -0.5px;
+}
+
+.headerSubtitle {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.closeButton {
+    position: absolute;
+    right: -8px;
+    top: -4px;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 18px;
+    color: #9ca3af;
+    transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.listContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.listItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.listItem:hover {
+    border-color: #d1d5db;
+}
+
+.listItemSelected {
+    background: #fff1f2;
+    border-color: #fecdd3;
+}
+
+.listItemText {
+    font-size: 16px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.listItemTextSelected {
+    font-weight: 600;
+    color: #be123c;
+}
+
+.emptyText {
+    text-align: center;
+    padding: 20px 0;
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+.addButton {
+    background: #111827;
+    color: #ffffff;
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+}
+
+.addButton:hover {
+    background: #374151;
+}
+
+/* Dark Mode Styles */
+:global(.dark-mode) .modalContent {
+    background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+:global(.dark-mode) .headerTitle {
+    color: #f9fafb;
+}
+
+:global(.dark-mode) .headerSubtitle {
+    color: #9ca3af;
+}
+
+:global(.dark-mode) .closeButton {
+    color: #6b7280;
+}
+
+:global(.dark-mode) .closeButton:hover {
+    background: #374151;
+    color: #e5e7eb;
+}
+
+:global(.dark-mode) .listItem {
+    background: #2d2d2d;
+    border-color: #404040;
+}
+
+:global(.dark-mode) .listItem:hover {
+    border-color: #6b7280;
+}
+
+:global(.dark-mode) .listItemSelected {
+    background: rgba(225, 29, 72, 0.15); /* #e11d48 with opacity */
+    border-color: #be123c;
+}
+
+:global(.dark-mode) .listItemText {
+    color: #d1d5db;
+}
+
+:global(.dark-mode) .listItemTextSelected {
+    color: #fb7185;
+}
+
+:global(.dark-mode) .addButton {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+:global(.dark-mode) .addButton:hover {
+    background: #d1d5db;
+}
+
+.emptyHeart { color: #9ca3af; }
+:global(.dark-mode) .emptyHeart { color: #6b7280; }
+
