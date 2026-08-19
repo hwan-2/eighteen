@@ -10,6 +10,8 @@ import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, arra
 import SortableBookmarkList from "@/component/SortableBookmarkList";
 
 
+import styles from './rtpage.module.css';
+
 interface BookmarkGroupList {
     listId : string;
     listName : string;
@@ -108,12 +110,27 @@ export default function Rtpage({tableData}){
     const groupSelectChange = (value) => {
         setGroupSelect(value);
         setSelectedGroup(true);
+        window.history.pushState({ groupOpen: true }, "", "#group");
     };
 
     const backChange = () => {
-        setGroupSelect("")
-        setSelectedGroup(false)
-    }
+        setGroupSelect("");
+        setSelectedGroup(false);
+        if (window.location.hash === "#group") {
+            window.history.back();
+        }
+    };
+
+    useEffect(() => {
+        const handlePopState = () => {
+            if (window.location.hash !== "#group") {
+                setGroupSelect("");
+                setSelectedGroup(false);
+            }
+        };
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, []);
 
     const handleDeleteSuccess = (deletedItem) => {
         setBookmarkData(data =>
@@ -150,15 +167,21 @@ export default function Rtpage({tableData}){
 
 
     return (
-        <div>
-            <>그룹 선택</>
-            {!selectedGroup?
-                <button onClick={() => {setIsSortable((prev) => !prev), setGroupEditOpen(null)}}>
-                    {isSortable ? "편집 완료" : "순서 변경"}
-                </button>
-                :<></>
-            }
+        <div style={{ padding: "20px 0" }}>
+            {!selectedGroup && (
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth: "1000px", margin: "0 auto", padding: "0 20px" }}>
+                    <h2 className={styles.rtTopTitle}>
+                        그룹 선택
+                    </h2>
+                    <button 
+                        className={`${styles.rtTopBtn} ${isSortable ? styles.active : ''}`}
+                        onClick={() => {setIsSortable((prev) => !prev); setGroupEditOpen(null)}}>
+                        {isSortable ? "편집 완료" : "순서 변경"}
+                    </button>
+                </div>
+            )}
             
+
 
             {!selectedGroup?
                 <div>
@@ -196,12 +219,7 @@ export default function Rtpage({tableData}){
                             
                         </div>
                     })} */}
-                    <div
-                        style={{
-                            maxWidth: "90vh",
-                            margin: "40px auto",
-                        }}
-                        >
+                    <div className={styles.modernGridWrapper}>
                         <DndContext
                             collisionDetection={closestCenter}
                             onDragEnd={handleDragEnd}
@@ -210,14 +228,7 @@ export default function Rtpage({tableData}){
                                 items={sortedItems.map((item) => item.listId)}
                                 strategy={rectSortingStrategy}
                             >
-                                <div
-                                    style={{
-                                        display: "grid",
-                                        gridTemplateColumns: "repeat(auto-fit, 20vh)",
-                                        justifyContent: "center",
-                                        gap: "10px",
-                                    }}
-                                >
+                                <div className={styles.modernGrid}>
                                     {sortedItems.map((item) => (
                                         <SortableBookmarkList
                                             key={item.listId}
@@ -233,8 +244,10 @@ export default function Rtpage({tableData}){
                                         
                                     ))}
 
-                                    <button style={{width: "20vh", height: "20vh", borderRadius: 10, verticalAlign: "top",}} onClick={() => setAddListOpen(true)}>
-                                        <h1>+</h1>
+                                    <button 
+                                        className={styles.modernAddBtn}
+                                        onClick={() => setAddListOpen(true)}>
+                                        <h1 style={{ fontSize: "3rem", margin: 0, fontWeight: 300 }}>+</h1>
                                     </button>
                                 </div>
                             </SortableContext>
@@ -252,7 +265,17 @@ export default function Rtpage({tableData}){
                     {/* <button style={{width: "20vh", height: "20vh", borderRadius: 10, margin: "5px", verticalAlign: "top",}} onClick={() => setAddListOpen(true)}>+</button> */}
                 </div> :
                 <div>
-                    <button onClick={backChange}>뒤로가기</button>
+                    <div style={{ width: "80%", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", marginBottom: "20px" }}>
+                        <h2 className={styles.rtLowerTitle}>
+                            {bookmarkGroupList.find(g => g.listId === groupSelect)?.listName || "그룹"}
+                        </h2>
+                        <button 
+                            className={styles.rtBackBtn}
+                            onClick={backChange}
+                        >
+                            목록 <span style={{ fontSize: "1.2rem", lineHeight: 1 }}>→</span>
+                        </button>
+                    </div>
                     {bookmarkData.some(item => item.listId === groupSelect && item.type === "song")? // 선택한 그룹에 저장된 노래가 있는지 없는지 판단
                         <table className='table'>
                             <thead>

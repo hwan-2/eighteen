@@ -1,0 +1,83 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+.modalContent {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    min-width: 320px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.modalTitle { margin: 0 0 8px 0; font-size: 1.4rem; color: #2d3748; }
+.modalSubtitle { margin: 0; color: #718096; font-size: 0.95rem; }
+.modalInput {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    background: white;
+    color: #1a202c;
+}
+.modalInput:focus { border-color: #4a5568; }
+.btnCancel {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #edf2f7;
+    color: #4a5568;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btnCancel:hover { background: #e2e8f0; }
+.btnSave {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #4a5568;
+    color: white;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.btnSave:hover:not(:disabled) { background: #2d3748; }
+.btnSave:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Dark Mode */
+:global(.dark-mode) .modalContent {
+    background: #262626;
+}
+:global(.dark-mode) .modalTitle { color: #f9fafb; }
+:global(.dark-mode) .modalSubtitle { color: #9ca3af; }
+:global(.dark-mode) .modalInput {
+    background: #333333;
+    border-color: #404040;
+    color: #f9fafb;
+}
+:global(.dark-mode) .modalInput:focus { border-color: #f9fafb; }
+:global(.dark-mode) .btnCancel {
+    background: #3f3f46;
+    color: #e5e7eb;
+}
+:global(.dark-mode) .btnCancel:hover { background: #525252; }
+:global(.dark-mode) .btnSave {
+    background: #f9fafb;
+    color: #1a202c;
+}
+:global(.dark-mode) .btnSave:hover:not(:disabled) { background: #e5e7eb; }

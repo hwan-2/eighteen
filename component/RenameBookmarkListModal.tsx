@@ -1,6 +1,8 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion';
+import styles from './RenameBookmarkListModal.module.css';
 
 interface RenameListModalProps {
   isOpen: boolean;
@@ -11,10 +13,10 @@ interface RenameListModalProps {
 
 export default function RenameBookmarkListModal({isOpen, onClose, onSuccess, listItem} : RenameListModalProps) {
     const [input, setInput] = useState<string>("")
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const handleChange = (value : string) => {
         setInput(value)
-        console.log(input)
     }
     const handleKeyDown = (e : any) => {
         if (e.key === "Enter") {
@@ -27,6 +29,15 @@ export default function RenameBookmarkListModal({isOpen, onClose, onSuccess, lis
             setInput(listItem.listName);
         }
     }, [listItem]);
+
+    // Focus input when modal opens
+    useEffect(() => {
+        if (isOpen && inputRef.current) {
+            setTimeout(() => {
+                inputRef.current?.focus();
+            }, 100);
+        }
+    }, [isOpen]);
 
     const renameList = async () => {
         const res = await fetch('api/bookmark/renameBookmark',
@@ -51,69 +62,54 @@ export default function RenameBookmarkListModal({isOpen, onClose, onSuccess, lis
         
     }
 
-    if (!isOpen) return null;
-
     return (
-        <div
-            onClick={onClose}
-            style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100vw",
-                height: "100vh",
-                backgroundColor: "rgba(0,0,0,0.5)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 15,
-            }}
-        >
-            <div
-                onClick={(e) => e.stopPropagation()}
-                style={{
-                    background: "white",
-                    padding: "20px",
-                    borderRadius: "10px",
-                    minWidth: "200px",
-            }}>
-                <div
-                    style={{
-                        position: "relative",
-                        display: "flex",
-                        flexDirection: "column",
-                    }}
+        <AnimatePresence>
+            {isOpen && (
+                <motion.div
+                    onClick={onClose}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className={styles.modalOverlay}
                 >
-                    그룹명 변경 "{listItem.listName}"
+                    <motion.div
+                        onClick={(e) => e.stopPropagation()}
+                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                        className={styles.modalContent}
+                    >
+                        <div>
+                            <h2 className={styles.modalTitle}>그룹명 변경</h2>
+                            <p className={styles.modalSubtitle}>기존 이름: <span style={{fontWeight: 600}}>{listItem.listName}</span></p>
+                        </div>
 
-                    <input
-                        type="text"
-                        placeholder="..."
-                        className=""
-                        value = {input}
-                        onChange={(e)=>handleChange(e.target.value)}
-                        onKeyDown = {handleKeyDown}
-                        style={{
-                            margin: "10px",
-                        }}
-                    />
-                    <div
-                        style={{
-                            position: "relative",
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "right"
-                        }}>
-                            <button onClick = {renameList}>
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            placeholder="새 그룹 이름 입력"
+                            value={input}
+                            onChange={(e)=>handleChange(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            className={styles.modalInput}
+                        />
+
+                        <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "10px" }}>
+                            <button onClick={onClose} className={styles.btnCancel}>
+                                취소
+                            </button>
+                            <button 
+                                onClick={renameList}
+                                disabled={!input.trim()}
+                                className={styles.btnSave}
+                            >
                                 저장
                             </button>
-                            <button onClick={onClose}>
-                                닫기
-                            </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+                        </div>
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     )
 }

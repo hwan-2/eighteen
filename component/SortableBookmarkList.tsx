@@ -2,6 +2,7 @@
 
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
+import styles from './SortableBookmarkList.module.css';
 
 export type Item = {
   listId: string;
@@ -43,31 +44,23 @@ export default function SortableBookmarkList({item, isSortable, groupSelectChang
     position: "relative",
     display: "inline-block",
     verticalAlign: "top",
+    zIndex: (isDragging || groupEditOpen === item.listId) ? 100 : 1,
   };
 
   return (
     <div
       ref={setNodeRef}
-      style={style}
-    //   {...attributes}
-    //   {...listeners}
+      style={{ ...style, width: "100%" }}
     >
       <button
-        style={{
-          width: "20vh",
-          height: "20vh",
-          borderRadius: 10,
-          backgroundColor: "#919191",
-          color: "#000000",
-          opacity: 1,
-        }}
+        className={styles.sortableCard}
         onClick={() => {
           groupSelectChange(item.listId);
           setGroupEditOpen(null);
         }}
         disabled={isSortable}
       >
-        <h1>{item.listName}</h1>
+        <h1 style={{ fontSize: "1.2rem", margin: 0, padding: "10px", wordBreak: "keep-all", fontWeight: 600 }}>{item.listName}</h1>
       </button>
       {isSortable?
         <span
@@ -75,39 +68,37 @@ export default function SortableBookmarkList({item, isSortable, groupSelectChang
           {...listeners}
           style={{
             position: "absolute",
-            top: 8,
-            right: 8,
+            top: 10,
+            right: 10,
             cursor: "grab",
             userSelect: "none",
             border:"none",
             outline:"none",
             background: "transparent",
-            color: "#FFFFFF"
+            color: "#a0aec0",
+            fontSize: "1.2rem"
           }}
         >
           ☰
         </span>
-        :<button onClick={(e) => {e.stopPropagation(); setGroupEditOpen(groupEditOpen === item.listId ? null : item.listId); }} style={{ position: "absolute", top: 6, right: 6, border:"none", outline:"none", background: "transparent", color: "#FFFFFF"}}>
+        :<button onClick={(e) => {e.stopPropagation(); setGroupEditOpen(groupEditOpen === item.listId ? null : item.listId); }} style={{ position: "absolute", top: 10, right: 10, border:"none", outline:"none", background: "transparent", color: "#a0aec0", fontSize: "1.2rem", cursor: "pointer"}}>
           ⋮
         </button>
       }
         
       {groupEditOpen === item.listId && (
-        <div
-          style={{
-            position: "absolute",
-            top: 36,
-            right: 6,
-            background: "#fff",
-            borderRadius: 6,
-            width: "6vh",
-            height: "6vh",
-            justifyContent:"center",
-            alignContent:"center",
-          }}
-        >
-          <div onClick={() => {setRenameGroupOpen(true), setSelectedRenameGroup(item), console.log(item)}}>수정</div>
-          <div onClick={() => deleteList(item)}>삭제</div>
+        <div className={styles.dropdownMenu}>
+          <button 
+            className={styles.dropdownBtn}
+            onClick={() => {setRenameGroupOpen(true); setSelectedRenameGroup(item); console.log(item)}}>
+            ✏️ 수정
+          </button>
+          <div className={styles.divider}></div>
+          <button 
+            className={`${styles.dropdownBtn} ${styles.delete}`}
+            onClick={() => deleteList(item)}>
+            🗑️ 삭제
+          </button>
         </div>
       )}
     </div>

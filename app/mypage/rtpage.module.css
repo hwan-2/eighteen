@@ -1,0 +1,74 @@
+.modernGridWrapper {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+.modernGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+@media (max-width: 900px) {
+    .modernGrid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 650px) {
+    .modernGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 400px) {
+    .modernGrid { grid-template-columns: 1fr; }
+}
+
+/* Top Header Styles */
+.rtTopTitle { font-size: 1.8rem; color: #2d3748; margin: 0; }
+.rtTopBtn {
+    padding: 8px 16px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer;
+    font-size: 0.95rem; transition: background 0.2s;
+    background-color: #edf2f7; color: #4a5568;
+}
+.rtTopBtn:hover { background-color: #e2e8f0; }
+.rtTopBtn.active { background-color: #4a5568; color: white; }
+.rtTopBtn.active:hover { background-color: #2d3748; }
+
+/* Lower Header Styles */
+.rtLowerTitle { font-size: 1.5rem; color: #1a202c; margin: 0; font-weight: 700; text-align: center; }
+.rtBackBtn {
+    position: absolute; right: 0; display: inline-flex; align-items: center; gap: 6px;
+    background: #ffffff; border: 1px solid #e2e8f0; color: #4a5568; font-size: 0.95rem;
+    font-weight: 600; cursor: pointer; padding: 8px 16px; border-radius: 10px;
+    transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+.rtBackBtn:hover { background: #f7fafc; border-color: #cbd5e0; }
+
+/* Add Button */
+.modernAddBtn {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    border-radius: 16px;
+    background-color: transparent;
+    border: 2px dashed #cbd5e0;
+    color: #a0aec0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.modernAddBtn:hover {
+    background-color: #f7fafc;
+    border-color: #a0aec0;
+    color: #4a5568;
+}
+
+/* Dark Mode */
+:global(.dark-mode) .rtTopTitle { color: #f9fafb; }
+:global(.dark-mode) .rtTopBtn { background-color: #3f3f46; color: #e5e7eb; }
+:global(.dark-mode) .rtTopBtn:hover { background-color: #525252; }
+:global(.dark-mode) .rtTopBtn.active { background-color: #f9fafb; color: #1a202c; }
+:global(.dark-mode) .rtTopBtn.active:hover { background-color: #e5e7eb; }
+
+:global(.dark-mode) .rtLowerTitle { color: #f9fafb; }
+:global(.dark-mode) .rtBackBtn { background: #262626; border-color: #404040; color: #f9fafb; }
+:global(.dark-mode) .rtBackBtn:hover { background: #333333; border-color: #525252; }
+
+:global(.dark-mode) .modernAddBtn { border-color: #404040; color: #6b7280; }
+:global(.dark-mode) .modernAddBtn:hover { background-color: #262626; border-color: #525252; color: #f9fafb; }
