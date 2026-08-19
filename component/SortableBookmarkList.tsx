@@ -57,7 +57,9 @@ export default function SortableBookmarkList({item, isSortable, groupSelectChang
           width: "20vh",
           height: "20vh",
           borderRadius: 10,
-          backgroundColor: "#919191"
+          backgroundColor: "#919191",
+          color: "#000000",
+          opacity: 1,
         }}
         onClick={() => {
           groupSelectChange(item.listId);
@@ -77,11 +79,15 @@ export default function SortableBookmarkList({item, isSortable, groupSelectChang
             right: 8,
             cursor: "grab",
             userSelect: "none",
+            border:"none",
+            outline:"none",
+            background: "transparent",
+            color: "#FFFFFF"
           }}
         >
           ☰
         </span>
-        :<button onClick={(e) => {e.stopPropagation(); setGroupEditOpen(groupEditOpen === item.listId ? null : item.listId); }} style={{ position: "absolute", top: 6, right: 6,}}>
+        :<button onClick={(e) => {e.stopPropagation(); setGroupEditOpen(groupEditOpen === item.listId ? null : item.listId); }} style={{ position: "absolute", top: 6, right: 6, border:"none", outline:"none", background: "transparent", color: "#FFFFFF"}}>
           ⋮
         </button>
       }
@@ -96,6 +102,8 @@ export default function SortableBookmarkList({item, isSortable, groupSelectChang
             borderRadius: 6,
             width: "6vh",
             height: "6vh",
+            justifyContent:"center",
+            alignContent:"center",
           }}
         >
           <div onClick={() => {setRenameGroupOpen(true), setSelectedRenameGroup(item), console.log(item)}}>수정</div>

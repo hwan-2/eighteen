@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import axios from "axios"
 import { FaMagnifyingGlass, FaHeart } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import {addBookmarkToLocal, removeBookmarkFromLocal, getLocalBookmarks} from  '@/util/addBookmarkToLocal'
@@ -326,8 +327,8 @@ export default function Main() {
                                 >
                                 {testLogin ? 
                                   (
-                                    <button onClick={() => openModal(item)}>이</button>
-                                    
+                                    // <button style={{background:"transparent", color:"black"}} onClick={() => openModal(item)}>+</button>
+                                    <FaPlus style={{scale: 1.5,}} onClick={() => openModal(item)}/>
                                   )
                                 : (
                                     bookmarkLocalSet.has(`${item.brand}-${item.no}`) ? (

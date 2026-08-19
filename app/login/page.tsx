@@ -1,15 +1,18 @@
 'use client'
 import {useRouter} from "next/navigation";
+import { useState } from "react";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import './login.css'
-import { Container, FormControlLabel } from '@mui/material';
+import { Container, FormControlLabel, InputAdornment, IconButton, } from '@mui/material';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useSession, signIn, signOut } from "next-auth/react"
 import GoogleButton from 'react-google-button'
 
 export default function Login(){
+    const [showPassword, setShowPassword] = useState(false);
     const router = useRouter()
     const login = async (e : any) =>{
         e.preventDefault()
@@ -47,7 +50,20 @@ export default function Login(){
                     <h1>로그인</h1>
                     <form onSubmit={login}>
                         <TextField className="TextField" label="이메일" variant="filled" name="email" id="email" margin="normal" fullWidth required />
-                        <TextField className="TextField" label="비밀번호" variant="filled" name="password" id="password" margin="normal" type="password" fullWidth required/>
+                        <TextField className="TextField" label="비밀번호" variant="filled" name="password" id="password" margin="normal" type={showPassword ? "text" : "password"} fullWidth required
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => setShowPassword((prev) => !prev)}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
                         <Button type="submit" variant='contained' sx={{ mt:3, mb: 2}}>로그인</Button>
                     </form>
                     혹시 회원이 아니신가요? <Link href="/signup">회원가입</Link>

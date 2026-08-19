@@ -276,7 +276,7 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
             )} */}
 
                 <button onClick={() => setAddListOpen(true)}>새 그룹 추가</button>
-                <button onClick={fetchBookmark}>저장</button>
+                
 
                 <h4>현재 선택 곡 : {tmpTitle.title}</h4>
 
