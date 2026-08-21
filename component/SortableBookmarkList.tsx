@@ -72,6 +72,7 @@ export default function SortableBookmarkList({item, isSortable, groupSelectChang
             right: 10,
             cursor: "grab",
             userSelect: "none",
+            touchAction: "none",
             border:"none",
             outline:"none",
             background: "transparent",

@@ -4,7 +4,7 @@ import Delete from "./delete"
 import './mypage.css'
 import AddBookmarkListModal from '@/component/AddBookmarkListModal'
 import RenameBookmarkListModal from '@/component/RenameBookmarkListModal'
-import { closestCenter, DndContext, DragEndEvent, } from "@dnd-kit/core";
+import { closestCenter, DndContext, DragEndEvent, useSensor, useSensors, PointerSensor, TouchSensor } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, arrayMove, } from "@dnd-kit/sortable";
 
 import SortableBookmarkList from "@/component/SortableBookmarkList";
@@ -37,6 +37,20 @@ export default function Rtpage({tableData}){
             console.log(tableData)
         }
     }, [tableData])
+
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 5,
+            }
+        }),
+        useSensor(TouchSensor, {
+            activationConstraint: {
+                delay: 250,
+                tolerance: 5,
+            }
+        })
+    );
 
     const sortedItems = useMemo(
         () => [...bookmarkGroupList].sort((a, b) => a.listIndex - b.listIndex),
@@ -221,6 +235,7 @@ export default function Rtpage({tableData}){
                     })} */}
                     <div className={styles.modernGridWrapper}>
                         <DndContext
+                            sensors={sensors}
                             collisionDetection={closestCenter}
                             onDragEnd={handleDragEnd}
                         >
