@@ -8,12 +8,7 @@ import DarkMode from "@/app/darkmode";
 
 export default async function NavBar() {
     let session = await getServerSession(authOptions)
-    if (session) {
-        console.log(session)
-    }
-    else {
-        console.log("로그인x")
-    }
+
 
     return (
         <nav>

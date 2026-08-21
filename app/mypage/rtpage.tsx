@@ -34,7 +34,6 @@ export default function Rtpage({tableData}){
     useEffect(() => {
         if(tableData) {
             setBookmarkData(tableData)
-            console.log(tableData)
         }
     }, [tableData])
 

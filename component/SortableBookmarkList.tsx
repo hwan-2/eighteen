@@ -91,7 +91,7 @@ export default function SortableBookmarkList({item, isSortable, groupSelectChang
         <div className={styles.dropdownMenu}>
           <button 
             className={styles.dropdownBtn}
-            onClick={() => {setRenameGroupOpen(true); setSelectedRenameGroup(item); console.log(item)}}>
+            onClick={() => {setRenameGroupOpen(true); setSelectedRenameGroup(item);}}>
             ✏️ 수정
           </button>
           <div className={styles.divider}></div>

@@ -80,7 +80,6 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
                 // throw new Error(`저장 실패: ${item}`);
                 alert(result)
             }
-            console.log('저장 완료');
             onBookmarkSuccess()
         } catch (error) {
             console.error(error);

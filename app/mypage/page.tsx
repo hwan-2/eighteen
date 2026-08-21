@@ -23,13 +23,9 @@ export default async function Mypage(){
     }
 
     if (session) {
-        console.log(session.user._id)
         // const res = await fetch(`https://eighteen-three.vercel.app/api/get/${session?.user._id}`)
         // data = await res.json()
         data = await fetchBookmark()
-    }
-    else {
-        console.log("로그인x")
     }
 
     

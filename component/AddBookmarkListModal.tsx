@@ -14,7 +14,6 @@ export default function AddBookmarkListModal({isOpen, onClose, onSuccess} : AddL
 
     const handleChange = (value : string) => {
         setInput(value)
-        console.log(input)
     }
     const handleKeyDown = (e : any) => {
         if (e.key === "Enter") {

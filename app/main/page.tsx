@@ -89,8 +89,6 @@ export default function Main() {
       setBookmark([])
       setTestLogin(false)
     }
-    console.log(bookmark)
-    console.log(result)
     setData(filteredMusicData)
     setColumns(["제공", "번호", "제목", "가수", "북마크"])
     setVisible(true)
@@ -222,8 +220,6 @@ export default function Main() {
 
     setTmpTitle(item);
     setIsOpen(true);
-    //console.log(bookmarkGrouplist)
-    console.log(bookmark)
   };
 
   const fetchList = async () => {
