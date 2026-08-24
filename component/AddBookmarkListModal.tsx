@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './AddBookmarkListModal.module.css';
+import { useSnackbarStore } from '@/store/useSnackbarStore';
+
 interface AddListModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -11,6 +13,7 @@ interface AddListModalProps {
 
 export default function AddBookmarkListModal({isOpen, onClose, onSuccess} : AddListModalProps) {
     const [input, setInput] = useState<string>("")
+    const { showSnackbar } = useSnackbarStore();
 
     const handleChange = (value : string) => {
         setInput(value)
@@ -33,10 +36,7 @@ export default function AddBookmarkListModal({isOpen, onClose, onSuccess} : AddL
         const result = await res.json()
 
         if (!res.ok) {
-            // if (res.status === 400) {
-            //     alert("이미 존재하는 보관함 이름입니다.")
-            // }
-            alert(result)
+            showSnackbar(result, "error");
         }
         else {
             onSuccess()

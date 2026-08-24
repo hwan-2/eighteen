@@ -36,20 +36,19 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
             //유효성 검사 진행
             //공백문자 확인 및 username 특수문자 체크
-            res.setHeader('Content-Type', 'text/html; charset=utf-8')
 
             if (isNullOrWhitespace(username) || hasSpecialCharacters(username) || isNullOrWhitespace(password) || isNullOrWhitespace(email)) {
-                return res.send("<script>alert('공백 혹은 이름에 특수문자가 들어갑니다.'); history.back();</script>")
+                return res.status(400).json({ error: '공백 혹은 이름에 특수문자가 들어갑니다.' });
             }
 
             //email 형식 체크
             if (!checkEmail(email)) {
-                return res.send("<script>alert('이메일 형식이 옳지 않습니다.'); history.back();</script>")
+                return res.status(400).json({ error: '이메일 형식이 옳지 않습니다.' });
             }
 
             //비밀번호 형식 체크
             if (!checkPassword(password)) {
-                return res.send("<script>alert('비밀번호 형식이 옳지 않습니다.'); history.back();</script>")
+                return res.status(400).json({ error: '비밀번호 형식이 옳지 않습니다. (영문, 숫자, 특수문자 포함 8~16자)' });
             }
 
             //email 중복 체크
@@ -57,11 +56,11 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             const existingUser = await db.collection('users').findOne({email})
 
             if (existingUser) {
-                return res.send("<script>alert('이미 사용 중인 이메일입니다.'); history.back();</script>")
+                return res.status(400).json({ error: '이미 사용 중인 이메일입니다.' });
             }
 
             //최종적으로 체크 후 패스워드 hash 및 회원가입 진행
-            const hash = await bcrypt.hash(req.body.password, 10)
+            const hash = await bcrypt.hash(password, 10)
             const newUser = {
                 username,
                 email,
@@ -69,7 +68,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             }
 
             await db.collection('users').insertOne(newUser);
-            res.send("<script>alert('가입을 환영합니다!');location.href='/login';</script>")
+            return res.status(200).json({ success: true, message: '가입을 환영합니다!' });
         } catch (error) {
             console.error(error)
             res.status(500).json({ error: "회원가입 처리에 실패했습니다."})

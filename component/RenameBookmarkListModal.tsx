@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './RenameBookmarkListModal.module.css';
+import { useSnackbarStore } from '@/store/useSnackbarStore';
 
 interface RenameListModalProps {
   isOpen: boolean;
@@ -13,6 +14,7 @@ interface RenameListModalProps {
 
 export default function RenameBookmarkListModal({isOpen, onClose, onSuccess, listItem} : RenameListModalProps) {
     const [input, setInput] = useState<string>("")
+    const { showSnackbar } = useSnackbarStore();
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleChange = (value : string) => {
@@ -52,7 +54,7 @@ export default function RenameBookmarkListModal({isOpen, onClose, onSuccess, lis
         const result = await res.json()
 
         if (!res.ok) {
-            alert(result)
+            showSnackbar(result, "error");
         }
         else {
             onSuccess()

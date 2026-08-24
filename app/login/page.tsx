@@ -4,16 +4,19 @@ import { useState } from "react";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import './login.css'
-import { Container, FormControlLabel, InputAdornment, IconButton, } from '@mui/material';
+import { Container, FormControlLabel, InputAdornment, IconButton } from '@mui/material';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useSession, signIn, signOut } from "next-auth/react"
 import GoogleButton from 'react-google-button'
+import { useSnackbarStore } from '@/store/useSnackbarStore';
 
 export default function Login(){
     const [showPassword, setShowPassword] = useState(false);
+    const { showSnackbar } = useSnackbarStore();
     const router = useRouter()
+
     const login = async (e : any) =>{
         e.preventDefault()
 
@@ -25,7 +28,7 @@ export default function Login(){
             redirect: false,
         });
         if (!result) {
-            alert("로그인 응답이 없습니다.");
+            showSnackbar("로그인 응답이 없습니다.", "error");
             return;
         }
         if (result.ok) {
@@ -33,7 +36,7 @@ export default function Login(){
             location.reload();
         } else {
             console.log(result.error);
-            alert("잘못된 비밀번호 혹은 아이디 입니다.");
+            showSnackbar("잘못된 비밀번호 혹은 아이디 입니다.", "error");
         }
     }
 
@@ -42,7 +45,7 @@ export default function Login(){
             <Container component="main" maxWidth="xs">
                 <Box
                     sx={{
-                        marginTop: 10,
+                        marginTop: 15,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',

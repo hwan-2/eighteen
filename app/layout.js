@@ -5,7 +5,8 @@ import { FaGithub } from "react-icons/fa";
 import NavBar from '@/component/NavBar';
 import TopButton from "@/component/TopButton";
 import { cookies } from 'next/headers'
-
+import GlobalSnackbar from '@/component/GlobalSnackbar';
+import GlobalConfirm from '@/component/GlobalConfirm';
 
 export const metadata = {
   title: 'Eighteen',
@@ -33,7 +34,8 @@ export default async function RootLayout({ children }) {
             <FaGithub />
           </Link>
         </div>
-
+        <GlobalConfirm />
+        <GlobalSnackbar />
       </body>
       </html>
   )

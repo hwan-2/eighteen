@@ -6,9 +6,11 @@ import AddBookmarkListModal from '@/component/AddBookmarkListModal'
 import RenameBookmarkListModal from '@/component/RenameBookmarkListModal'
 import { closestCenter, DndContext, DragEndEvent, useSensor, useSensors, PointerSensor, TouchSensor } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, arrayMove, } from "@dnd-kit/sortable";
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 
 import SortableBookmarkList from "@/component/SortableBookmarkList";
-
+import { useSnackbarStore } from '@/store/useSnackbarStore';
+import { useConfirmStore } from '@/store/useConfirmStore';
 
 import styles from './rtpage.module.css';
 
@@ -30,6 +32,9 @@ export default function Rtpage({tableData}){
     const [renameGroupOpen, setRenameGroupOpen] = useState(false);
     const [selectedRenameGroup, setSelectedRenameGroup] = useState<BookmarkGroupList>({listId:"", listName:"", listIndex:0})
     const [isSortable, setIsSortable] = useState(false);
+    
+    const { showSnackbar } = useSnackbarStore();
+    const { showConfirm } = useConfirmStore();
 
     useEffect(() => {
         if(tableData) {
@@ -152,24 +157,25 @@ export default function Rtpage({tableData}){
     }
 
     const deleteList = async (item) => {
-
-        if (window.confirm(item.listName + " 그룹을 삭제할까요?")) {
-            const res = await fetch(`api/bookmark/deleteLists?listId=${encodeURIComponent(item.listId)}`,
-            {
-                method: 'DELETE',
-            })
-
-            if (res.ok) {
-                    setGroupEditOpen(null);
-                    fetchGroups();
-                } else {
-                    alert("삭제에 실패했습니다.")
-            }
-        }
-        else{
-            alert("취소합니다.")
-        }
+        const isOk = await showConfirm(`정말로 '${item.listName}' 그룹을 삭제하시겠습니까?`, "그룹 삭제");
         
+        if (!isOk) {
+            showSnackbar("취소합니다.", "info");
+            return;
+        }
+
+        const res = await fetch(`api/bookmark/deleteLists?listId=${encodeURIComponent(item.listId)}`,
+        {
+            method: 'DELETE',
+        })
+
+        if (res.ok) {
+            setGroupEditOpen(null);
+            fetchGroups();
+            showSnackbar("삭제되었습니다.", "success");
+        } else {
+            showSnackbar("삭제에 실패했습니다.", "error");
+        }
     }
 
     const filteredData = bookmarkData.filter(item => {
@@ -332,6 +338,7 @@ export default function Rtpage({tableData}){
                 onClose={() => setAddListOpen(false)}
                 onSuccess={fetchGroups}
             />
+
         </div>
     )
 }
