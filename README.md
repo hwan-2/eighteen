@@ -20,8 +20,10 @@ https://eighteen-three.vercel.app/
 
 ## 기술 스택
 - **Framework**: Next.js 14
+- **Language**: TypeScript
 - **Auth**: Next-Auth
 - **Database**: MongoDB & Mongoose
+- **State Management**: Zustand
 - **Deployment**: Vercel
 
 ## 설치 및 실행
@@ -46,6 +48,9 @@ npm run dev
 ```
 
 ## 업데이트 기록
+### v.1.3.0 - 2026-08-24
+- Update: 다중 저장 리스트 구현
+ 
 ### v.1.2.0 - 2026-04-22
 - Refactor: TypeScript로 리팩토링
 
