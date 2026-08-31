@@ -6,7 +6,7 @@ import AddBookmarkListModal from '@/component/AddBookmarkListModal'
 import RenameBookmarkListModal from '@/component/RenameBookmarkListModal'
 import { closestCenter, DndContext, DragEndEvent, useSensor, useSensors, PointerSensor, TouchSensor } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, arrayMove, } from "@dnd-kit/sortable";
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Tooltip } from '@mui/material';
 
 import SortableBookmarkList from "@/component/SortableBookmarkList";
 import { useSnackbarStore } from '@/store/useSnackbarStore';
@@ -264,11 +264,43 @@ export default function Rtpage({tableData}){
                                         
                                     ))}
 
-                                    <button 
-                                        className={styles.modernAddBtn}
-                                        onClick={() => setAddListOpen(true)}>
-                                        <h1 style={{ fontSize: "3rem", margin: 0, fontWeight: 300 }}>+</h1>
-                                    </button>
+                                    <Tooltip 
+                                        title={bookmarkGroupList.length >= 10 ? "최대 10개까지만 생성할 수 있습니다." : "새 그룹 추가"} 
+                                        placement="top" 
+                                        arrow
+                                        slotProps={{
+                                            popper: {
+                                                sx: {
+                                                    zIndex: 10000,
+                                                }
+                                            },
+                                            tooltip: {
+                                                sx: {
+                                                    fontSize: '1rem',
+                                                    padding: '10px 14px'
+                                                }
+                                            }
+                                        }}
+                                    >
+                                        <span>
+                                            <button 
+                                                className={styles.modernAddBtn}
+                                                onClick={(e) => {
+                                                    if (bookmarkGroupList.length >= 10) {
+                                                        e.preventDefault();
+                                                        return;
+                                                    }
+                                                    setAddListOpen(true);
+                                                }}
+                                                style={{
+                                                    opacity: bookmarkGroupList.length >= 10 ? 0.5 : 1,
+                                                    cursor: bookmarkGroupList.length >= 10 ? "not-allowed" : "pointer"
+                                                }}
+                                            >
+                                                <h1 style={{ fontSize: "3rem", margin: 0, fontWeight: 300 }}>+</h1>
+                                            </button>
+                                        </span>
+                                    </Tooltip>
                                 </div>
                             </SortableContext>
                         </DndContext>

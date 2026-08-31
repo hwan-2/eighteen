@@ -24,6 +24,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const db = (await connectDB).db('eighteen')
             const personalPagePath = `users/${userId}`
 
+            // 최대 보관함 갯수 제한 (10개)
+            const listCount = await db.collection(personalPagePath).countDocuments({ type: 'list' })
+            if (listCount >= 10) {
+                return res.status(400).json("그룹은 최대 10개까지만 생성할 수 있습니다.")
+            }
+
             // 이미 같은 이름의 리스트가 있는지 중복 검사
             const existing = await db.collection(personalPagePath).findOne({type: 'list', listName: newListName})
             if (existing) {

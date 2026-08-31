@@ -3,6 +3,8 @@ import { useMemo, useEffect, useState } from 'react'
 import { MdDeleteForever } from "react-icons/md";
 import './mypage.css'
 import {getLocalBookmarks, removeBookmarkFromLocal} from "@/util/addBookmarkToLocal"
+import { useSnackbarStore } from '@/store/useSnackbarStore';
+import { useConfirmStore } from '@/store/useConfirmStore';
 
 interface SongData {
     brand: string;
@@ -24,14 +26,18 @@ export default function Localpage(){
         setBrandSelect(e.target.value);
     };
 
-    const deleteTest = (brand : string, no : string) => {
+    const deleteTest = async (brand : string, no : string) => {
+        const { showConfirm } = useConfirmStore.getState();
+        const { showSnackbar } = useSnackbarStore.getState();
 
-        if (window.confirm("북마크에서 삭제할까요?")) {
+        const isOk = await showConfirm("북마크에서 삭제할까요?", "삭제 확인");
+        if (isOk) {
             removeBookmarkFromLocal(brand, no)
             setBookmarkLocal(getLocalBookmarks())
+            showSnackbar("삭제되었습니다.", "success")
         }
         else{
-            alert("취소합니다.")
+            showSnackbar("취소합니다.", "info")
         }
     }
 

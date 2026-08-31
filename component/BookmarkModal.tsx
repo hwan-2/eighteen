@@ -1,6 +1,6 @@
 "use client"
 
-import { Checkbox } from '@mui/material';
+import { Checkbox, Tooltip } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react'
 import { FaMagnifyingGlass, FaHeart } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
@@ -213,12 +213,43 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
                             )}
                         </div>
 
-                        <button
-                            className={styles.addButton}
-                            onClick={() => setAddListOpen(true)}
+                        <Tooltip 
+                            title={bookmarkGroupList.length >= 10 ? "최대 10개까지만 생성할 수 있습니다." : "새 그룹 추가"} 
+                            placement="top" 
+                            arrow
+                            slotProps={{
+                                popper: {
+                                    sx: {
+                                        zIndex: 10000,
+                                    }
+                                },
+                                tooltip: {
+                                    sx: {
+                                        fontSize: '1rem',
+                                        padding: '10px 14px'
+                                    }
+                                }
+                            }}
                         >
-                            + 새 그룹 추가
-                        </button>
+                            <span>
+                                <button
+                                    className={styles.addButton}
+                                    onClick={(e) => {
+                                        if (bookmarkGroupList.length >= 10) {
+                                            e.preventDefault();
+                                            return;
+                                        }
+                                        setAddListOpen(true);
+                                    }}
+                                    style={{
+                                        opacity: bookmarkGroupList.length >= 10 ? 0.5 : 1,
+                                        cursor: bookmarkGroupList.length >= 10 ? "not-allowed" : "pointer"
+                                    }}
+                                >
+                                    + 새 그룹 추가
+                                </button>
+                            </span>
+                        </Tooltip>
 
                         <AddBookmarkListModal
                             isOpen={addListOpen}

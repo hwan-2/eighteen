@@ -1,3 +1,5 @@
+import { useSnackbarStore } from '@/store/useSnackbarStore';
+
 const STORAGE_KEY = 'guest_bookmarks';
 
 interface SongData {
@@ -20,7 +22,7 @@ export const addBookmarkToLocal = (songData: SongData) => {
         (b) => b.brand === songData.brand && b.no === songData.no
     )
     if (isDuplicate) {
-        alert("이미 추가된 곡입니다.")
+        useSnackbarStore.getState().showSnackbar("이미 추가된 곡입니다.", "error")
         return false
     }
 
