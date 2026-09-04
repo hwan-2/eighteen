@@ -86,7 +86,14 @@ export default function AddBookmarkListModal({isOpen, onClose, onSuccess} : AddL
                             placeholder="그룹 이름을 입력하세요"
                             className={styles.inputField}
                             value={input}
-                            onChange={(e) => handleChange(e.target.value)}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                if (val.length > 20) {
+                                    handleChange(val.slice(0, 20));
+                                } else {
+                                    handleChange(val);
+                                }
+                            }}
                             onKeyDown={handleKeyDown}
                         />
 

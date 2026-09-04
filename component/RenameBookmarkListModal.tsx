@@ -92,7 +92,14 @@ export default function RenameBookmarkListModal({isOpen, onClose, onSuccess, lis
                             type="text"
                             placeholder="새 그룹 이름 입력"
                             value={input}
-                            onChange={(e)=>handleChange(e.target.value)}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                if (val.length > 20) {
+                                    handleChange(val.slice(0, 20));
+                                } else {
+                                    handleChange(val);
+                                }
+                            }}
                             onKeyDown={handleKeyDown}
                             className={styles.modalInput}
                         />

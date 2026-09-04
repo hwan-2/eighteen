@@ -60,7 +60,20 @@ export default function SortableBookmarkList({item, isSortable, groupSelectChang
         }}
         disabled={isSortable}
       >
-        <h1 style={{ fontSize: "1.2rem", margin: 0, padding: "10px", wordBreak: "keep-all", fontWeight: 600 }}>{item.listName}</h1>
+        <h1 style={{ 
+          fontSize: "1.2rem", 
+          margin: 0, 
+          padding: "10px", 
+          wordBreak: "break-word", 
+          fontWeight: 600,
+          display: "-webkit-box",
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+          textOverflow: "ellipsis"
+        }}>
+          {item.listName}
+        </h1>
       </button>
       {isSortable?
         <span

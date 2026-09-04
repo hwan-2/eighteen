@@ -4,8 +4,8 @@
   border-radius: 16px;
   background-color: #ffffff;
   color: #2d3748;
-  border: 1px solid #edf2f7;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s, border-color 0.2s;
   cursor: pointer;
   display: flex;
@@ -16,7 +16,7 @@
 }
 .sortableCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
   border-color: #cbd5e0;
 }
 
