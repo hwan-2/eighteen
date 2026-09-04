@@ -6,7 +6,7 @@ import AddBookmarkListModal from '@/component/AddBookmarkListModal'
 import RenameBookmarkListModal from '@/component/RenameBookmarkListModal'
 import { closestCenter, DndContext, DragEndEvent, useSensor, useSensors, PointerSensor, TouchSensor } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, arrayMove, } from "@dnd-kit/sortable";
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Tooltip } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Tooltip, TooltipProps } from '@mui/material';
 
 import SortableBookmarkList from "@/component/SortableBookmarkList";
 import { useSnackbarStore } from '@/store/useSnackbarStore';
@@ -14,17 +14,47 @@ import { useConfirmStore } from '@/store/useConfirmStore';
 
 import styles from './rtpage.module.css';
 
-const ClientOnlyTooltip = ({ children, ...props }) => {
+import { ClickAwayListener } from '@mui/material';
+
+const ClientOnlyTooltip = ({ children, ...props }: TooltipProps) => {
     const [isMounted, setIsMounted] = useState(false);
+    const [open, setOpen] = useState(false);
+
     useEffect(() => {
         setIsMounted(true);
     }, []);
 
     if (!isMounted) {
-        return children;
+        return <>{children}</>;
     }
 
-    return <Tooltip {...props}>{children}</Tooltip>;
+    const handleTooltipClose = () => {
+        setOpen(false);
+    };
+
+    const handleTooltipOpen = () => {
+        setOpen(true);
+    };
+
+    return (
+        <ClickAwayListener onClickAway={handleTooltipClose}>
+            <span 
+                onClick={handleTooltipOpen} 
+                onMouseEnter={handleTooltipOpen} 
+                onMouseLeave={handleTooltipClose}
+            >
+                <Tooltip 
+                    {...props} 
+                    open={open}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                >
+                    {children}
+                </Tooltip>
+            </span>
+        </ClickAwayListener>
+    );
 };
 
 
