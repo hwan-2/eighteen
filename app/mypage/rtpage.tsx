@@ -5,8 +5,9 @@ import './mypage.css'
 import AddBookmarkListModal from '@/component/AddBookmarkListModal'
 import RenameBookmarkListModal from '@/component/RenameBookmarkListModal'
 import { closestCenter, DndContext, DragEndEvent, useSensor, useSensors, PointerSensor, TouchSensor } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, arrayMove, } from "@dnd-kit/sortable";
+import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, arrayMove, useSortable } from "@dnd-kit/sortable";
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Tooltip } from '@mui/material';
+import { CSS } from "@dnd-kit/utilities";
 
 import SortableBookmarkList from "@/component/SortableBookmarkList";
 import { useSnackbarStore } from '@/store/useSnackbarStore';
@@ -20,9 +21,20 @@ interface BookmarkGroupList {
     listIndex : number;
 }
 
+interface SongList {
+    brand : string;
+    listId : string;
+    no : string;
+    singer : string;
+    songIndex : number;
+    title : string;
+    type : string;
+    _id : string;
+}
+
 export default function Rtpage({tableData}){
 
-    const [brandSelect, setBrandSelect] = useState<string>("all")
+    // const [brandSelect, setBrandSelect] = useState<string>("all")
     const [bookmarkData, setBookmarkData] = useState(tableData || [])
     const [bookmarkGroupList, setBookmarkGroupList] = useState<BookmarkGroupList[]>([])
     const [groupSelect, setGroupSelect] = useState<string>("")
@@ -32,7 +44,7 @@ export default function Rtpage({tableData}){
     const [renameGroupOpen, setRenameGroupOpen] = useState(false);
     const [selectedRenameGroup, setSelectedRenameGroup] = useState<BookmarkGroupList>({listId:"", listName:"", listIndex:0})
     const [isSortable, setIsSortable] = useState(false);
-    
+
     const { showSnackbar } = useSnackbarStore();
     const { showConfirm } = useConfirmStore();
 
@@ -61,16 +73,12 @@ export default function Rtpage({tableData}){
         [bookmarkGroupList]
     );
 
+
     const handleDragEnd = async ({ active, over }: DragEndEvent) => {
         if (!over || active.id === over.id) return;
 
-        const oldIndex = sortedItems.findIndex(
-        (item) => item.listId === active.id
-        );
-
-        const newIndex = sortedItems.findIndex(
-        (item) => item.listId === over.id
-        );
+        const oldIndex = sortedItems.findIndex((item) => item.listId === active.id);
+        const newIndex = sortedItems.findIndex((item) => item.listId === over.id);
 
         const reordered = arrayMove(sortedItems, oldIndex, newIndex);
 
@@ -81,19 +89,50 @@ export default function Rtpage({tableData}){
 
 
         setBookmarkGroupList(updated);
+        // console.log(bookmarkGroupList)
+        //console.log(songList)
         await updateGroupOrder(updated);
 
     };
+
+    const handleDragEndSongs = async ({ active, over }: DragEndEvent) => {
+        if (!over || active.id === over.id) return;
+
+        const oldIndex = filteredData.findIndex((item) => item._id === active.id);
+        const newIndex = filteredData.findIndex((item) => item._id === over.id);
+
+        const reordered = arrayMove(filteredData, oldIndex, newIndex);
+
+        const updated = reordered.map((item, index) => ({
+        ...item,
+        songIndex : index,
+        }));
+        // console.log("active:", active.id);
+        // console.log("over:", over?.id);
+
+        setBookmarkData((prev) =>
+            prev.map((item) => {
+                if (!("_id" in item)) {
+                    return item;
+                }
+
+                const updatedItem = updated.find(
+                    (song) => song._id === item._id
+                );
+
+                return updatedItem ?? item;
+            })
+        );
+        await updateSongOrder(updated);
+
+    };
+
 
     useEffect(() => {
         fetchGroups();
     }, []);
 
     const updateGroupOrder = async (items) => {
-        // const payload = {
-        //     orderedListIds: items.map((item) => item.listId),
-        // };
-
         await fetch("/api/bookmark/reorderBookmark", {
             method: "PUT",
             headers: {
@@ -104,6 +143,19 @@ export default function Rtpage({tableData}){
             }),
         });
     };
+
+    const updateSongOrder = async (items) => {
+        await fetch("/api/bookmark/reorderSongs", {
+            method: "PUT",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                listId: items[0].listId,
+                orderedSongIds: items.map(item => item._id),
+            }),
+        })
+    }
 
 
     const fetchGroups = async () => {
@@ -121,9 +173,9 @@ export default function Rtpage({tableData}){
         }
     };
 
-    const brandSelectChange = (e) => {
-        setBrandSelect(e.target.value);
-    };
+    // const brandSelectChange = (e) => {
+    //     setBrandSelect(e.target.value);
+    // };
 
     const groupSelectChange = (value) => {
         setGroupSelect(value);
@@ -178,11 +230,12 @@ export default function Rtpage({tableData}){
         }
     }
 
-    const filteredData = bookmarkData.filter(item => {
-        if (brandSelect === "all") return item.listId === groupSelect && item.title
-        const brandName = brandSelect === "tj" ? "tj" : "kumyoung"
-        return item.brand === brandName && item.listId === groupSelect && item.title
-    })
+    const filteredData : SongList[] = bookmarkData.filter(item => {
+        //if (brandSelect === "all") return item.listId === groupSelect && item.title
+        return item.listId === groupSelect && item.title
+        //const brandName = brandSelect === "tj" ? "tj" : "kumyoung"
+        //return item.brand === brandName && item.listId === groupSelect && item.title
+    }).sort((a, b) => a.songIndex - b.songIndex);
 
 
     return (
@@ -301,6 +354,7 @@ export default function Rtpage({tableData}){
                                             </button>
                                         </span>
                                     </Tooltip>
+
                                 </div>
                             </SortableContext>
                         </DndContext>
@@ -329,35 +383,55 @@ export default function Rtpage({tableData}){
                         </button>
                     </div>
                     {bookmarkData.some(item => item.listId === groupSelect && item.type === "song")? // 선택한 그룹에 저장된 노래가 있는지 없는지 판단
-                        <table className='table'>
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <select onChange={brandSelectChange} value={brandSelect} className='brandSelect'>
-                                            <option key="all" value="all">제공</option>
-                                            <option key="tj" value="tj">TJ</option>
-                                            <option key="ky" value="ky">금영</option>
-                                        </select>
-                                    </th>
-                                    <th>번호</th>
-                                    <th>제목</th>
-                                    <th>가수</th>
-                                    <th>삭제</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredData.map((item, index) => {
-                                    return <tr className="tr" key={index}>
-                                    <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
-                                    <td>{item.no}</td>
-                                    <td>{item.title}</td>
-                                    <td>{item.singer}</td>
-                                    <td><Delete item={item} onDeleteSuccess={handleDeleteSuccess}/></td>
+
+                        <DndContext
+                            collisionDetection={closestCenter}
+                            onDragEnd={handleDragEndSongs}
+                        >
+                            <table className='table'>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>
+                                            {/* <select onChange={brandSelectChange} value={brandSelect} className='brandSelect'>
+                                                <option key="all" value="all">제공</option>
+                                                <option key="tj" value="tj">TJ</option>
+                                                <option key="ky" value="ky">금영</option>
+                                            </select> */}
+                                        제공</th>
+                                        <th>번호</th>
+                                        <th>제목</th>
+                                        <th>가수</th>
+                                        <th>삭제</th>
                                     </tr>
-                                    })
-                                } 
-                            </tbody>
-                        </table>
+                                </thead>
+
+                                <SortableContext
+                                    items={filteredData.map((item) => item._id)}
+                                    strategy={verticalListSortingStrategy}
+                                >
+                                    {/* <tbody>
+                                        {filteredData.map((item, index) => {
+                                            return <tr className="tr" key={index}  >
+                                            <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
+                                            <td>{item.no}</td>
+                                            <td>{item.title}</td>
+                                            <td>{item.singer}</td>
+                                            <td><Delete item={item} onDeleteSuccess={handleDeleteSuccess}/></td>
+                                            </tr>
+                                            })
+                                        } 
+                                    </tbody> */}
+                                    <tbody>
+                                        {filteredData.map((item) => (
+                                            <SortableRow key={item._id} item={item} onDeleteSuccess={handleDeleteSuccess} />
+                                        ))}
+                                    </tbody>
+                                </SortableContext>
+
+                            </table>
+
+                        </DndContext>
                         :
                         <div>이 그룹에는 아직 노래가 없어요</div>
                     }
@@ -373,4 +447,33 @@ export default function Rtpage({tableData}){
 
         </div>
     )
+}
+
+
+function SortableRow({ item, onDeleteSuccess }) {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+    } = useSortable({
+        id: item._id,
+    });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
+
+    return (
+        <tr ref={setNodeRef} style={style} >
+            <td className='drag-handle' {...attributes} {...listeners}>⠿</td>
+            <td>{item.brand === 'tj' && <img src="/img/tj.png" className='brand'></img>}{item.brand === 'kumyoung' && <img src="/img/ky.png" className='brand'></img>}</td>
+            <td>{item.no}</td>
+            <td>{item.title}</td>
+            <td>{item.singer}</td>
+            <td><Delete item={item} onDeleteSuccess={onDeleteSuccess}/></td>
+        </tr>
+    );
 }
