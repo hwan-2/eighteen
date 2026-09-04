@@ -6,7 +6,7 @@ import AddBookmarkListModal from '@/component/AddBookmarkListModal'
 import RenameBookmarkListModal from '@/component/RenameBookmarkListModal'
 import { closestCenter, DndContext, DragEndEvent, useSensor, useSensors, PointerSensor, TouchSensor } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, arrayMove, useSortable } from "@dnd-kit/sortable";
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Tooltip } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Tooltip, TooltipProps } from '@mui/material';
 import { CSS } from "@dnd-kit/utilities";
 
 import SortableBookmarkList from "@/component/SortableBookmarkList";
@@ -15,7 +15,7 @@ import { useConfirmStore } from '@/store/useConfirmStore';
 
 import styles from './rtpage.module.css';
 
-const ClientOnlyTooltip = ({ children, ...props }) => {
+const ClientOnlyTooltip = ({ children, ...props } : TooltipProps) => {
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => {
         setIsMounted(true);
