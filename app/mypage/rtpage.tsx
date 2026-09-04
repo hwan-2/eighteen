@@ -15,6 +15,20 @@ import { useConfirmStore } from '@/store/useConfirmStore';
 
 import styles from './rtpage.module.css';
 
+const ClientOnlyTooltip = ({ children, ...props }) => {
+    const [isMounted, setIsMounted] = useState(false);
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    if (!isMounted) {
+        return children;
+    }
+
+    return <Tooltip {...props}>{children}</Tooltip>;
+};
+
+
 interface BookmarkGroupList {
     listId : string;
     listName : string;
@@ -317,7 +331,7 @@ export default function Rtpage({tableData}){
                                         
                                     ))}
 
-                                    <Tooltip 
+                                    <ClientOnlyTooltip 
                                         title={bookmarkGroupList.length >= 10 ? "최대 10개까지만 생성할 수 있습니다." : "새 그룹 추가"} 
                                         placement="top" 
                                         arrow
@@ -353,8 +367,7 @@ export default function Rtpage({tableData}){
                                                 <h1 style={{ fontSize: "3rem", margin: 0, fontWeight: 300 }}>+</h1>
                                             </button>
                                         </span>
-                                    </Tooltip>
-
+                                    </ClientOnlyTooltip>
                                 </div>
                             </SortableContext>
                         </DndContext>
