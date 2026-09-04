@@ -26,7 +26,6 @@ const ClientOnlyTooltip = ({ children, ...props }: TooltipProps) => {
     }, []);
 
     if (!isMounted) {
-        return children;
         return <>{children}</>;
     }
 
