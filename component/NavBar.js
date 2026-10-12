@@ -13,8 +13,8 @@ export default async function NavBar() {
     return (
         <nav>
             <div className={"navbar"}>
-                <a href={"/main"} style={{ display: 'block', marginTop: '-10px' }}><Image src={logo} alt="Home"/></a>
-                <div style={{ display: 'flex',  marginLeft: 'auto', gap: '10px', alignItems: 'center' }}>
+                <a href={"/main"} className="navbar-logo"><Image src={logo} alt="Home" loading="eager"/></a>
+                <div className="navbar-actions">
                     <DarkMode></DarkMode>
                     {
                         session && session.user ?

@@ -214,9 +214,12 @@ export default function BookmarkModal({isOpen, onClose, bookmarkGroupList, tmpTi
                         </div>
 
                         <Tooltip 
-                            title={bookmarkGroupList.length >= 10 ? "최대 10개까지만 생성할 수 있습니다." : "새 그룹 추가"} 
+                            title={bookmarkGroupList.length >= 10 ? "최대 10개까지만 생성할 수 있습니다." : ""} 
                             placement="top" 
                             arrow
+                            disableTouchListener={bookmarkGroupList.length < 10}
+                            disableHoverListener={bookmarkGroupList.length < 10}
+                            disableFocusListener={bookmarkGroupList.length < 10}
                             slotProps={{
                                 popper: {
                                     sx: {

@@ -361,7 +361,7 @@ export default function Rtpage({tableData}){
                                     ))}
 
                                     <ClientOnlyTooltip 
-                                        title={bookmarkGroupList.length >= 10 ? "최대 10개까지만 생성할 수 있습니다." : "새 그룹 추가"} 
+                                        title={bookmarkGroupList.length >= 10 ? "최대 10개까지만 생성할 수 있습니다." : ""} 
                                         placement="top" 
                                         arrow
                                         slotProps={{
@@ -413,7 +413,8 @@ export default function Rtpage({tableData}){
                     {/* <button style={{width: "20vh", height: "20vh", borderRadius: 10, margin: "5px", verticalAlign: "top",}} onClick={() => setAddListOpen(true)}>+</button> */}
                 </div> :
                 <div>
-                    <div style={{ width: "80%", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", marginBottom: "20px" }}>
+                    <div className={styles.rtLowerHeader}>
+                        <div className={styles.rtLowerHeaderLeftSpacer}></div>
                         <h2 className={styles.rtLowerTitle}>
                             {bookmarkGroupList.find(g => g.listId === groupSelect)?.listName || "그룹"}
                         </h2>

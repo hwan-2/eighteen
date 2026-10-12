@@ -32,19 +32,64 @@ body {
 }
 
 .navbar{
+  box-sizing: border-box;
+  width: 100%;
   background: black;
-  padding: 30px;
-  height: 30px;
+  padding: 20px 30px;
+  min-height: 90px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 24px;
 }
 
 .navbar a {
-  margin-right: 30px;
   font-size: 20px;
   text-decoration: none;
   color: white;
   font-family: Pretendard;
+  white-space: nowrap;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  flex: 0 1 200px;
+  min-width: 0;
+}
+
+.navbar-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: auto;
+  gap: 24px;
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    min-height: 68px;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .navbar-logo {
+    flex-basis: clamp(100px, 35vw, 160px);
+  }
+
+  .navbar-actions {
+    gap: 12px;
+  }
+
+  .navbar-actions a {
+    font-size: 16px;
+  }
 }
 
 .footer {

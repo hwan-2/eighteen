@@ -5,17 +5,21 @@
 }
 .modernGrid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 20px;
 }
+.modernGrid > * {
+    min-width: 0;
+}
 @media (max-width: 900px) {
-    .modernGrid { grid-template-columns: repeat(3, 1fr); }
+    .modernGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 650px) {
-    .modernGrid { grid-template-columns: repeat(2, 1fr); }
+    .modernGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 400px) {
-    .modernGrid { grid-template-columns: 1fr; }
+    .modernGridWrapper { padding: 0 16px; }
+    .modernGrid { gap: 12px; }
 }
 
 /* Top Header Styles */
@@ -30,14 +34,30 @@
 .rtTopBtn.active:hover { background-color: #2d3748; }
 
 /* Lower Header Styles */
-.rtLowerTitle { font-size: 1.5rem; color: #1a202c; margin: 0; font-weight: 700; text-align: center; }
+.rtLowerHeader {
+    width: 80%; max-width: 1000px; margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.rtLowerTitle { 
+    font-size: 1.5rem; color: #1a202c; margin: 0; font-weight: 700; 
+    text-align: center; word-break: keep-all; flex: 1;
+}
+.rtLowerHeaderLeftSpacer {
+    width: 85px; flex-shrink: 0;
+}
 .rtBackBtn {
-    position: absolute; right: 0; display: inline-flex; align-items: center; gap: 6px;
+    width: 85px; flex-shrink: 0; display: inline-flex; justify-content: center; align-items: center; gap: 6px;
     background: #ffffff; border: 1px solid #e2e8f0; color: #4a5568; font-size: 0.95rem;
-    font-weight: 600; cursor: pointer; padding: 8px 16px; border-radius: 10px;
+    font-weight: 600; cursor: pointer; padding: 8px 10px; border-radius: 10px;
     transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 .rtBackBtn:hover { background: #f7fafc; border-color: #cbd5e0; }
+
+@media (max-width: 650px) {
+    .rtLowerHeaderLeftSpacer { display: none; }
+    .rtLowerTitle { text-align: left; padding-right: 15px; }
+    .rtLowerHeader { align-items: flex-start; }
+}
 
 /* Add Button */
 .modernAddBtn {
